@@ -1,0 +1,17 @@
+/*    testui.hrh
+ *
+ * Test resource constants definitions
+ *
+ * Copyright 2004 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+#ifndef __TESTUI_HRH__
+#define __TESTUI_HRH__
+
+enum TCommands {
+    ETestCmdDummy
+};
+
+#endif

@@ -1,0 +1,21 @@
+/*    configrecog.mmp
+ *
+ * Project definition file for PuTTY configuration file recognizer.
+ *
+ * Copyright 2002,2003 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+TARGET		recputty.mdl
+TARGETTYPE	dll
+UID		0x10003a19 0x101f9077
+TARGETPATH	\system\recogs\
+
+SOURCEPATH	..\..\configrecog
+SOURCE		puttyconfigrecog.cpp
+SYSTEMINCLUDE	\epoc32\include
+
+LIBRARY		euser.lib apmime.lib
+
+DEFFILE		mrec.def

@@ -1,0 +1,76 @@
+/*    puttyui.mmp
+ *
+ * Project definition file for PuTTY UI APP.
+ *
+ * Copyright 2002,2003,2006 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+#include "../../include/puttyuids.hrh"
+
+TARGET		putty.exe
+TARGETTYPE	exe
+UID		0x100039ce KUidPuttyAppDefine
+SECUREID	KUidPuttyAppDefine
+VENDORID	0
+CAPABILITY	NetworkServices
+EPOCSTACKSIZE	32768
+EPOCHEAPSIZE	262144 2097152
+
+MACRO		PUTTY_S60
+MACRO		PUTTY_S60V3
+
+// EKA2 has CSystemRandom, no need to init RNG from audio
+MACRO		PUTTY_NO_AUDIORECORDER
+
+SOURCEPATH	..\..\ui
+SOURCE		s60\puttyapp.cpp
+SOURCE		s60\puttydoc.cpp
+SOURCE		s60\puttyappui.cpp
+SOURCE		s60\profilelistview.cpp
+SOURCE		s60\profileeditview.cpp
+SOURCE		s60\profileeditsettinglistbase.cpp
+SOURCE		s60\profileeditgeneralsettinglist.cpp
+SOURCE		s60\profileeditsshsettinglist.cpp
+SOURCE		s60\profileeditdisplaysettinglist.cpp
+SOURCE		s60\profileeditloggingsettinglist.cpp
+SOURCE		s60\terminalview.cpp
+SOURCE		s60\terminalcontainer.cpp
+SOURCE		s60\stringutils.cpp
+SOURCE		s60\dynamicenumtextsettingitem.cpp
+SOURCE		s60\sendgrid.cpp
+
+SOURCE		common\terminalcontrol.cpp
+SOURCE		common\terminalcontrols2font.cpp
+SOURCE		common\termfepext1.cpp
+SOURCE		common\oneshottimer.cpp
+SOURCE		common\netconnect.cpp
+SOURCE		common\palettes.cpp
+SOURCE		s2font\s2font.cpp
+
+USERINCLUDE	..\..\ui\s60v2 ..\..\ui\s60 ..\..\ui\common ..\..\ui\s2font
+USERINCLUDE	..\..\include ..\..\engine\putty ..\..\engine\puttysymbian
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+SYSTEMINCLUDE	\epoc32\include\mmf\plugin  // mmfPluginInterfaceUIDs.hrh
+
+START RESOURCE	s60\putty.rss
+HEADER
+TARGETPATH resource\apps
+END
+
+START RESOURCE	s60v3\putty_reg.rss
+TARGETPATH	\private\10003a3f\apps
+END
+
+LIBRARY		avkon.lib eikdlg.lib bafl.lib
+LIBRARY		euser.lib apparc.lib cone.lib eikcore.lib gdi.lib eikcoctl.lib
+LIBRARY		eikctl.lib efsrv.lib
+LIBRARY		mediaclientaudio.lib commonengine.lib
+LIBRARY		ws32.lib bitgdi.lib fbscli.lib fepbase.lib
+LIBRARY		aknskins.lib aknskinsrv.lib aknswallpaperutils.lib
+LIBRARY		esock.lib
+LIBRARY		commondialogs.lib
+LIBRARY		puttyengine.lib
+LIBRARY		etext.lib
+LIBRARY		estor.lib

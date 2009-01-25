@@ -1,0 +1,6 @@
+enum TCommands {
+    ECmdScroll = 100,
+    ECmdWrite,
+    ECommand2,
+    ECommand3
+};

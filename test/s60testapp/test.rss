@@ -1,0 +1,39 @@
+/*    testui.rss
+ *
+ * Test resource definitions
+ *
+ * Copyright 2004 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+NAME TEST
+
+#include <eikon.rh>
+#include "testui.hrh"
+#include <avkon.rsg>
+#include <avkon.rh>
+
+RESOURCE RSS_SIGNATURE {
+}
+
+RESOURCE TBUF {
+    buf = "";
+}
+
+RESOURCE EIK_APP_INFO {
+    menubar = r_test_menubar;
+    cba = R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+}
+
+RESOURCE MENU_BAR r_test_menubar {
+    titles = {
+        MENU_TITLE { menu_pane = r_test_menu_pane; txt = ""; }
+    };
+}
+
+RESOURCE MENU_PANE r_test_menu_pane {
+    items = {
+        MENU_ITEM { command = EEikCmdExit; txt = "Exit"; }
+    };
+}

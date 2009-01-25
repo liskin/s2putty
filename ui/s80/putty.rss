@@ -1,0 +1,864 @@
+/*    puttyui.rss
+ *
+ * Putty UI resource definitions
+ *
+ * Copyright 2002-2007,2009 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+NAME PTTY
+
+#include <eikon.rh>
+#include <eikcore.rsg>
+#include <indicato.rsg>
+#include <uikon.hrh>
+
+#include "puttyui.hrh"
+
+RESOURCE RSS_SIGNATURE {
+}
+
+RESOURCE TBUF {
+    buf = "";
+}
+
+// Application info
+RESOURCE EIK_APP_INFO {
+    hotkeys = r_putty_hotkeys;
+    cba = r_putty_cba;
+    menubar = r_putty_menubar;
+    status_pane = r_putty_status_pane;
+}
+
+// Command buttons
+RESOURCE CBA r_putty_cba {
+    breadth = 80;
+    buttons = {
+        CBA_BUTTON {
+            id = ECmdConnect;
+            txt = "";
+            bmpfile = "";
+            bmpid = 0xffff;
+        },
+        CBA_BUTTON {
+            id = ECommand1;
+            txt = "";
+            bmpfile = "";
+            bmpid = 0xffff;
+        },
+        CBA_BUTTON {
+            id = ECommand2;
+            txt = "";
+            bmpfile = "";
+            bmpid = 0xffff;
+        },
+        CBA_BUTTON {
+            id = EEikCmdExit;
+            txt = "Close";
+            bmpfile = "";
+            bmpid = 0xffff;
+            }
+    };
+}
+
+
+// Select/Unselect command button
+RESOURCE CBA_BUTTON r_putty_select_cba {
+    id = ECmdSelect;
+    txt = "Select";
+}
+
+RESOURCE CBA_BUTTON r_putty_unselect_cba {
+    id = ECmdUnselect;
+    txt = "Unselect";
+}
+
+
+// Mark/Copy command button
+RESOURCE CBA_BUTTON r_putty_mark_cba {
+    id = ECmdMark;
+    txt = "Mark";
+}
+
+RESOURCE CBA_BUTTON r_putty_copy_cba {
+    id = ECmdCopy;
+    txt = "Copy";
+}
+
+RESOURCE CBA_BUTTON r_putty_blank_cba {
+    id = ECommand1;
+    txt = "";
+}
+
+
+// Status pane:
+RESOURCE STATUS_PANE_APP_MODEL r_putty_status_pane {
+    //CEikStatusPane* statuspane = iEikonEnv->AppUiFactory()->StatusPane();
+    //statuspane->SwitchLayoutL(R_INDICATOR_LAYOUT_NARROW);
+    layout = R_INDICATOR_LAYOUT_NARROW;
+}
+
+
+// Hotkeys
+RESOURCE HOTKEYS r_putty_hotkeys {
+    shift_control = {
+        HOTKEY { command = ECmdSendPipe; key = 'p'; },
+        HOTKEY { command = ECmdSendBackquote; key = 'q'; },
+        HOTKEY { command = ECmdSendLessThan; key = 'l'; },
+        HOTKEY { command = ECmdSendGreaterThan; key = 'g'; },
+        HOTKEY { command = ECmdSelect; key = 's'; },
+        HOTKEY { command = ECmdMark; key = 'm'; },
+        HOTKEY { command = ECmdCopy; key = 'c'; },
+        HOTKEY { command = ECmdPaste; key = 'v'; }
+    };
+}
+
+// Menu bar
+RESOURCE MENU_BAR r_putty_menubar {
+    titles = {
+        MENU_TITLE {
+            menu_pane = r_putty_file_menu;
+            txt = "File";
+        },
+        MENU_TITLE {
+            menu_pane = r_putty_edit_menu;
+            txt = "Edit";
+        },
+        MENU_TITLE {
+            menu_pane = r_putty_view_menu;
+            txt = "View";
+        },
+        MENU_TITLE {
+            menu_pane = r_putty_tools_menu;
+            txt = "Tools";
+        },
+        MENU_TITLE {
+            menu_pane = r_putty_help_menu;
+            txt = "Help";
+        }
+    };
+}
+
+// File menu pane
+RESOURCE MENU_PANE r_putty_file_menu {
+    items = {
+        MENU_ITEM {
+            command = ECmdConnect;
+            txt = "Connect...";
+        },
+        MENU_ITEM {
+            command = EEikCmdExit;
+            txt = "Close";
+        }
+    };
+}
+
+// Edit menu pane
+RESOURCE MENU_PANE r_putty_edit_menu {
+    items = {
+        MENU_ITEM {
+            command = ECmdSelect;
+            txt = "Select";
+            flags = EEikMenuItemCheckBox;
+        },
+        MENU_ITEM {
+            command = ECmdMark;
+            txt = "Mark";
+        },
+        MENU_ITEM {
+            command = ECmdCopy;
+            txt = "Copy";
+        },
+        MENU_ITEM {
+            command = ECmdPaste;
+            txt = "Paste";
+        }
+    };
+}
+
+// View menu pane
+RESOURCE MENU_PANE r_putty_view_menu {
+    items = {
+        MENU_ITEM {
+            command = ECmdLargeFont;
+            txt = "Large Font";
+            flags = EEikMenuItemCheckBox;
+        },
+        MENU_ITEM {
+            command = ECmdFullScreen;
+            txt = "Full Screen";
+            flags = EEikMenuItemCheckBox;
+        },
+        MENU_ITEM {
+            cascade = r_putty_palette_menu;
+            txt = "Palette";
+        }
+    };
+}
+
+// Tools menu pane
+RESOURCE MENU_PANE r_putty_tools_menu {
+    items = {
+        MENU_ITEM {
+            command = ECmdSendSpecialCharacter;
+            txt = "Send Special Character...";
+            extratxt = "Chr";
+        },
+        MENU_ITEM {
+            cascade = r_putty_send_function_key_menu;
+            txt = "Send Function Key";
+        },
+        MENU_ITEM {
+            cascade = r_putty_send_character_menu;
+            txt = "Send Character";
+        },
+        MENU_ITEM {
+            command = ECmdInitRandomGenerator;
+            txt = "Initialize random number generator";
+        }
+    };
+}
+
+// Tools menu pane
+RESOURCE MENU_PANE r_putty_help_menu {
+    items = {
+        MENU_ITEM {
+            command = ECmdAbout;
+            txt = "About...";
+        }
+    };
+}
+
+// Send character menu pane
+RESOURCE MENU_PANE r_putty_send_character_menu {
+    items = {
+        MENU_ITEM {
+            command = ECmdSendPipe;
+            txt = "Pipe |";
+        },
+        MENU_ITEM {
+            command = ECmdSendBackquote;
+            txt = "Backquote `";
+        },
+        MENU_ITEM {
+            command = ECmdSendLessThan;
+            txt = "Less than <";
+        },
+        MENU_ITEM {
+            command = ECmdSendGreaterThan;
+            txt = "Greater than >";
+        }
+    };
+}
+
+// Send function key menu pane
+RESOURCE MENU_PANE r_putty_send_function_key_menu {
+    items = {
+        MENU_ITEM {
+            command = ECmdSendF1;
+            txt = "F1";
+        },
+        MENU_ITEM {
+            command = ECmdSendF2;
+            txt = "F2";
+        },
+        MENU_ITEM {
+            command = ECmdSendF3;
+            txt = "F3";
+        },
+        MENU_ITEM {
+            command = ECmdSendF4;
+            txt = "F4";
+        },
+        MENU_ITEM {
+            command = ECmdSendF5;
+            txt = "F5";
+        },
+        MENU_ITEM {
+            command = ECmdSendF6;
+            txt = "F6";
+        },
+        MENU_ITEM {
+            command = ECmdSendF7;
+            txt = "F7";
+        },
+        MENU_ITEM {
+            command = ECmdSendF8;
+            txt = "F8";
+        },
+        MENU_ITEM {
+            command = ECmdSendF9;
+            txt = "F9";
+        },
+        MENU_ITEM {
+            command = ECmdSendF10;
+            txt = "F10";
+        }
+    };
+}
+
+// Palette menu (populated at run time)
+RESOURCE MENU_PANE r_putty_palette_menu {
+}
+
+
+// Host key dialog buttons
+RESOURCE DLG_BUTTONS r_unknown_host_key_dlg_buttons {
+    buttons = {
+        DLG_BUTTON {
+            id = ECmdHostKeyAcceptAndSave;
+            button = CMBUT {
+                txt = "Accept\nand Save";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = ECmdHostKeyAcceptOnce;
+            button = CMBUT {
+                txt = "Accept\nOnce";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = EEikBidBlank;
+            button = CMBUT {
+                txt = "";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = ECmdHostKeyReject;
+            button = CMBUT {
+                txt = "Reject";
+            };
+            flags = 0;
+        }
+    };
+}
+
+
+// Connection dialog
+RESOURCE DIALOG r_connection_dialog {
+    title = "Connect";
+    buttons = R_EIK_BUTTONS_CANCEL_OK;
+    flags = EEikDialogFlagWait;
+    items = {
+        DLG_LINE {
+            type = EEikCtEdwin;
+            prompt = "Host";
+            id = EConnDlgHost;
+            control = EDWIN {
+                width = 16;
+                maxlength = 64;
+            };
+        }
+    };
+}
+
+
+// Settings dialog
+RESOURCE DIALOG r_settings_dialog {
+    title = "Settings";
+    pages = r_settings_pages;
+    flags = EEikDialogFlagWait;    
+    buttons = r_settings_dlg_buttons;
+}
+
+RESOURCE ARRAY r_settings_pages {
+    items = {
+        PAGE {
+            text = "Profile";
+            id = ESettingsProfilePage;
+            lines = r_settings_profile_page;
+        },
+        PAGE {
+            text = "SSH";
+            id = ESettingsSshPage;
+            lines = r_settings_ssh_page;
+        },
+        PAGE {
+            text = "Display";
+            id = ESettingsDisplayPage;
+            lines = r_settings_display_page;
+        },
+        PAGE {
+            text = "Logging";
+            id = ESettingsLoggingPage;
+            lines = r_settings_logging_page;
+        }
+    };
+}
+
+RESOURCE ARRAY r_settings_profile_page {
+    items = {
+        DLG_LINE {
+            type = EEikCtEdwin;
+            prompt = "Profile";
+            id = ESettingsProfile;
+            control = EDWIN {
+                width = 12;
+                maxlength = 64;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtEdwin;
+            prompt = "Host";
+            id = ESettingsHost;
+            control = EDWIN {
+                width = 12;
+                maxlength = 64;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtEdwin;
+            prompt = "Username";
+            id = ESettingsUsername;
+            control = EDWIN {
+                width = 8;
+                maxlength = 99;
+            };
+        }        
+    };
+}
+
+
+RESOURCE ARRAY r_settings_ssh_page {
+    items = {
+        DLG_LINE {
+            type = EEikCtNumberEditor;
+            prompt = "Port";
+            id = ESettingsPort;
+            control = NUMBER_EDITOR {
+                min = 1;
+                max = 65535;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtChoiceList;
+            prompt = "SSH Version";
+            id = ESettingsSshVersion;
+            control = CHOICELIST {
+                array_id = r_settings_ssh_versions;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtEdwin;
+            prompt = "Private Key File";
+            id = ESettingsPrivateKey;
+            control = EDWIN {
+                width = 12;
+                maxlength = 255;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtCheckBox;
+            prompt = "Compression";
+            id = ESettingsCompression;
+        },
+        DLG_LINE {
+            type = EEikCtChoiceList;
+            prompt = "Preferred Cipher";
+            id = ESettingsSshCipher;
+            control = CHOICELIST {
+                array_id = r_settings_ssh_ciphers;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtNumberEditor;
+            prompt = "SSH Keepalive interval";
+            id = ESettingsKeepalive;
+            control = NUMBER_EDITOR {
+                min = 0;
+                max = 100000;
+            };
+        }
+    };
+}
+
+RESOURCE ARRAY r_settings_ssh_versions {
+    items = {
+        LBUF { txt = "1 only"; },
+        LBUF { txt = "1 preferred"; },
+        LBUF { txt = "2 preferred"; },
+        LBUF { txt = "2 only"; }
+    };
+}
+
+RESOURCE ARRAY r_settings_ssh_ciphers {
+    items = {
+        LBUF { txt = "Blowfish-128"; },
+        LBUF { txt = "AES-256"; }
+    };
+}
+
+RESOURCE ARRAY r_settings_display_page {
+    items = {
+        DLG_LINE {
+            type = EEikCtCheckBox;
+            prompt = "Full Screen";
+            id = ESettingsFullScreen;
+        },
+        DLG_LINE {
+            type = EEikCtChoiceList;
+            prompt = "Font";
+            id = ESettingsFont;
+            control = CHOICELIST {
+                array_id = r_settings_fonts;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtChoiceList;
+            prompt = "Palette";
+            id = ESettingsPalette;
+            control = CHOICELIST {
+                array_id = r_settings_palettes;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtChoiceList;
+            prompt = "Character Set";
+            id = ESettingsCharacterSet;
+            control = CHOICELIST {
+                array_id = r_settings_character_sets;
+            };
+        }
+    };
+}
+
+RESOURCE ARRAY r_settings_fonts {
+    items = {
+        LBUF { txt = "Terminal 6x8"; },
+        LBUF { txt = "Terminal 7x14"; }
+    };
+}
+
+RESOURCE ARRAY r_settings_character_sets {
+    items = {
+        LBUF { txt = "dummy"; }
+    };
+}
+
+RESOURCE ARRAY r_settings_palettes {
+    items = {
+        LBUF { txt = "dummy"; }
+    };
+}
+
+RESOURCE ARRAY r_settings_logging_page {
+    items = {
+        DLG_LINE {
+            type = EEikCtChoiceList;
+            prompt = "Log Type";
+            id = ESettingsLogType;
+            control = CHOICELIST {
+                array_id = r_settings_log_type;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtEdwin;
+            prompt = "Log File";
+            id = ESettingsLogFile;
+            control = EDWIN {
+                width = 12;
+                maxlength = 255;
+            };
+        }
+    };
+}
+
+RESOURCE ARRAY r_settings_log_type {
+    items = {
+        LBUF { txt = "No logging"; },
+        LBUF { txt = "Text only"; },
+        LBUF { txt = "All traffic"; },
+        LBUF { txt = "SSH data & debug"; }
+    };
+}
+
+
+// Settings dialog buttons
+RESOURCE DLG_BUTTONS r_settings_dlg_buttons {
+    buttons = {
+        DLG_BUTTON {
+            id = EEikBidOk;
+            button = CMBUT {
+                txt = "OK";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = EEikBidBlank;
+            button = CMBUT {
+                txt = "";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = ECmdSettingsDelete;
+            button = CMBUT {
+                txt = "Delete";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = EEikBidCancel;
+            button = CMBUT {
+                txt = "Cancel";
+            };
+            flags = 0;
+        }
+    };
+}
+
+
+// Settings dialog browse key file button
+RESOURCE DLG_BUTTON r_settings_browse_key_button {
+    id = ECmdSettingsBrowseKeyFile;
+    button = CMBUT {
+        txt = "Browse";
+    };
+    flags = 0;
+}
+
+
+// Authentication prompt dialog -- secret
+RESOURCE DIALOG r_auth_prompt_secret_dialog {
+    title = "";
+    buttons = R_EIK_BUTTONS_CANCEL_OK;
+    flags = EEikDialogFlagWait;
+    items = {
+        DLG_LINE {
+            type = EEikCtSecretEd;
+            prompt = "";
+            id = EAuthPromptEditor;
+            control = SECRETED {
+                num_letters = 32;
+            };
+        }
+    };
+}
+
+
+// Authentication prompt dialog -- public
+RESOURCE DIALOG r_auth_prompt_public_dialog {
+    title = "";
+    buttons = R_EIK_BUTTONS_CANCEL_OK;
+    flags = EEikDialogFlagWait;
+    items = {
+        DLG_LINE {
+            type = EEikCtEdwin;
+            prompt = "";
+            id = EAuthPromptEditor;
+            control = EDWIN {
+                width = 8;
+                maxlength = 64;
+            };
+        }
+    };
+}
+
+
+// Profile list dialog
+RESOURCE DIALOG r_profile_list_dialog {
+    title = "Select Profile";
+    buttons = r_profile_list_dlg_buttons;
+    flags = EEikDialogFlagWait;
+    items = {
+        DLG_LINE {
+            type = EEikCtListBox;
+            prompt = "";
+            id = EProfileListDlgProfileList;
+            control = LISTBOX {
+                width = 16;
+                height = 6;
+                flags = EEikListBoxNoExtendedSelection;
+            };
+        }
+    };
+}
+
+
+// Profile list dialog buttons
+RESOURCE DLG_BUTTONS r_profile_list_dlg_buttons {
+    buttons = {
+        DLG_BUTTON {
+            id = ECmdProfileListConnect;
+            button = CMBUT {
+                txt = "Connect";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = ECmdProfileListEdit;
+            button = CMBUT {
+                txt = "Edit";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = ECmdProfileListNew;
+            button = CMBUT {
+                txt = "New";
+            };
+            flags = 0;
+        },
+        DLG_BUTTON {
+            id = ECmdProfileListClose;
+            button = CMBUT {
+                txt = "Close";
+            };
+            flags = 0;
+        }
+    };
+}
+
+
+// Palette names
+RESOURCE ARRAY r_putty_palette_names {
+    items = {
+        LBUF { txt = "Black on White"; },
+        LBUF { txt = "Gray on Black"; },
+        LBUF { txt = "White on Black"; }
+    };
+}
+
+// Palettes
+STRUCT PALETTE {
+    BYTE values[66]; // 22 RGB values
+}
+RESOURCE ARRAY r_putty_palettes {
+    items = {
+        PALETTE { // Black on white
+            values = {
+                0,0,0,  128,128,128,  255,255,255,  255,255,255,  0,0,0,
+                128,128,192,  0,0,0,  85,85,85,  187,0,0,  255,85,85,
+                0,187,0,  85,255,85,  187,187,0,  255,255,85,  0,0,187,
+                85,85,255,  187,0,187,  255,85,255,  0,187,187,
+                85,255,255,  187,187,187,  192,192,192
+            };
+        },
+        PALETTE { // Gray on black
+            values = {
+                187, 187, 187,  255,255,255,  0,0,0,  0,0,0,  0,0,0,
+                128,128,192,  0,0,0,  85,85,85,  187,0,0,  255,85,85,
+                0,187,0,  85,255,85,  187,187,0,  255,255,85,  0,0,187,
+                85,85,255,  187,0,187,  255,85,255,  0,187,187,
+                85,255,255,  187,187,187,  255,255,255
+            };
+        }, 
+        PALETTE { // White on black
+            values = {
+                255, 255, 255,  255,255,255,  0,0,0,  0,0,0,  0,0,0,
+                128,128,192,  0,0,0,  85,85,85,  187,0,0,  255,85,85,
+                0,187,0,  85,255,85,  187,187,0,  255,255,85,  0,0,187,
+                85,85,255,  187,0,187,  255,85,255,  0,187,187,
+                85,255,255,  187,187,187,  255,255,255
+            };
+        }
+    };
+}
+
+
+// Localizable strings
+
+// Fatal error panic name
+RESOURCE TBUF r_str_fatal_error { buf = "Fatal error"; }
+
+// Connection error dialog title
+RESOURCE TBUF r_str_connection_error_title { buf = "Connection Error"; }
+
+// Fatal Error dialog title
+RESOURCE TBUF r_str_fatal_error_title { buf = "Fatal Error"; }
+
+// Connection closed info message (connection closed normally)
+RESOURCE TBUF r_str_connection_closed { buf = "Connection closed"; }
+
+// Unknown host key dialog title
+RESOURCE TBUF r_str_unknown_host_key_title { buf = "Unknown Host Key"; }
+
+// Unknown host key dialog contents format string. %S = key fingerprint
+RESOURCE TBUF r_str_unknown_host_key_dlg_fmt {
+    buf = "Unknown host key received from the server.\nThe key fingerprint is:\n%S";
+}
+
+// Different host key dialog title
+RESOURCE TBUF r_str_different_host_key_title { buf = "Host Key Changed"; }
+
+// Different host key dialog contents format string. %S = key fingerprint
+RESOURCE TBUF r_str_different_host_key_dlg_fmt {
+    buf = "SECURITY WARNING!\nThe server host key appears to have changed.\nThis may indicate an attack.\nThe new key fingerprint is:\n%S";
+}
+
+// Accept cipher dialog title
+RESOURCE TBUF r_str_accept_cipher_title { buf = "Accept Cipher?"; }
+
+// Accept cipher dialog contents format string. First %S = usage, second cipher
+RESOURCE TBUF r_str_accept_cipher_dlg_fmt {
+    buf = "SECURITY WARNING!\nThe server supports only weak ciphers.\nAccept %S %S?";
+}
+
+// Cipher communication directions: Both, client-to-server, server-to-client
+RESOURCE TBUF r_str_accept_cipher_dir_both { buf = "in both directions"; }
+RESOURCE TBUF r_str_accept_cipher_client_to_server { buf = "from client to server"; }
+RESOURCE TBUF r_str_accept_cipher_server_to_client { buf = "from server to client"; }
+
+// Dialing busy message
+RESOURCE TBUF r_str_connecting_to_network { buf = "Connecting to network"; }
+
+// Connecting busy message
+RESOURCE TBUF r_str_connecting_to_server { buf = "Connecting to server"; }
+
+// Network connection failed error message. %S = error message
+RESOURCE TBUF r_str_net_connect_failed { buf = "Network connection failed.\n%S\n"; }
+
+// Recording busy message
+RESOURCE TBUF r_str_recording { buf = "Recording"; }
+
+// Randomized info messages
+RESOURCE TBUF r_str_randomized { buf = "Initialized"; }
+
+// Recording error dialog title
+RESOURCE TBUF r_str_record_error_title { buf = "Recording Error"; }
+
+// Audio device in use dialog
+RESOURCE TBUF r_str_audio_device_in_use { buf = "Audio device in use.\nTry again?"; }
+
+// OK confirm dialog button
+RESOURCE TBUF r_str_ok_confirm { buf = "OK"; }
+
+// Recording failed error message. %S = error message
+RESOURCE TBUF r_str_record_failed { buf = "Audio recording failed.\n%S\n"; }
+
+// Recording confirmation dialog title
+RESOURCE TBUF r_str_record_confirm_title { buf = "Start recording?"; }
+
+// Recording confirmation dialog text
+RESOURCE TBUF r_str_record_confirm_text { buf = "The random number generator\nwill be initialized using\nnoise from the microphone.\nProceed?"; }
+
+// Initial random number generation confirm dialog title
+RESOURCE TBUF r_str_initial_random_title { buf = "Running PuTTY for the first time"; }
+
+// Initial random number generation confirm dialog text
+RESOURCE TBUF r_str_initial_random_text { buf = "You seem to be running PuTTY for the\nfirst time. It is recommended that you\ninitialize the random number generator\nbefore connecting. Proceed?"; }
+
+// Private key file selection dialog title
+RESOURCE TBUF r_str_key_file_dialog_title { buf = "Select file"; }
+
+// Show PuTTY config files dialog button name
+RESOURCE TBUF r_str_show_putty_config_files { buf = "Show PuTTY\nconfig files"; }
+
+// About dialog title
+RESOURCE TBUF r_str_about_title { buf = "About PuTTY"; }
+
+// ABout dialog contents (FIXME: Make more dynamic)
+RESOURCE TBUF r_str_about_text { buf = "PuTTY for Symbian OS\nVersion 1.5.0\nBased on PuTTY 0.60\nBuilt " __DATE__ ", " __TIME__; }
+
+// Delete profile confirmation title
+RESOURCE TBUF r_str_delete_profile_confirm_title { buf = "Delete profile?"; }
+
+// Delete profile confirmation text
+RESOURCE TBUF r_str_delete_profile_confirm_text { buf = "Are you sure you want\nto delete this profile?"; }
+
+// Generic error title
+RESOURCE TBUF r_str_error_title { buf = "Error"; }

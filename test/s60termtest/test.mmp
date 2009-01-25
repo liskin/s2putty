@@ -1,0 +1,42 @@
+/*    testui.mmp
+ *
+ * Test application project definition file
+ *
+ * Copyright 2004 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+TARGET		test.app
+TARGETTYPE	app
+UID		0x100039ce 0x011f9001
+TARGETPATH	\system\apps\test
+
+MACRO		PUTTY_S60
+//MACRO		LOGFILE_ENABLED
+
+SOURCEPATH	.
+SOURCE		testapp.cpp
+SOURCE		testdoc.cpp
+SOURCE		testappui.cpp
+SOURCE		testappview.cpp
+
+SOURCEPATH	..\..\ui\common
+SOURCE		terminalcontrol.cpp
+SOURCE		terminalcontrols2font.cpp
+SOURCE		oneshottimer.cpp
+SOURCE		termfepext1.cpp
+SOURCE		logfile.cpp
+
+SOURCEPATH	..\..\ui\s2font
+SOURCE		s2font.cpp
+
+SOURCEPATH	.
+
+USERINCLUDE	. ..\..\ui\common ..\..\ui\s2font
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+
+RESOURCE	test.rss
+LIBRARY		avkon.lib euser.lib apparc.lib cone.lib eikcore.lib gdi.lib
+LIBRARY		eikcoctl.lib bitgdi.lib fbscli.lib efsrv.lib ws32.lib 
+LIBRARY		fepbase.lib

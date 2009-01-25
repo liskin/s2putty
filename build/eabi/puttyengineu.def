@@ -1,0 +1,13 @@
+EXPORTS
+	_ZN12CPuttyEngine4NewLEP12MPuttyClientRK7TDesC16 @ 1 NONAME ; CODE
+	_ZTI11CLineReader @ 2 NONAME ; DATA
+	_ZTI15CPuttyEngineImp @ 3 NONAME ; DATA
+	_ZTI7CRecver @ 4 NONAME ; DATA
+	_ZTI7CSender @ 5 NONAME ; DATA
+	_ZTI9CAcceptor @ 6 NONAME ; DATA
+	_ZTV11CLineReader @ 7 NONAME ; DATA
+	_ZTV15CPuttyEngineImp @ 8 NONAME ; DATA
+	_ZTV7CRecver @ 9 NONAME ; DATA
+	_ZTV7CSender @ 10 NONAME ; DATA
+	_ZTV9CAcceptor @ 11 NONAME ; DATA
+

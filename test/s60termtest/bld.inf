@@ -1,0 +1,13 @@
+//*    bld.inf
+//*
+//* Component definition file for S60 terminal test
+//*
+//* Copyright 2008 Petteri Kangaslampi
+//*
+//* See license.txt for full copyright and license information.
+
+PRJ_PLATFORMS 
+winscw gcce
+
+PRJ_MMPFILES
+test_s60v3.mmp

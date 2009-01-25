@@ -1,0 +1,195 @@
+/*    puttyui.hrh
+ *
+ * Putty UI resource constants definitions
+ *
+ * Copyright 2003-2004 Sergei Khloupnov
+ * Copyright 2002-2004 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+#ifndef __PUTTYUI_HRH__
+#define __PUTTYUI_HRH__
+
+enum TCommands {
+    //
+    // Put all commands that may be repeated by pressing green dial btn in this
+    // part (upper)
+    //
+
+    EPuttyCmdSendText = 100,
+    EPuttyCmdSendLine,
+    EPuttyCmdSendPipe,
+    EPuttyCmdSendCR,
+    EPuttyCmdSendSpace,
+    EPuttyCmdSendEsc,
+    EPuttyCmdSendHome,
+    EPuttyCmdSendInsert,
+    EPuttyCmdSendDelete,
+    EPuttyCmdSendEnd,
+    EPuttyCmdSendPageUp,
+    EPuttyCmdSendPageDown,
+    EPuttyCmdSendBackquote,
+    EPuttyCmdSendTab,
+    EPuttyCmdSendCtrlKeys,
+    EPuttyCmdSendCtrlAD,
+    EPuttyCmdSendCtrlC,
+    EPuttyCmdSendCtrlD,
+    EPuttyCmdSendCtrlZ,
+    EPuttyCmdSendCtrlBrkt,
+    EPuttyCmdSendAltKeys,
+    EPuttyCmdSendAlt0,
+    EPuttyCmdSendAlt1,
+    EPuttyCmdSendAlt2,
+    EPuttyCmdSendAlt3,
+    EPuttyCmdSendAlt4,
+    EPuttyCmdSendAlt5,
+    EPuttyCmdSendAlt6,
+    EPuttyCmdSendAlt7,
+    EPuttyCmdSendAlt8,
+    EPuttyCmdSendAlt9,
+    EPuttyCmdSendF1,
+    EPuttyCmdSendF2,
+    EPuttyCmdSendF3,
+    EPuttyCmdSendF4,
+    EPuttyCmdSendF5,
+    EPuttyCmdSendF6,
+    EPuttyCmdSendF7,
+    EPuttyCmdSendF8,
+    EPuttyCmdSendF9,
+    EPuttyCmdSendF10,
+
+    
+    //
+    // Put all commands that should not be repeated by pressing green dial
+    // button below this line
+    //
+    
+    EPuttyCmdNotRepeated,
+
+
+    EPuttyCmdProfileListConnect,
+    EPuttyCmdProfileListEdit,
+    EPuttyCmdProfileListNew,
+    EPuttyCmdProfileListDelete,
+
+    EPuttyCmdProfileEditOpen,
+    EPuttyCmdProfileEditClear,
+    EPuttyCmdProfileEditNextSettingList,
+    EPuttyCmdProfileEditPrevSettingList,
+    
+
+    EPuttyCmdConnectionConnect,
+    EPuttyCmdConnectionClose,
+    EPuttyCmdDisconnect,
+    EPuttyCmdDisconnectCba,
+    EPuttyCommand1,
+    EPuttyCommand2,
+    EPuttyCmdLargeFont,
+    EPuttyCmdFullScreen,
+    EPuttyCmdReverseScreen,
+    EPuttyCmdInitRandomGenerator,
+    EPuttyCmdLoadSettings,
+    EPuttyCmdSettings,
+    EPuttyCmdSettingsConnection,
+    EPuttyCmdSettingsConnectionHost,
+    EPuttyCmdSettingsConnectionPort,
+    EPuttyCmdSettingsConnectionHostPort,
+    EPuttyCmdSettingsConnectionVersion,
+    EPuttyCmdSettingsAuthentication,
+    EPuttyCmdSettingsAuthenticationUsername,
+    EPuttyCmdSettingsAuthenticationKeyfile,
+    EPuttyCmdSettingsLogging,
+    EPuttyCmdSettingsLoggingType,
+    EPuttyCmdSettingsLoggingFile,
+    EPuttyCmdSaveSettings,
+    EPuttyCmdSaveSettingsAsDefault,
+    EPuttyCmdResetDefaultSettings,
+    EPuttyCmdSend,
+    EPuttyCmdSetPalette,
+    
+    EPuttyCmdHostKeyAcceptAndSave,
+    EPuttyCmdHostKeyAcceptOnce,
+    EPuttyCmdHostKeyReject,
+    EPuttyCmdSettingsBrowseKeyFile,
+    EPuttyCmdNotImplemented,
+
+    EPuttyCmdSelect,
+    EPuttyCmdMark,
+    EPuttyCmdCopy,
+    EPuttyCmdPaste,    
+
+    EPuttyCmdRepeatLast,
+    
+    EPuttyCmdNoFixedFonts,
+
+    // this must be very last command in enum TCommands
+    EPuttyCmdSetFont = 0x11000
+};
+
+enum TDlgControls {
+    EConnDlgHost = 200,
+
+    ESettingsConnectionPage,
+    ESettingsAuthenticationPage,
+    ESettingsLoggingPage,
+    ESettingsHost,
+    ESettingsPort,
+    ESettingsHostPort,
+    ESettingsSshVersion,
+    ESettingsUsername,
+    ESettingsPrivateKey,
+    ESettingsLogType,
+    ESettingsLogFile,
+
+    ESelectNewFileDialog,
+    ESelectExistingFileDialog,
+    
+    EInfoMessage,
+    EConfirmDisconnectQuery,
+    ERecordConfirmation,
+    ERecorderInUse,
+    EUnknownHostKey,
+    EAcceptWeakCipher,
+
+    EEnterHost,
+    EEnterPort,
+    EEnterString,
+    ESelectProtocol,
+    ESelectLogType,
+
+    EDialerDialog,
+    ERecordingDialog,
+
+    ELastOne
+};
+
+enum TSettingItems {
+    EPuttySettingGeneralProfileName = 1,
+    EPuttySettingGeneralHost,
+    EPuttySettingGeneralUsername,
+
+    EPuttySettingSshPort,
+    EPuttySettingSshVersion,
+    EPuttySettingSshPrivateKey,
+    EPuttySettingSshCompression,
+    EPuttySettingSshCipher,
+    EPuttySettingSshKeepalive,
+
+    EPuttySettingDisplayFont,
+    EPuttySettingDisplayFullScreen,
+    EPuttySettingDisplayPalette,
+    EPuttySettingDisplayCharSet,
+
+    EPuttySettingLoggingType,
+    EPuttySettingLoggingFile
+};
+
+enum TSettingTabs {
+    EPuttySettingTabGeneral = 0,
+    EPuttySettingTabSsh,
+    EPuttySettingTabDisplay,
+    EPuttySettingTabLogging
+};
+
+#endif

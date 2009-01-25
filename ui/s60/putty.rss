@@ -1,0 +1,1007 @@
+/*    putty.rss
+ *
+ * Putty UI resource definitions
+ *
+ * Copyright 2003-2004 Sergei Khloupnov
+ * Copyright 2002-2004,2007 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+NAME PTTY
+
+#include <eikon.rh>
+#include "puttyui.hrh"
+#include <avkon.rsg>
+#include <avkon.rh>
+#include <appinfo.rh>
+#include <commondialogs.hrh>
+#include <commondialogs.rh>
+#include "sendgrid.rh"
+
+
+RESOURCE RSS_SIGNATURE {
+}
+
+RESOURCE TBUF {
+    buf = "";
+}
+
+// Application info
+RESOURCE EIK_APP_INFO {
+}
+
+// Localisable app info -- icon and caption
+RESOURCE LOCALISABLE_APP_INFO r_putty_localisable_app_info {
+    short_caption = "PuTTY";
+    caption_and_icon = CAPTION_AND_ICON_INFO {
+        caption = "PuTTY";
+        number_of_icons = 1;
+        icon_file = "\\resource\\apps\\putty_aif.mif";
+    };
+}
+
+
+/*********************
+ *
+ * Profile list view
+ *
+ ********************/
+
+// Profile list view
+RESOURCE AVKON_VIEW r_putty_profilelist_view {
+    menubar = r_putty_profilelist_menubar;
+    cba = R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+}
+
+// Profile list menu bar
+RESOURCE MENU_BAR r_putty_profilelist_menubar {
+    titles = {
+        MENU_TITLE { menu_pane = r_putty_profilelist_menu_pane; txt = ""; }
+    };
+}
+
+// Profile list main menu pane
+RESOURCE MENU_PANE r_putty_profilelist_menu_pane {
+    items = {
+        MENU_ITEM { command = EPuttyCmdProfileListConnect; txt = "Connect"; },
+        MENU_ITEM { command = EPuttyCmdProfileListEdit; txt = "Edit"; },
+        MENU_ITEM { command = EPuttyCmdProfileListNew; txt = "New"; },
+        MENU_ITEM { command = EPuttyCmdProfileListDelete; txt = "Delete"; },
+        MENU_ITEM { command = EEikCmdExit; txt = "Exit"; }
+    };
+}
+
+
+/*********************
+ *
+ * Profile edit view
+ *
+ ********************/
+
+// Profile edit view
+RESOURCE AVKON_VIEW r_putty_profileedit_view {
+    menubar = r_putty_profileedit_menubar;
+    cba = R_AVKON_SOFTKEYS_OPTIONS_BACK;
+}
+
+// Profile edit menu bar
+RESOURCE MENU_BAR r_putty_profileedit_menubar {
+    titles = {
+        MENU_TITLE { menu_pane = r_putty_profileedit_menu_pane; txt = ""; }
+    };
+}
+
+// Profile edit main menu pane
+RESOURCE MENU_PANE r_putty_profileedit_menu_pane {
+    items = {
+        MENU_ITEM { command = EPuttyCmdProfileEditOpen; txt = "Open"; },
+        MENU_ITEM { command = EPuttyCmdProfileEditClear; txt = "Clear"; },
+        MENU_ITEM { command = EAknSoftkeyBack; txt = "Back"; }
+    };
+}
+
+// Profile edit page selection listbox
+RESOURCE LISTBOX r_putty_profileedit_pageselect_listbox {
+    flags = EAknListBoxSelectionList;
+    array_id = r_putty_profileedit_pageselect_items;
+}
+
+// Page selection list items
+RESOURCE ARRAY r_putty_profileedit_pageselect_items {
+    items = {
+        LBUF { txt = "\tGeneral\t\t"; },
+        LBUF { txt = "\tSSH protocol\t\t"; },
+        LBUF { txt = "\tDisplay\t\t"; },
+        LBUF { txt = "\tLogging\t\t"; }
+    };
+}
+
+
+// General settings setting list
+RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_general_settinglist {
+    title = "General";
+    items = {
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingGeneralProfileName;
+            setting_page_resource = r_putty_profileedit_profilename_page;
+            name = "Profile name";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingGeneralHost;
+            setting_page_resource = r_putty_profileedit_host_page;
+            name = "Host";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingGeneralUsername;
+            setting_page_resource = r_putty_profileedit_username_page;
+            name = "Username";
+        }
+    };
+}
+
+// Profile name edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_profilename_page {
+    label = "Profile name";
+    type = EEikCtEdwin;
+    editor_resource_id = r_putty_profileedit_profilename_edwin;
+}
+RESOURCE EDWIN r_putty_profileedit_profilename_edwin {
+    width = 20;
+    lines = 1;
+    maxlength = 128;
+}
+
+// Host edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_host_page {
+    label = "Host";
+    type = EEikCtEdwin;
+    editor_resource_id = r_putty_profileedit_host_edwin;
+}
+RESOURCE EDWIN r_putty_profileedit_host_edwin {
+    width = 20;
+    lines = 1;
+    maxlength = 511;
+    default_case = EAknEditorLowerCase;
+    avkon_flags = EAknEditorFlagNoT9;
+}
+
+// Username edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_username_page {
+    label = "Username";
+    type = EEikCtEdwin;
+    editor_resource_id = r_putty_profileedit_username_edwin;
+}
+RESOURCE EDWIN r_putty_profileedit_username_edwin {
+    width = 20;
+    lines = 1;
+    maxlength = 99;
+    default_case = EAknEditorLowerCase;
+    avkon_flags = EAknEditorFlagNoT9;
+}
+
+
+// SSH protocol settings list
+RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_ssh_settinglist {
+    title = "SSH Protocol";
+    items = {
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingSshPort;
+            setting_page_resource = r_putty_profileedit_port_page;
+            name = "Port";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingSshVersion;
+            setting_page_resource = r_putty_profileedit_version_page;
+            associated_resource = r_putty_profileedit_version_texts;
+            name = "SSH version";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingSshPrivateKey;
+            setting_page_resource = r_putty_profileedit_privatekey_page;
+            name = "Private key";
+        },        
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingSshCompression;
+            setting_page_resource = r_putty_profileedit_compression_page;
+            associated_resource = r_putty_profileedit_compression_texts;
+            name = "Compression";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingSshCipher;
+            setting_page_resource = r_putty_profileedit_cipher_page;
+            associated_resource = r_putty_profileedit_cipher_texts;
+            name = "Preferred cipher";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingSshKeepalive;
+            setting_page_resource = r_putty_profileedit_keepalive_page;
+            name = "Keepalive interval";
+        }
+    };
+}
+
+// Port edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_port_page {
+    label = "Port";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_port_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_port_edwin {
+    min = 1;
+    max = 65535;
+}
+
+// SSH Version edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_version_page {
+    label= "SSH version";
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_putty_profileedit_version_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_version_popup {
+    flags = 0;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_version_texts {
+    setting_texts_resource = r_putty_profileedit_version_text_array;
+    popped_up_texts_resource = r_putty_profileedit_version_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_version_text_array {
+    items = {
+        AVKON_ENUMERATED_TEXT { value = 0; text = "SSH 1 only"; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = "SSH 1 preferred"; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = "SSH 2 preferred"; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = "SSH 2 only"; }
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_version_popped_up_text_array {
+    items = {
+        LBUF { txt = "SSH 1 only"; },
+        LBUF { txt = "SSH 1 preferred"; },
+        LBUF { txt = "SSH 2 preferred"; },
+        LBUF { txt = "SSH 2 only"; }
+    };
+}
+
+// Private key edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_privatekey_page {
+    label = "Private key";
+    type = EEikCtEdwin;
+    editor_resource_id = r_putty_profileedit_privatekey_edwin;
+}
+RESOURCE EDWIN r_putty_profileedit_privatekey_edwin {
+    width = 20;
+    lines = 1;
+    maxlength = 128;
+}
+RESOURCE MEMORYSELECTIONDIALOG r_putty_memory_selection_dialog {
+}
+
+// Compression edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_compression_page {
+    type = EAknCtPopupSettingList;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_compression_texts {
+    setting_texts_resource = r_putty_profileedit_compression_text_array;
+    popped_up_texts_resource = r_putty_profileedit_compression_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_compression_text_array {
+    items = {
+        AVKON_ENUMERATED_TEXT { value = 1; text = "On"; },
+        AVKON_ENUMERATED_TEXT { value = 0; text = "Off"; }
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_compression_popped_up_text_array {
+    items = {
+        LBUF { txt = "On"; },
+        LBUF { txt = "Off"; }
+    };
+}
+
+
+// SSH Version edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_cipher_page {
+    label= "Preferred cipher";
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_putty_profileedit_cipher_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_cipher_popup {
+    flags = 0;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_cipher_texts {
+    setting_texts_resource = r_putty_profileedit_cipher_text_array;
+    popped_up_texts_resource = r_putty_profileedit_cipher_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_cipher_text_array {
+    items = {
+        AVKON_ENUMERATED_TEXT { value = 0; text = "Blowfish-128"; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = "AES-256"; }
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_cipher_popped_up_text_array {
+    items = {
+        LBUF { txt = "Blowfish-128"; },
+        LBUF { txt = "AES-256"; }
+    };
+}
+
+// Keepalive edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_keepalive_page {
+    label = "Keepalive interval";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_keepalive_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_keepalive_edwin {
+    min = 0;
+    max = 10000;
+    maxlength = 5;
+}
+
+
+// Display settings list
+RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_display_settinglist {
+    title = "Display";
+    items = {
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingDisplayFont;
+            setting_page_resource = r_putty_profileedit_font_page;
+            associated_resource = r_putty_profileedit_font_texts;
+            name = "Font";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingDisplayFullScreen;
+            setting_page_resource = r_putty_profileedit_fullscreen_page;
+            associated_resource = r_putty_profileedit_fullscreen_texts;
+            name = "Full screen";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingDisplayPalette;
+            setting_page_resource = r_putty_profileedit_palette_page;
+            associated_resource = r_putty_profileedit_palette_texts;
+            name = "Palette";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingDisplayCharSet;
+            setting_page_resource = r_putty_profileedit_charset_page;
+            associated_resource = r_putty_profileedit_charset_texts;
+            name = "Character set";
+        }
+    };
+}
+
+// Font edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_font_page {
+    label= "Font";
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_putty_profileedit_font_popup;
+}
+
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_font_popup {
+    flags = 0;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_font_texts {
+    setting_texts_resource = r_putty_profileedit_font_text_array;
+    popped_up_texts_resource = r_putty_profileedit_font_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_font_text_array {
+    items = {
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_font_popped_up_text_array {
+    items = {
+    };
+}
+
+// Full Screen edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_fullscreen_page {
+    type = EAknCtPopupSettingList;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_fullscreen_texts {
+    setting_texts_resource = r_putty_profileedit_fullscreen_text_array;
+    popped_up_texts_resource = r_putty_profileedit_fullscreen_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_fullscreen_text_array {
+    items = {
+        AVKON_ENUMERATED_TEXT { value = 1; text = "On"; },
+        AVKON_ENUMERATED_TEXT { value = 0; text = "Off"; }
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_fullscreen_popped_up_text_array {
+    items = {
+        LBUF { txt = "On"; },
+        LBUF { txt = "Off"; }
+    };
+}
+
+// Palette edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_palette_page {
+    label= "Color palette";
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_putty_profileedit_palette_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_palette_popup {
+    flags = 0;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_palette_texts {
+    setting_texts_resource = r_putty_profileedit_palette_text_array;
+    popped_up_texts_resource = r_putty_profileedit_palette_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_palette_text_array {
+    items = {
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_palette_popped_up_text_array {
+    items = {
+    };
+}
+
+// Character set edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_charset_page {
+    label= "Character Set";
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_putty_profileedit_charset_popup;
+}
+
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_charset_popup {
+    flags = 0;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_charset_texts {
+    setting_texts_resource = r_putty_profileedit_charset_text_array;
+    popped_up_texts_resource = r_putty_profileedit_charset_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_charset_text_array {
+    items = {
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_charset_popped_up_text_array {
+    items = {
+    };
+}
+
+
+// Logging settings list
+RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_logging_settinglist {
+    title = "Logging";
+    items = {
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingLoggingType;
+            setting_page_resource = r_putty_profileedit_logtype_page;
+            associated_resource = r_putty_profileedit_logtype_texts;
+            name = "Log type";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingLoggingFile;
+            setting_page_resource = r_putty_profileedit_logfile_page;
+            name = "Log file";
+        }
+    };
+}
+
+// Log type edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_logtype_page {
+    label= "Log type";
+    type = EAknCtPopupSettingList;
+    editor_resource_id = r_putty_profileedit_logtype_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_logtype_popup {
+    flags = 0;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_logtype_texts {
+    setting_texts_resource = r_putty_profileedit_logtype_text_array;
+    popped_up_texts_resource = r_putty_profileedit_logtype_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_logtype_text_array {
+    items = {
+        AVKON_ENUMERATED_TEXT { value = 0; text = "No logging"; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = "Text only"; },
+        AVKON_ENUMERATED_TEXT { value = 2; text = "All traffic"; },
+        AVKON_ENUMERATED_TEXT { value = 3; text = "SSH data & debug"; }
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_logtype_popped_up_text_array {
+    items = {
+        LBUF { txt = "No logging"; },
+        LBUF { txt = "Text only"; },
+        LBUF { txt = "All traffic"; },
+        LBUF { txt = "SSH data & debug"; }
+    };
+}
+
+// Log file edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_logfile_page {
+    label = "Private key";
+    type = EEikCtEdwin;
+    editor_resource_id = r_putty_profileedit_logfile_edwin;
+}
+RESOURCE EDWIN r_putty_profileedit_logfile_edwin {
+    width = 20;
+    lines = 1;
+    maxlength = 128;
+}
+
+
+RESOURCE NAVI_DECORATOR r_putty_settings_navi_decorator {
+    type = ENaviDecoratorControlTabGroup;
+    control = TAB_GROUP {
+        tab_width = EAknTabWidthWithThreeLongTabs;
+        active = 0;
+        tabs = {
+            TAB {
+                id = EPuttySettingTabGeneral;
+                txt = "General";
+                },
+            TAB {
+                id = EPuttySettingTabSsh;
+                txt = "SSH";
+                },
+            TAB {
+                id = EPuttySettingTabDisplay;
+                txt = "Display";
+                },
+            TAB {
+                id = EPuttySettingTabLogging;
+                txt = "Logging";
+                }
+            };
+    };
+}
+
+
+/*********************
+ *
+ * Terminal view
+ *
+ ********************/
+
+// Terminal view
+RESOURCE AVKON_VIEW r_putty_terminal_view {
+    menubar = r_putty_terminal_menubar;
+    cba = r_putty_terminal_softkeys;
+}
+
+// Terminal view softkey buttons (Options / Disconnect)
+RESOURCE CBA r_putty_terminal_softkeys {
+    buttons = {
+        CBA_BUTTON 
+            {
+            id = EAknSoftkeyOptions; 
+            txt = "Options";
+            },
+        CBA_BUTTON 
+            {
+            id = EPuttyCmdSend; 
+            txt = "Send";
+            }
+        };
+    }
+
+
+// Terminal menu bar
+RESOURCE MENU_BAR r_putty_terminal_menubar {
+    titles = {
+        MENU_TITLE { menu_pane = r_putty_terminal_menu_pane; txt = ""; }
+    };
+}
+
+// Terminal main menu pane
+RESOURCE MENU_PANE r_putty_terminal_menu_pane {
+    items = {
+        MENU_ITEM { command = EPuttyCmdSend; txt = "Send..."; },
+        MENU_ITEM { cascade = r_putty_view_menu; txt = "View"; },
+        MENU_ITEM { cascade = r_putty_edit_menu; txt = "Edit"; },
+        MENU_ITEM { command = EPuttyCmdDisconnect; txt = "Disconnect"; }
+    };
+}
+
+// View menu
+RESOURCE MENU_PANE r_putty_view_menu {
+    items = {
+        MENU_ITEM { command = EPuttyCmdSetFont; txt = "Screen font..."; },
+        MENU_ITEM { command = EPuttyCmdSetPalette; txt = "Palette..."; },
+        MENU_ITEM { command = EPuttyCmdFullScreen; txt = "Toggle full screen"; }
+    };
+}
+
+// Edit menu
+RESOURCE MENU_PANE r_putty_edit_menu {
+    items = {
+        MENU_ITEM { command = EPuttyCmdSelect; txt = "Select"; },
+        MENU_ITEM { command = EPuttyCmdMark; txt = "Mark"; },
+        MENU_ITEM { command = EPuttyCmdCopy; txt = "Copy"; },
+        MENU_ITEM { command = EPuttyCmdPaste; txt = "Paste"; }
+    };
+}
+
+// Font selection
+RESOURCE MENU_PANE r_putty_font_menu {
+    items = {
+    };
+}
+
+// Main send grid
+RESOURCE SENDGRID r_putty_send_grid {
+    items = {
+        SENDGRID_ITEM /*1*/ { command = EPuttyCmdSendLine; txt = "Line..."; },
+        SENDGRID_ITEM /*2*/ { command = EPuttyCmdSendText; txt = "Text..."; },
+        SENDGRID_ITEM /*3*/ { command = EPuttyCmdSendCR; txt = "Enter"; },
+        SENDGRID_ITEM /*4*/ { command = EPuttyCmdSendTab; txt = "Tab"; },
+        SENDGRID_ITEM /*5*/ { subgrid = r_putty_send_special_key_grid; txt = "Sp.Key..."; },
+        SENDGRID_ITEM /*6*/ { txt = ""; },
+        SENDGRID_ITEM /*7*/ { subgrid = r_putty_send_ctrl_grid; txt = "Control+..."; },
+        SENDGRID_ITEM /*8*/ { subgrid = r_putty_send_alt_grid; txt = "Alt+..."; },
+        SENDGRID_ITEM /*9*/ { command = EPuttyCmdSendPipe; txt = "Pipe |"; },
+        SENDGRID_ITEM /***/ { command = EPuttyCmdSendEsc; txt = "Esc"; },
+        SENDGRID_ITEM /*0*/ { command = EPuttyCmdSendSpace; txt = "Space"; },
+        SENDGRID_ITEM /*#*/ { command = EPuttyCmdSendBackquote; txt = "Backquote `"; }
+    };
+}
+
+// Send special key grid
+RESOURCE SENDGRID r_putty_send_special_key_grid {
+    items = {
+        SENDGRID_ITEM /*1*/ { command = EPuttyCmdSendHome; txt = "Home"; },
+        SENDGRID_ITEM /*2*/ { subgrid = r_putty_send_fkey_grid; txt = "F1-F10..."; },
+        SENDGRID_ITEM /*3*/ { command = EPuttyCmdSendPageUp; txt = "Page Up"; },
+        SENDGRID_ITEM /*4*/ { txt = ""; },
+        SENDGRID_ITEM /*5*/ { txt = ""; },
+        SENDGRID_ITEM /*6*/ { txt = ""; },
+        SENDGRID_ITEM /*7*/ { command = EPuttyCmdSendEnd; txt = "End"; },
+        SENDGRID_ITEM /*8*/ { txt = ""; },
+        SENDGRID_ITEM /*9*/ { command = EPuttyCmdSendPageDown; txt = "Page Down"; },
+        SENDGRID_ITEM /***/ { txt = ""; },
+        SENDGRID_ITEM /*0*/ { command = EPuttyCmdSendInsert; txt = "Insert"; },
+        SENDGRID_ITEM /*#*/ { command = EPuttyCmdSendDelete; txt = "Delete"; }
+    };
+}
+
+// Send Alt + key
+RESOURCE MENU_PANE r_putty_send_alt_grid {
+    items = {
+        SENDGRID_ITEM /*1*/ { command = EPuttyCmdSendAlt1; txt = "Alt-1"; },
+        SENDGRID_ITEM /*2*/ { command = EPuttyCmdSendAlt2; txt = "Alt-2"; },
+        SENDGRID_ITEM /*3*/ { command = EPuttyCmdSendAlt3; txt = "Alt-3"; },
+        SENDGRID_ITEM /*4*/ { command = EPuttyCmdSendAlt4; txt = "Alt-4"; },
+        SENDGRID_ITEM /*5*/ { command = EPuttyCmdSendAlt5; txt = "Alt-5"; },
+        SENDGRID_ITEM /*6*/ { command = EPuttyCmdSendAlt6; txt = "Alt-6"; },
+        SENDGRID_ITEM /*7*/ { command = EPuttyCmdSendAlt7; txt = "Alt-7"; },
+        SENDGRID_ITEM /*8*/ { command = EPuttyCmdSendAlt8; txt = "Alt-8"; },
+        SENDGRID_ITEM /*9*/ { command = EPuttyCmdSendAlt9; txt = "Alt-9"; },
+        SENDGRID_ITEM /***/ { command = EPuttyCmdSendAltKeys; txt = "Alt+Keys..."; },
+        SENDGRID_ITEM /*1*/ { command = EPuttyCmdSendAlt0; txt = "Alt-0"; },
+        SENDGRID_ITEM /*#*/ { txt = ""; }
+    };
+}
+
+// Send Control + key
+RESOURCE MENU_PANE r_putty_send_ctrl_grid {
+    items = {
+        SENDGRID_ITEM /*1*/ { command = EPuttyCmdSendCtrlKeys; txt = "Ctrl+Keys..."; },
+        SENDGRID_ITEM /*2*/ { command = EPuttyCmdSendCtrlD; txt = "Ctrl-D"; },
+        SENDGRID_ITEM /*3*/ { command = EPuttyCmdSendCtrlBrkt; txt = "Ctrl-]"; },
+        SENDGRID_ITEM /*4*/ { command = EPuttyCmdSendCtrlC; txt = "Ctrl-C"; },
+        SENDGRID_ITEM /*5*/ { command = EPuttyCmdSendCtrlZ; txt = "Ctrl-Z"; },
+        SENDGRID_ITEM /*6*/ { txt = ""; },
+        SENDGRID_ITEM /*7*/ { txt = ""; },
+        SENDGRID_ITEM /*8*/ { txt = ""; },
+        SENDGRID_ITEM /*9*/ { txt = ""; },
+        SENDGRID_ITEM /***/ { txt = ""; },
+        SENDGRID_ITEM /*0*/ { txt = ""; },
+        SENDGRID_ITEM /*#*/ { command = EPuttyCmdSendCtrlAD; txt = "Ctrl-A,D"; }
+    };
+}
+
+// Send function key menu pane
+RESOURCE MENU_PANE r_putty_send_fkey_grid {
+    items = {
+        SENDGRID_ITEM /*1*/ { command = EPuttyCmdSendF1; txt = "F1"; },
+        SENDGRID_ITEM /*2*/ { command = EPuttyCmdSendF2; txt = "F2"; },
+        SENDGRID_ITEM /*3*/ { command = EPuttyCmdSendF3; txt = "F3"; },
+        SENDGRID_ITEM /*4*/ { command = EPuttyCmdSendF4; txt = "F4"; },
+        SENDGRID_ITEM /*5*/ { command = EPuttyCmdSendF5; txt = "F5"; },
+        SENDGRID_ITEM /*6*/ { command = EPuttyCmdSendF6; txt = "F6"; },
+        SENDGRID_ITEM /*7*/ { command = EPuttyCmdSendF7; txt = "F7"; },
+        SENDGRID_ITEM /*8*/ { command = EPuttyCmdSendF8; txt = "F8"; },
+        SENDGRID_ITEM /*9*/ { command = EPuttyCmdSendF9; txt = "F9"; },
+        SENDGRID_ITEM /***/ { txt = ""; },
+        SENDGRID_ITEM /*0*/ { command = EPuttyCmdSendF10;txt = "F10";},
+        SENDGRID_ITEM /*#*/ { txt = ""; }
+    };
+}
+
+// Network connection wait dialog
+RESOURCE DIALOG r_putty_net_connect_wait_dialog {
+    flags = EAknWaitNoteFlags;
+    buttons = R_AVKON_SOFTKEYS_CANCEL;
+    items = {
+        DLG_LINE {
+            type = EAknCtNote;
+            id = EDialerDialog;
+            control = AVKON_NOTE {
+                layout = EWaitLayout;
+                animation = R_QGN_GRAF_WAIT_BAR_ANIM;
+                singular_label = "Connecting to network...";
+            };
+        }
+    };
+}
+
+// Host key query dialog
+RESOURCE DIALOG r_putty_hostkey_query_dialog {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_YES_NO;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EGeneralQuery;
+            control = AVKON_CONFIRMATION_QUERY {
+                layout = EConfirmationQueryLayout;
+            };
+        }
+    };
+}
+
+// Accept weak cipher prompt dialog
+RESOURCE DIALOG r_putty_cipher_query_dialog {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_YES_NO;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EGeneralQuery;
+            control = AVKON_CONFIRMATION_QUERY {
+                layout = EConfirmationQueryLayout;
+            };
+        }
+    };
+}
+
+// Authentication prompt for non-secret data (such as the username)
+RESOURCE DIALOG r_putty_auth_not_secret_dialog {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EGeneralQuery;
+            control = AVKON_DATA_QUERY {
+                layout = EDataLayout;
+                label = "";
+                control = EDWIN {
+                    default_case = EAknEditorLowerCase;
+                    avkon_flags = EAknEditorFlagNoT9;
+                };
+            };
+        }
+    };
+}
+
+// Authentication prompt for secret data (such as a password)
+RESOURCE DIALOG r_putty_auth_secret_dialog {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EGeneralQuery;
+            control = AVKON_DATA_QUERY {
+                layout = ECodeLayout;
+                label = "";
+                control = SECRETED {
+                    num_letters = 32;                    
+                };
+            };
+        }
+    };
+}
+
+// Disconnect confirmation query
+RESOURCE DIALOG r_putty_confirm_disconnect_query {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_YES_NO;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EConfirmDisconnectQuery;
+            control = AVKON_CONFIRMATION_QUERY {
+                layout = EConfirmationQueryLayout;
+                label = "Disconnect current session?";
+            };
+        }
+    };
+}
+
+// Send text dialog
+RESOURCE DIALOG r_putty_send_text_dialog {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EGeneralQuery;
+            control = AVKON_DATA_QUERY {
+                layout = EDataLayout;
+                label = "";
+                control = EDWIN {
+                    default_case = EAknEditorLowerCase;
+                    maxlength = 256;
+                };
+            };
+        }
+    };
+}
+
+
+/*********************
+ *
+ * Common resources
+ *
+ ********************/
+
+// Generic info message dilaog
+RESOURCE DIALOG r_putty_info_message_dlg {
+    flags = EAknDialogGenericQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
+    items = {
+        DLG_LINE {
+            type = EAknCtNote;
+            id = EInfoMessage;
+            control = AVKON_NOTE {
+                layout = ENoteWithImageLayout;
+                singular_label = "";
+                plural_label = "";
+            };
+        }
+    };
+}
+
+// Generic string entry dialog
+RESOURCE DIALOG r_putty_string_query_dialog {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EEnterString;
+            control = AVKON_DATA_QUERY {
+                layout = EDataLayout;
+                label = "";
+                control = EDWIN {
+                    flags = EEikEdwinNoHorizScrolling | EEikEdwinResizable;
+                    width = 5;
+                    maxlength = 128;
+                    max_view_height_in_lines = 5;
+                    base_line_delta = 21;
+                    // Default to lower case, no T9
+                    default_case = EAknEditorLowerCase;
+                    avkon_flags = EAknEditorFlagNoT9;
+                };
+            };
+        }
+    };
+}
+
+// Generic info message dilaog
+RESOURCE DIALOG r_putty_info_message_dialog {
+    flags = EAknDialogGenericQueryFlags | EEikDialogFlagWait;
+    buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
+    items = {
+        DLG_LINE {
+            type = EAknCtNote;
+            id = EInfoMessage;
+            control = AVKON_NOTE {
+                layout = ENoteWithImageLayout;
+                singular_label = "";
+                plural_label = "";
+            };
+        }
+    };
+}
+
+// Palette names
+RESOURCE ARRAY r_putty_palette_names {
+    items = {
+        LBUF { txt = "Black on White"; },
+        LBUF { txt = "Gray on Black"; },
+        LBUF { txt = "White on Black"; }
+    };
+}
+
+// Palettes
+STRUCT PALETTE {
+    BYTE values[66]; // 22 RGB values
+}
+RESOURCE ARRAY r_putty_palettes {
+    items = {
+        PALETTE { // Black on white
+            values = {
+                0,0,0,  128,128,128,  255,255,255,  255,255,255,  0,0,0,
+                128,128,192,  0,0,0,  85,85,85,  187,0,0,  255,85,85,
+                0,187,0,  85,255,85,  187,187,0,  255,255,85,  0,0,187,
+                85,85,255,  187,0,187,  255,85,255,  0,187,187,
+                85,255,255,  187,187,187,  192,192,192
+            };
+        },
+        PALETTE { // Gray on black
+            values = {
+                187, 187, 187,  255,255,255,  0,0,0,  0,0,0,  0,0,0,
+                128,128,192,  0,0,0,  85,85,85,  187,0,0,  255,85,85,
+                0,187,0,  85,255,85,  187,187,0,  255,255,85,  0,0,187,
+                85,85,255,  187,0,187,  255,85,255,  0,187,187,
+                85,255,255,  187,187,187,  255,255,255
+            };
+        }, 
+        PALETTE { // White on black
+            values = {
+                255, 255, 255,  255,255,255,  0,0,0,  0,0,0,  0,0,0,
+                128,128,192,  0,0,0,  85,85,85,  187,0,0,  255,85,85,
+                0,187,0,  85,255,85,  187,187,0,  255,255,85,  0,0,187,
+                85,85,255,  187,0,187,  255,85,255,  0,187,187,
+                85,255,255,  187,187,187,  255,255,255
+            };
+        }
+    };
+}
+
+// Profile list view title
+RESOURCE TBUF r_putty_str_profilelist_title  { buf = "Profiles"; }
+
+// Profile edit view title
+RESOURCE TBUF r_putty_str_profileedit_title  { buf = "Edit profile"; }
+
+// Log file selection dialog title
+RESOURCE TBUF r_putty_str_logfile_dialog_title { buf = "Select log file"; }
+
+// Terminal view title
+RESOURCE TBUF r_putty_str_terminal_title  { buf = "PuTTY"; }
+
+// Log file name prompt
+RESOURCE TBUF r_putty_str_logfile_prompt { buf = "Log file"; }
+
+// Profile edit open/edit menu item test
+RESOURCE TBUF r_putty_str_profileedit_pagelist_open { buf = "Open"; }
+RESOURCE TBUF r_putty_str_profileedit_settinglist_edit { buf = "Edit"; }
+
+// Error: Default font not found
+RESOURCE TBUF r_putty_str_error_default_font_not_found { buf = "Font not available"; }
+
+// Host name prompt
+RESOURCE TBUF r_putty_str_host_prompt { buf = "Host"; }
+
+// Connection failed error message. %U = error message, %N = error code
+RESOURCE TBUF r_putty_str_net_connect_failed { buf = "Connection failed.\n%U (%N)\n"; }
+
+// Connecting to host info message
+RESOURCE TBUF r_putty_str_connecting_to_host { buf = "Connecting to server..."; }
+
+// Fatal error with error code, %N = error code
+RESOURCE TBUF r_putty_str_fatal_error_with_code { buf = "Fatal error %N"; }
+
+// Connection closed info message (connection closed normally)
+RESOURCE TBUF r_putty_str_connection_closed { buf = "Connection closed"; }
+
+// Unknown host key dialog contents format string. %S = key fingerprint
+RESOURCE TBUF r_putty_str_unknown_host_key_dlg_fmt {
+    buf = "Accept unknown host key?\n%S";
+}
+
+// Different host key dialog contents format string. %S = key fingerprint
+RESOURCE TBUF r_putty_str_different_host_key_dlg_fmt {
+    buf = "Accept CHANGED host key?\n%S";
+}
+
+// Accept cipher dialog contents format string. First %S = cipher, second
+// the direction
+RESOURCE TBUF r_putty_str_accept_cipher_dlg_fmt {
+    buf = "Accept WEAK\n%S %S?";
+}
+
+// Send text dialog prompt for a line (with CR)
+RESOURCE TBUF r_putty_str_line { buf = "Line"; }
+
+// Send text dialog prompt for text (without CR)
+RESOURCE TBUF r_putty_str_text { buf = "Text"; }
+
+// Send text dialog prompt for Ctrl+keys
+RESOURCE TBUF r_putty_str_ctrl_keys { buf = "Ctrl+..."; }
+
+// Send text dialog prompt for Alt+keys
+RESOURCE TBUF r_putty_str_alt_keys { buf = "Alt+..."; }

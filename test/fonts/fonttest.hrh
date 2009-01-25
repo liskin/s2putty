@@ -1,0 +1,6 @@
+enum TCommands {
+    ECommand0 = 100,
+    ECommand1,
+    ECommand2,
+    ECommand3
+};

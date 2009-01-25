@@ -1,0 +1,32 @@
+/*    puttyuids.hrh
+ *
+ * Putty UI UID definitions
+ *
+ * Copyright 2007 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+#ifndef PUTTYUIDS_HRH
+#define PUTTYUIDS_HRH
+
+/** PuTTY S60v3 application */
+#ifdef EKA2
+#define KUidPuttyAppDefine 0xf01f9075
+#else
+#error EKA1 broken
+#endif
+
+/** Profile list view */
+#define KUidPuttyProfileListViewDefine 0xa0000e4f
+
+/** Profile edit view */
+#define KUidPuttyProfileEditViewDefine 0xa0000e50
+
+/** Profile edit view activation message */
+#define KUidPuttyProfileEditViewActivateMessageDefine 0xa0000e51
+
+/** Terminal view */
+#define KUidPuttyTerminalViewDefine 0xa0000e52
+
+#endif

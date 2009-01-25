@@ -1,0 +1,15 @@
+;*    test.pkg
+;*
+;* Package definition file for a test application
+;*
+;* Copyright 2005 Petteri Kangaslampi
+;*
+;* See license.txt for full copyright and license information.
+
+#{"Test"},(0x011f9076),1,0,20051211
+
+; Supports Series 60 v0.9 or later.
+(0x101F6F88), 0, 0, 0, {"Series60ProductID"}
+
+"..\..\..\epoc32\release\armi\urel\test.app"-"!:\system\apps\test\test.app"
+"..\..\..\epoc32\release\armi\urel\test.rsc"-"!:\system\apps\test\test.rsc"

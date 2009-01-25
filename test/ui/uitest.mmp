@@ -1,0 +1,14 @@
+TARGET		uitest.app
+TARGETTYPE	app
+UID		0x100039ce 0x01420075
+TARGETPATH	\system\apps\uitest
+
+SOURCEPATH	..\..
+SOURCE		test\ui\uitest.cpp
+SOURCE		crystalui\terminalcontrol.cpp
+
+USERINCLUDE	. ..\..\include ..\..\crystalui ..\..\puttysymbian ..\..\putty
+SYSTEMINCLUDE	\epoc32\include
+
+RESOURCE	test\ui\uitest.rss
+LIBRARY		euser.lib apparc.lib cone.lib eikcore.lib gdi.lib

@@ -1,0 +1,32 @@
+;*    putty.pkg
+;*
+;* Package definition file for PuTTY for Series 60
+;*
+;* Copyright 2002,2003,2005 Petteri Kangaslampi
+;*
+;* See license.txt for full copyright and license information.
+
+#{"PuTTY"},(0x101f9076),1,4,20060305
+
+; Supports Series 60 v0.9 or later.
+(0x101F6F88), 0, 0, 0, {"Series60ProductID"}
+
+; Installation note
+"installnote.txt"-"",FT,TC
+
+; PuTTY UI application
+"..\..\..\epoc32\release\armi\urel\putty.app"-"!:\system\apps\putty\putty.app"
+"..\..\..\epoc32\release\armi\urel\putty.rsc"-"!:\system\apps\putty\putty.rsc"
+"..\..\..\epoc32\release\armi\urel\putty.aif"-"!:\system\apps\putty\putty.aif"
+
+; Putty engine
+"..\..\..\epoc32\release\armi\urel\puttyengine.dll"-"!:\system\apps\putty\puttyengine.dll"
+
+; Recognizer
+"..\..\..\epoc32\release\armi\urel\recputty.mdl"-"!:\system\recogs\recputty.mdl"
+
+; Fonts
+"..\..\ui\s2font\fixed4x6.s2f"-"!:\system\apps\putty\fonts\fixed4x6.s2f"
+"..\..\ui\s2font\fixed5x7.s2f"-"!:\system\apps\putty\fonts\fixed5x7.s2f"
+"..\..\ui\s2font\fixed6x10.s2f"-"!:\system\apps\putty\fonts\fixed6x10.s2f"
+"..\..\ui\s2font\fixed6x12.s2f"-"!:\system\apps\putty\fonts\fixed6x12.s2f"

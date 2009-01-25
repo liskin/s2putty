@@ -1,0 +1,4 @@
+EXPORTS
+; NEW:
+	NewL__12CPuttyEngineP12MPuttyClientRC7TDesC16 @ 1 NONAME ; CPuttyEngine::NewL(MPuttyClient *, TDesC16 const &)
+

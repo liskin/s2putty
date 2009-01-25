@@ -1,0 +1,26 @@
+;*    putty.pkg
+;*
+;* Package definition file for PuTTY for the Nokia 9200 Communicator series
+;*
+;* Copyright 2002-2004 Petteri Kangaslampi
+;*
+;* See license.txt for full copyright and license information.
+
+#{"PuTTY"},(0x101f9076),1,4,20060503,TYPE=SISAPP
+
+; Signature
+*"c:\home\pekangas\keys\petteri2006.key","c:\home\pekangas\keys\petteri2006.cer"
+
+; Installation note
+"installnote.txt"-"",FT,TC
+
+; PuTTY UI application
+"..\..\..\epoc32\release\armi\urel\putty.app"-"!:\system\apps\putty\putty.app"
+"..\..\..\epoc32\release\armi\urel\putty.rsc"-"!:\system\apps\putty\putty.rsc"
+"..\..\..\epoc32\release\armi\urel\putty.aif"-"!:\system\apps\putty\putty.aif"
+
+; Putty engine
+"..\..\..\epoc32\release\armi\urel\puttyengine.dll"-"!:\system\apps\putty\puttyengine.dll"
+
+; Recognizer
+"..\..\..\epoc32\release\armi\urel\recputty.mdl"-"!:\system\recogs\recputty.mdl"

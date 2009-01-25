@@ -1,0 +1,26 @@
+/*    sendgrid.rh
+ *
+ * S60 "Send" grid control resource structure definitions
+ *
+ * Copyright 2008 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+#ifndef SENDGRID_RH
+#define SENDGRID_RH
+
+
+// Defines a single grid
+STRUCT SENDGRID {
+    STRUCT items[]; // SENDGRID_ITEMs, must be exactly 12
+}
+
+// Send grid item, used in SENDGRID.items
+STRUCT SENDGRID_ITEM {
+    LONG command = 0;  // command id. Ignored if subgrid is defined
+    LLINK subgrid = 0; // link to subgrid
+    LTEXT txt;         // text, max length 30 characters
+}
+
+#endif

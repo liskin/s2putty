@@ -1,0 +1,29 @@
+TARGET		telnettest.dxe
+TARGETTYPE	exedll
+//TARGETTYPE	exe
+SOURCEPATH	..\..
+UID		0x01420071
+TARGETPATH      \test\telnettest.dxe
+
+
+USERINCLUDE	..\..\puttysymbian ..\..\putty
+
+SOURCE		putty\telnet.c
+SOURCE		putty\misc.c
+SOURCE		putty\version.c
+SOURCE		putty\settings.c
+SOURCE		putty\tree234.c
+SOURCE		putty\ldisc.c
+
+SOURCE		puttysymbian\epocnet.cpp
+SOURCE		puttysymbian\epocstore.cpp
+SOURCE		puttysymbian\charutil.cpp
+SOURCE		puttysymbian\assert.cpp
+SOURCE		puttysymbian\epocmemory.cpp
+
+SOURCE		test\telnet\telnettest.cpp
+
+SYSTEMINCLUDE	..\..\puttysymbian
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+
+LIBRARY		estlib.lib euser.lib insock.lib esock.lib efsrv.lib

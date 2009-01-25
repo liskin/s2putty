@@ -1,0 +1,44 @@
+/*    puttyui.mmp
+ *
+ * Project definition file for PuTTY UI APP.
+ *
+ * Copyright 2002,2003 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+TARGET		putty.app
+TARGETTYPE	app
+UID		0x100039ce 0x101f9075
+TARGETPATH	\system\apps\putty
+AIF		putty.aif ..\..\ui\s90 puttyuiaif.rss c12 iconlarge.bmp iconlargemask.bmp iconsmall.bmp iconsmallmask.bmp
+
+MACRO		PUTTY_S90
+
+SOURCEPATH	..\..\ui
+SOURCE		s90\puttyapp.cpp
+SOURCE		s90\puttydoc.cpp
+SOURCE		s90\puttyappui.cpp
+SOURCE		s90\puttyappview.cpp
+SOURCE		s90\connectiondialog.cpp
+SOURCE		s90\dialler.cpp
+SOURCE		s90\audiorecorder.cpp
+SOURCE		s90\settingsdialog.cpp
+SOURCE		s90\authdialog.cpp
+
+SOURCE		common\terminalcontrol.cpp
+SOURCE		common\terminalcontrols2font.cpp
+SOURCE		common\oneshottimer.cpp
+
+SOURCE		s2font\s2font.cpp
+
+USERINCLUDE	..\..\ui\s90 ..\..\ui\common ..\..\ui\s2font
+USERINCLUDE	..\..\include ..\..\engine\putty ..\..\engine\puttysymbian
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+
+RESOURCE	s90\putty.rss
+LIBRARY		euser.lib apparc.lib cone.lib eikcore.lib gdi.lib ckndlg.lib
+LIBRARY		eikcoctl.lib eikdlg.lib efsrv.lib
+LIBRARY		mediaclientaudio.lib eikctl.lib eikcdlg.lib cknctl.lib 
+LIBRARY		bitgdi.lib fbscli.lib ws32.lib fepbase.lib
+LIBRARY		puttyengine.lib

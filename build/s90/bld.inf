@@ -1,0 +1,15 @@
+//*    bld.inf
+//*
+//* Component definition file for PuTTY for S90
+//*
+//* Copyright 2002-2004,2006 Petteri Kangaslampi
+//*
+//* See license.txt for full copyright and license information.
+
+PRJ_PLATFORMS 
+wins armi
+
+PRJ_MMPFILES
+puttyengine.mmp
+puttyui.mmp
+..\common\configrecog.mmp

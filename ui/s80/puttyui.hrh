@@ -1,0 +1,92 @@
+/*    puttyui.hrh
+ *
+ * Putty UI resource constants definitions
+ *
+ * Copyright 2002,2003 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+#ifndef __PUTTYUI_HRH__
+#define __PUTTYUI_HRH__
+
+enum TCommands {
+    ECmdConnect = 100,
+    ECommand1,
+    ECommand2,
+    ECmdLargeFont,
+    ECmdFullScreen,
+    ECmdInitRandomGenerator,
+    ECmdLoadSettings,
+    ECmdSettings,
+    ECmdSaveSettings,
+    ECmdSaveSettingsAsDefault,
+    ECmdResetDefaultSettings,
+    ECmdAbout,
+    ECmdSendSpecialCharacter,
+    ECmdSendPipe,
+    ECmdSendBackquote,
+    ECmdSendLessThan,
+    ECmdSendGreaterThan,
+    ECmdSelect,
+    ECmdUnselect,
+    ECmdMark,
+    ECmdCopy,
+    ECmdPaste,
+
+    ECmdSendF1,
+    ECmdSendF2,
+    ECmdSendF3,
+    ECmdSendF4,
+    ECmdSendF5,
+    ECmdSendF6,
+    ECmdSendF7,
+    ECmdSendF8,
+    ECmdSendF9,
+    ECmdSendF10,
+
+    ECmdHostKeyAcceptAndSave,
+    ECmdHostKeyAcceptOnce,
+    ECmdHostKeyReject,
+
+    ECmdSettingsBrowseKeyFile,
+    ECmdSettingsDelete,
+
+    ECmdProfileListConnect,
+    ECmdProfileListEdit,
+    ECmdProfileListNew,
+    ECmdProfileListClose,
+
+    ECmdPaletteStart = 1000,
+    ECmdPaletteEnd = 1100
+};
+
+enum TDlgControls {
+    EConnDlgHost = 200,
+
+    ESettingsProfilePage,
+    ESettingsSshPage,
+    ESettingsDisplayPage,
+    ESettingsLoggingPage,
+    ESettingsHost,
+    ESettingsPort,
+    ESettingsSshVersion,
+    ESettingsUsername,
+    ESettingsPrivateKey,
+    ESettingsLogType,
+    ESettingsLogFile,
+    ESettingsKeepalive,
+    ESettingsCompression,
+    ESettingsSshCipher,
+    ESettingsCharacterSet,
+    ESettingsProfile,
+    ESettingsFullScreen,
+    ESettingsFont,
+    ESettingsPalette,
+
+    EAuthPromptEditor,
+
+    EProfileListDlgProfileList
+};
+
+#endif

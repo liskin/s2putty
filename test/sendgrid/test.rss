@@ -1,0 +1,127 @@
+/*    testui.rss
+ *
+ * Test resource definitions
+ *
+ * Copyright 2004 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+NAME TEST
+
+#include <eikon.rh>
+#include "testui.hrh"
+#include <avkon.rsg>
+#include <avkon.rh>
+#include "sendgrid.rh"
+
+RESOURCE RSS_SIGNATURE {
+}
+
+RESOURCE TBUF {
+    buf = "";
+}
+
+RESOURCE EIK_APP_INFO {
+    menubar = r_test_menubar;
+    cba = R_AVKON_SOFTKEYS_OPTIONS_EXIT;
+}
+
+RESOURCE MENU_BAR r_test_menubar {
+    titles = {
+        MENU_TITLE { menu_pane = r_test_menu_pane; txt = ""; }
+    };
+}
+
+RESOURCE MENU_PANE r_test_menu_pane {
+    items = {
+        MENU_ITEM { command = ETestCmdShowGrid; txt = "Show Grid"; },
+        MENU_ITEM { command = ETestCmdRemoveGrid; txt = "Remove Grid"; },
+        MENU_ITEM { command = EEikCmdExit; txt = "Exit"; }
+    };
+}
+
+RESOURCE SENDGRID r_test_grid {
+    items = {
+        SENDGRID_ITEM { command = 1; txt = "Line..."; },  // 1
+        SENDGRID_ITEM { command = 2; txt = "Text..."; },  // 2
+        SENDGRID_ITEM { command = 3; txt = "Enter"; },    // 3
+        SENDGRID_ITEM { command = 4; txt = "Sp.char"; },  // 4
+        SENDGRID_ITEM { command = 5; txt = "Sp.key"; },   // 5
+        SENDGRID_ITEM { command = 6; txt = "F1-F10"; },   // 6
+        SENDGRID_ITEM { subgrid = r_test_ctrl_grid; txt = "Ctrl+..."; }, // 7
+        SENDGRID_ITEM { subgrid = r_test_alt_grid; txt = "Alt+..."; },  // 8
+        SENDGRID_ITEM { command = 9; txt = "Pipe"; },     // 9
+        SENDGRID_ITEM { command = 10; txt = "Esc"; },     // *
+        SENDGRID_ITEM { command = 11; txt = "Space"; },   // 0
+        SENDGRID_ITEM { command = 12; txt = "Pah"; }      // #
+    };
+}
+
+RESOURCE SENDGRID r_test_ctrl_grid {
+    items = {
+        SENDGRID_ITEM { command = 1; txt = "Ctrl+keys"; },  // 1
+        SENDGRID_ITEM { command = 2; txt = "Ctrl+D"; },  // 2
+        SENDGRID_ITEM { command = 3; txt = "Ctrl+C"; },    // 3
+        SENDGRID_ITEM { command = 4; txt = "Ctrl+A,A"; },  // 4
+        SENDGRID_ITEM { command = 5; txt = "Ctrl+A,D"; },   // 5
+        SENDGRID_ITEM { command = 6; txt = "Pyh"; },   // 6
+        SENDGRID_ITEM { command = 7; txt = "Pyh7"; }, // 7
+        SENDGRID_ITEM { command = 8; txt = "Pyh8"; },  // 8
+        SENDGRID_ITEM { command = 9; txt = "Pyh9"; },     // 9
+        SENDGRID_ITEM { command = 10; txt = "Pyh10"; },     // *
+        SENDGRID_ITEM { command = 11; txt = "Pyh11"; },   // 0
+        SENDGRID_ITEM { command = 12; txt = "Pyh12"; }      // #
+    };
+}
+
+RESOURCE SENDGRID r_test_alt_grid {
+    items = {
+        SENDGRID_ITEM { command = 1; txt = "Alt+keys"; },  // 1
+        SENDGRID_ITEM { subgrid = r_test_alt_f; txt = "Alt + F1-F10..."; },  // 2
+        SENDGRID_ITEM { command = 3; txt = ""; },    // 3
+        SENDGRID_ITEM { subgrid = r_test_alt_num; txt = "Alt+nums..."; },  // 4
+        SENDGRID_ITEM { txt = ""; },   // 5
+        SENDGRID_ITEM { txt = ""; },   // 6
+        SENDGRID_ITEM { txt = ""; }, // 7
+        SENDGRID_ITEM { txt = ""; },  // 8
+        SENDGRID_ITEM { txt = ""; },     // 9
+        SENDGRID_ITEM { txt = ""; },     // *
+        SENDGRID_ITEM { txt = ""; },   // 0
+        SENDGRID_ITEM { txt = ""; }      // #
+    };
+}
+
+RESOURCE SENDGRID r_test_alt_f {
+    items = {
+        SENDGRID_ITEM { command = 1; txt = "Alt+F1"; },  // 1
+        SENDGRID_ITEM { command = 2; txt = "Alt+F2"; },  // 2
+        SENDGRID_ITEM { command = 3; txt = "Alt+F3"; },  // 3
+        SENDGRID_ITEM { command = 4; txt = "Alt+F4"; },  // 4
+        SENDGRID_ITEM { command = 5; txt = "Alt+F5"; },  // 5
+        SENDGRID_ITEM { command = 6; txt = "Alt+F6"; },  // 6
+        SENDGRID_ITEM { command = 7; txt = "Alt+F7"; },  // 7
+        SENDGRID_ITEM { command = 8; txt = "Alt+F8"; },  // 8
+        SENDGRID_ITEM { command = 9; txt = "Alt+F9"; },  // 9
+        SENDGRID_ITEM { txt = ""; },     // *
+        SENDGRID_ITEM { command = 0; txt = "Alt+F10"; },   // 0
+        SENDGRID_ITEM { txt = ""; }      // #
+    };
+}
+
+RESOURCE SENDGRID r_test_alt_num {
+    items = {
+        SENDGRID_ITEM { command = 1; txt = "Alt+1"; },  // 1
+        SENDGRID_ITEM { command = 2; txt = "Alt+2"; },  // 2
+        SENDGRID_ITEM { command = 3; txt = "Alt+3"; },  // 3
+        SENDGRID_ITEM { command = 4; txt = "Alt+4"; },  // 4
+        SENDGRID_ITEM { command = 5; txt = "Alt+5"; },  // 5
+        SENDGRID_ITEM { command = 6; txt = "Alt+6"; },  // 6
+        SENDGRID_ITEM { command = 7; txt = "Alt+7"; },  // 7
+        SENDGRID_ITEM { command = 8; txt = "Alt+8"; },  // 8
+        SENDGRID_ITEM { command = 9; txt = "Alt+9"; },  // 9
+        SENDGRID_ITEM { txt = ""; },     // *
+        SENDGRID_ITEM { command = 0; txt = "Alt+0"; },   // 0
+        SENDGRID_ITEM { txt = ""; }      // #
+    };
+}

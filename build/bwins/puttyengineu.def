@@ -1,0 +1,4 @@
+EXPORTS
+; NEW:
+	?NewL@CPuttyEngine@@SAPAV1@PAVMPuttyClient@@ABVTDesC16@@@Z @ 1 NONAME ; public: static class CPuttyEngine * __cdecl CPuttyEngine::NewL(class MPuttyClient *,class TDesC16 const &)
+

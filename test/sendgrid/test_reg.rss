@@ -1,0 +1,10 @@
+#include <appinfo.rh>
+
+UID2 KUidAppRegistrationResourceFile
+UID3 0xf11f9001
+
+RESOURCE APP_REGISTRATION_INFO {
+    app_file = "test";
+    embeddability = KAppNotEmbeddable;
+    newfile = KAppDoesNotSupportNewFile;
+}

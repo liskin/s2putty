@@ -1,0 +1,13 @@
+TARGET		fonttest.app
+TARGETTYPE	app
+UID		0x100039ce 0x01420074
+TARGETPATH	\system\apps\fonttest
+
+SOURCEPATH	.
+SOURCE		fonttest.cpp
+
+USERINCLUDE	.
+SYSTEMINCLUDE	\epoc32\include
+
+RESOURCE	fonttest.rss
+LIBRARY		euser.lib apparc.lib cone.lib eikcore.lib gdi.lib

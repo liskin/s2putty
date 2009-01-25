@@ -1,0 +1,31 @@
+/*    puttyuiaif.rss
+ *
+ * Resource definition for PuTTY UI application application info
+ * (AIF) file
+ *
+ * Copyright 2002 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+#include <aiftool.rh>
+
+RESOURCE AIF_DATA {
+    app_uid = 0x101f9075;
+
+    caption_list = {
+        CAPTION {
+            code = ELangEnglish;
+            caption = "PuTTY";
+        }
+    };
+
+    num_icons = 2;
+
+    datatype_list = {
+        DATATYPE {
+            priority = EDataTypePriorityHigh;
+            type = "application/prs.s2.putty-config";
+        }
+    };
+}

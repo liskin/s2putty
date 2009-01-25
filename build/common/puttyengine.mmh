@@ -1,0 +1,111 @@
+/*    puttyengine.mmh
+ *
+ * Project definition file include for the PuTTY engine DLL.
+ * Note that this is an almost complete project definition file on its own.
+ * Platform-specific project definition files just define macros and
+ * #include this.
+ *
+ * Copyright 2002-2004,2006,2008 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+TARGET		puttyengine.dll
+TARGETTYPE	dll
+SOURCEPATH	..\..\engine
+#ifdef EKA2
+CAPABILITY	NetworkServices
+UID		0x1000008d 0xf01f9073
+#else
+UID		0x1000008d 0x101f9073
+#endif
+
+USERINCLUDE	..\..\include ..\..\engine ..\..\engine\puttysymbian 
+USERINCLUDE	..\..\engine\putty ..\..\engine\putty\charset
+
+// Engine module source files
+SOURCE		puttyengineimp.cpp
+SOURCE		terminalkeys.cpp
+SOURCE		oneshottimer.cpp
+
+// PuTTY core source files
+SOURCE		putty\ssh.c
+SOURCE		putty\misc.c
+SOURCE		putty\version.c
+SOURCE		putty\settings.c
+SOURCE		putty\tree234.c
+SOURCE		putty\ldisc.c
+SOURCE		putty\sshcrc.c
+SOURCE		putty\sshdes.c
+SOURCE		putty\sshmd5.c
+SOURCE		putty\sshrsa.c
+SOURCE		putty\sshrand.c
+SOURCE		putty\sshsha.c
+SOURCE		putty\sshblowf.c
+SOURCE		putty\sshdh.c
+SOURCE		putty\sshcrcda.c
+SOURCE		putty\sshpubk.c
+SOURCE		putty\sshzlib.c
+SOURCE		putty\sshdss.c
+SOURCE		putty\x11fwd.c
+SOURCE		putty\portfwd.c
+SOURCE		putty\sshaes.c
+SOURCE		putty\sshsh512.c
+SOURCE		putty\sshbn.c
+SOURCE		putty\terminal.c
+SOURCE		putty\wcwidth.c
+SOURCE		putty\proxy.c
+SOURCE		putty\ldiscucs.c
+SOURCE		putty\pproxy.c
+SOURCE		putty\wildcard.c
+SOURCE		putty\logging.c
+SOURCE		putty\cproxy.c
+SOURCE		putty\minibidi.c
+SOURCE		putty\pinger.c
+SOURCE		putty\timing.c
+SOURCE		putty\time.c
+SOURCE		putty\ssharcf.c
+SOURCE		putty\sshsh256.c
+
+// PuTTY charset library sources
+SOURCE		putty\charset\sbcsdat.c
+SOURCE		putty\charset\slookup.c
+SOURCE		putty\charset\sbcs.c
+SOURCE		putty\charset\utf8.c
+SOURCE		putty\charset\toucs.c
+SOURCE		putty\charset\fromucs.c
+SOURCE		putty\charset\xenc.c
+SOURCE		putty\charset\mimeenc.c
+SOURCE		putty\charset\macenc.c
+SOURCE		putty\charset\localenc.c
+
+// Putty Symbian OS specific sources
+SOURCE		puttysymbian\epocnet.cpp
+SOURCE		puttysymbian\epocstore.cpp
+SOURCE		puttysymbian\charutil.cpp
+SOURCE		puttysymbian\assert.cpp
+SOURCE		puttysymbian\epocmemory.cpp
+SOURCE		puttysymbian\epocnoise.cpp
+SOURCE		puttysymbian\epocpageantc.cpp
+SOURCE		puttysymbian\epocunicode.cpp
+SOURCE		puttysymbian\epocmisc.cpp
+SOURCE		puttysymbian\epocprinting.cpp
+SOURCE		puttysymbian\snprintf.c
+
+SYSTEMINCLUDE	..\..\engine\puttysymbian
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+
+#if !defined(WINS) && !defined(EKA2)
+LIBRARY		edllstub.lib
+#endif
+LIBRARY		estlib.lib euser.lib insock.lib esock.lib efsrv.lib 
+LIBRARY		ws32.lib apgrfx.lib gdi.lib bafl.lib
+
+// Select the random number source to use
+#ifdef EKA2
+MACRO		PUTTY_HAVE_SYSTEMRANDOM
+LIBRARY		random.lib
+#else
+MACRO		PUTTY_HAVE_SYSAGENT
+LIBRARY		sysagt.lib
+#endif

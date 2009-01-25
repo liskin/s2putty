@@ -1,0 +1,15 @@
+/*    puttyengine.mmp
+ *
+ * Project definition file for the PuTTY engine DLL.
+ *
+ * Copyright 2006 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+MACRO		PUTTY_S60
+MACRO		PUTTY_S60V2
+MACRO		PUTTY_IPV6
+
+// Get all real definitions from the common include
+#include "../common/puttyengine.mmh"

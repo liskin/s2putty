@@ -1,0 +1,98 @@
+NAME FONT
+
+#include <eikon.rh>
+#include <eikcore.rsg>
+
+#include "fonttest.hrh"
+
+RESOURCE RSS_SIGNATURE {
+}
+
+RESOURCE TBUF {
+    buf = "";
+}
+
+RESOURCE EIK_APP_INFO {
+    hotkeys = r_test_hotkeys;
+    cba = r_test_cba;
+    menubar = r_test_menubar;
+}
+
+RESOURCE CBA r_test_cba {
+    breadth = 80;
+    buttons = {
+        CBA_BUTTON {
+            id = ECommand0;
+            txt = "Button 0";
+            bmpfile = "";
+            bmpid = 0xffff;
+        }, 
+        CBA_BUTTON {
+            id = ECommand1;
+            txt = "Button 1";
+            bmpfile = "";
+            bmpid = 0xffff;
+        },
+        CBA_BUTTON {
+            id = ECommand2;
+            txt = "Button 2\njee";
+            bmpfile = "";
+            bmpid = 0xffff;
+        },
+        CBA_BUTTON {
+            id = EEikCmdExit;
+            txt = "Close";
+            bmpfile = "";
+            bmpid = 0xffff;
+            }
+        };
+    }
+
+
+RESOURCE HOTKEYS r_test_hotkeys {
+    control = {
+        HOTKEY {
+            command = EEikCmdExit;
+            key = 'e';
+        }
+    };
+}
+
+RESOURCE MENU_BAR r_test_menubar {
+    titles = {
+        MENU_TITLE {
+            menu_pane = r_test_file_menu;
+            txt = "File";
+        },
+        MENU_TITLE {
+            menu_pane = r_test_tools_menu;
+            txt = "Tools";
+        }
+    };
+}
+
+RESOURCE MENU_PANE r_test_file_menu {
+    items = {
+        MENU_ITEM {
+            command = EEikCmdExit;
+            txt = "Close";
+        }
+    };
+}
+
+RESOURCE MENU_PANE r_test_tools_menu {
+    items = {
+        MENU_ITEM {
+            command = ECommand0;
+            txt="Item 0";
+        },
+        MENU_ITEM {
+            command = ECommand1;
+            txt="Item 1";
+        },
+        MENU_ITEM {
+            command = ECommand2;
+            txt="Item 2";
+        }
+    };
+}

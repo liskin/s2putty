@@ -1,0 +1,46 @@
+/*    puttyui.mmp
+ *
+ * Project definition file for PuTTY UI APP.
+ *
+ * Copyright 2002,2003,2006 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+TARGET		putty.app
+TARGETTYPE	app
+UID		0x100039ce 0x101f9075
+TARGETPATH	\system\apps\putty
+AIF		putty.aif ..\..\ui\s60 puttyuiaif.rss c12 s60_44x44.bmp s60_44x44_mask.bmp s60_42x29.bmp s60_42x29_mask.bmp
+
+MACRO		PUTTY_S60
+MACRO		PUTTY_S60V1
+
+SOURCEPATH	..\..\ui
+SOURCE		s60\puttyapp.cpp
+SOURCE		s60\puttydoc.cpp
+SOURCE		s60\puttyappui.cpp
+SOURCE		s60\puttyterminalview.cpp
+SOURCE		s60\puttyterminalcontainer.cpp
+SOURCE		s60v1\netconnectcici.cpp
+SOURCE		s60v1\audiorecorder.cpp
+SOURCE		s60\filelistdialog.cpp
+
+SOURCE		common\terminalcontrol.cpp
+SOURCE		common\terminalcontrols2font.cpp
+SOURCE		common\termfepext1.cpp
+SOURCE		common\oneshottimer.cpp
+SOURCE		s2font\s2font.cpp
+
+USERINCLUDE	..\..\ui\s60v1 ..\..\ui\s60 ..\..\ui\common ..\..\ui\s2font
+USERINCLUDE	..\..\include ..\..\engine\putty ..\..\engine\puttysymbian
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+
+RESOURCE	s60\putty.rss
+LIBRARY		avkon.lib eikdlg.lib bafl.lib
+LIBRARY		euser.lib apparc.lib cone.lib eikcore.lib gdi.lib eikcoctl.lib
+LIBRARY		efsrv.lib nifman.lib intconninit.lib commdb.lib
+LIBRARY		mediaclientaudio.lib commonengine.lib
+LIBRARY		ws32.lib bitgdi.lib fbscli.lib fepbase.lib
+LIBRARY		esock.lib
+LIBRARY		puttyengine.lib

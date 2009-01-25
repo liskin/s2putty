@@ -1,0 +1,40 @@
+/*    puttyui.mmp
+ *
+ * Project definition file for PuTTY UI APP for S80v1
+ *
+ * Copyright 2002,2003,2006 Petteri Kangaslampi
+ *
+ * See license.txt for full copyright and license information.
+*/
+
+TARGET		putty.app
+TARGETTYPE	app
+UID		0x100039ce 0x101f9075
+TARGETPATH	\system\apps\putty
+AIF		putty.aif ..\..\ui\s80 puttyuiaif.rss c12 iconlarge.bmp iconlargemask.bmp iconsmall.bmp iconsmallmask.bmp
+
+MACRO		PUTTY_S80
+MACRO		PUTTY_S80V1
+
+SOURCEPATH	..\..\ui
+SOURCE		s80\puttyapp.cpp
+SOURCE		s80\puttydoc.cpp
+SOURCE		s80\puttyappui.cpp
+SOURCE		s80\puttyappview.cpp
+SOURCE		common\terminalcontrol.cpp
+SOURCE		common\terminalcontrolsystemfont.cpp
+SOURCE		s80\connectiondialog.cpp
+SOURCE		s80v1\dialler.cpp
+SOURCE		s80v1\audiorecorder.cpp
+SOURCE		s80\settingsdialog.cpp
+SOURCE		s80\authdialog.cpp
+
+USERINCLUDE	..\..\ui\s80v1 ..\..\ui\s80 ..\..\ui\common ..\..\include
+USERINCLUDE	..\..\engine\putty ..\..\engine\puttysymbian
+SYSTEMINCLUDE	\epoc32\include \epoc32\include\libc
+
+RESOURCE	s80\putty.rss
+LIBRARY		euser.lib apparc.lib cone.lib eikcore.lib gdi.lib ckndlg.lib
+LIBRARY		eikcoctl.lib eikdlg.lib efsrv.lib nifman.lib netdial.lib
+LIBRARY		mediaclientaudio.lib eikctl.lib eikcdlg.lib
+LIBRARY		puttyengine.lib etext.lib bafl.lib fepbase.lib

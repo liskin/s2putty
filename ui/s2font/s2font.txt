@@ -1,0 +1,36 @@
+        The s2font file format
+        ----------------------
+
+The s2font file format is a simple file format for bitmapped
+monospaced fonts, mainly designed for Nethack and PuTTY for Symbian
+OS.
+
+All data is in network byte order, i.e. most significant byte
+first. Bitmap data is laid out most significant bit on the
+left. Bitmap data uses an integer number of bytes per row, i.e. the
+width in bytes of a row is
+        byteWidth = (charWidth+7)/8
+
+
+The file starts with a header as follows:
+
+Offset  Length  Data
+--------------------
+0       4       Magic identifier: 0x53324f4e, "S2FN"
+4       4       File format version. This document specifies format version
+                0x00010000.
+8       4       Number of characters
+12      4       Character width in pixels
+16      4       Character height in pixels
+24      var.    Characted encoding, as a null-terminated ASCII string.
+                Typical values are "CP437" for DOS fonts and "UCS-2" for 
+                Unicode fonts
+
+
+After the header follow n characters:
+
+Offset  Length                  Data
+------------------------------------
+0       2                       Character code. The interpretation of 
+                                this value depends on the encoding in use
+2       charHeight*byteWidth    Character bitmap data
