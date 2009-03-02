@@ -63,6 +63,7 @@ private:
     Config *iConfig;
     const CDesCArray &iFonts;
     TInt iFontValue;
+    TBool iBackSpace;
     TBool iFullScreen;
     CDesCArray *iCharSets; // owned by the setting item
     CPalettes *iPalettes;

@@ -177,6 +177,7 @@ enum TSettingItems {
     EPuttySettingSshKeepalive,
 
     EPuttySettingDisplayFont,
+    EPuttySettingDisplayBackSpace,
     EPuttySettingDisplayFullScreen,
     EPuttySettingDisplayPalette,
     EPuttySettingDisplayCharSet,
