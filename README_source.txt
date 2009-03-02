@@ -1,7 +1,7 @@
         PuTTY for Symbian OS
         --------------------
 
-Version 1.5.0, 25 January 2009
+Version 1.5 Development Snapshot
 
 Copyright 2002-2009 Petteri Kangaslampi
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
