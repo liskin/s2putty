@@ -206,6 +206,12 @@ void CTerminalContainer::GetTerminalRect(TRect &aRect) {
     // characters
     termWidth = fontWidth * (termWidth / fontWidth);
     termHeight = fontHeight * (termHeight / fontHeight);
+    // The following condition should only be met in the very specific case
+    // where an e90 user with 800x352 screen, uses the 14point font designed
+    // explicitly for a 80x24 screen size.
+    if (fontHeight == 14 && fontWidth == 10 && termWidth == 800) {
+        termHeight = 24 * fontHeight;
+    }
     assert((termWidth > 0) && (termHeight > 0));
 
     // Set terminal size and position
