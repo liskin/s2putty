@@ -615,7 +615,7 @@ void CTerminalView::HandleStatusPaneSizeChange() {
         delete iSendGrid;
         iSendGrid = NULL;
     }
-    if ( iContainer ) {
+    if ( iContainer && (!iPutty->GetConfig()->resize_action) ) {
         if ( iFullScreen ) {
             iContainer->SetRect(
                 CEikonEnv::Static()->EikAppUi()->ApplicationRect());
