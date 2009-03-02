@@ -1,8 +1,7 @@
 The PuTTY Symbian OS port is copyright 2002-2009 Petteri Kangaslampi.
 
-Portions copyright 2003-2004 Sergei Khloupnov.
-
-Portions of the Symbian OS version copyright Gabor Keresztfavli.
+Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
+Gabor Keresztfavli.
 
 PuTTY is copyright 1997-2007 Simon Tatham.
 

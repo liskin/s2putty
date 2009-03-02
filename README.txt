@@ -4,7 +4,8 @@
 Version 1.5.0, 25 January 2009
 
 Copyright 2002-2009 Petteri Kangaslampi
-Portions copyright 2003-2004 Sergei Khloupnov.
+Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
+Gabor Keresztfavli.
 Based on PuTTY 0.60, Copyright 1997-2007 Simon Tatham.
 See license.txt for full copyright and license information.
 
