@@ -72,6 +72,8 @@ enum TCommands {
     EPuttyCmdProfileListEdit,
     EPuttyCmdProfileListNew,
     EPuttyCmdProfileListDelete,
+    EPuttyCmdProfileListExport,
+    EPuttyCmdProfileListImport,
 
     EPuttyCmdProfileEditOpen,
     EPuttyCmdProfileEditClear,

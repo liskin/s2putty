@@ -68,8 +68,17 @@ RESOURCE MENU_PANE r_putty_profilelist_menu_pane {
         MENU_ITEM { command = EPuttyCmdProfileListEdit; txt = "Edit"; },
         MENU_ITEM { command = EPuttyCmdProfileListNew; txt = "New"; },
         MENU_ITEM { command = EPuttyCmdProfileListDelete; txt = "Delete"; },
+        MENU_ITEM { cascade = r_putty_profilelist_advanced_menu_pane; txt = "Advanced"; },
         MENU_ITEM { command = EEikCmdExit; txt = "Exit"; }
     };
+}
+
+// Profile list advanced menu pane
+RESOURCE MENU_PANE r_putty_profilelist_advanced_menu_pane {
+    items = {
+        MENU_ITEM { command = EPuttyCmdProfileListExport; txt = "Export"; },
+        MENU_ITEM { command = EPuttyCmdProfileListImport; txt = "Import"; }
+    };    
 }
 
 
@@ -1032,3 +1041,9 @@ RESOURCE TBUF r_putty_str_ctrl_keys { buf = "Ctrl+..."; }
 
 // Send text dialog prompt for Alt+keys
 RESOURCE TBUF r_putty_str_alt_keys { buf = "Alt+..."; }
+
+// Export file selection dialog title
+RESOURCE TBUF r_putty_str_export_dialog_title { buf = "Export to file"; }
+
+// Export file file name prompt
+RESOURCE TBUF r_putty_str_export_prompt { buf = "File name"; }
