@@ -4105,10 +4105,13 @@ static void ssh_setup_portfwd(Ssh ssh, const Config *cfg)
         char *sports, *dports, *saddr, *host;
 	int n;
 
-        sports = snewn(256, char);
-        dports = snewn(256, char);
-        saddr = snewn(256, char);
-        host = snewn(256, char);        
+
+	#define PORTFWD_BUFFER_LEN 256
+	
+	sports = snewn(PORTFWD_BUFFER_LEN, char);
+	dports = snewn(PORTFWD_BUFFER_LEN, char);
+	saddr = snewn(PORTFWD_BUFFER_LEN, char);
+	host = snewn(PORTFWD_BUFFER_LEN, char);        
 
 	address_family = 'A';
 	type = 'L';
@@ -4143,7 +4146,7 @@ static void ssh_setup_portfwd(Ssh ssh, const Config *cfg)
 		    strcpy(saddr, sports);
 		n = 0;
 	    }
-	    if (n < lenof(sports)-1) sports[n++] = *portfwd_strptr++;
+	    if (n < PORTFWD_BUFFER_LEN-1) sports[n++] = *portfwd_strptr++;
 	}
 	sports[n] = 0;
 	if (type != 'D') {
@@ -4151,14 +4154,14 @@ static void ssh_setup_portfwd(Ssh ssh, const Config *cfg)
 		portfwd_strptr++;
 	    n = 0;
 	    while (*portfwd_strptr && *portfwd_strptr != ':') {
-		if (n < lenof(host)-1) host[n++] = *portfwd_strptr++;
+		if (n < PORTFWD_BUFFER_LEN-1) host[n++] = *portfwd_strptr++;
 	    }
 	    host[n] = 0;
 	    if (*portfwd_strptr == ':')
 		portfwd_strptr++;
 	    n = 0;
 	    while (*portfwd_strptr) {
-		if (n < lenof(dports)-1) dports[n++] = *portfwd_strptr++;
+		if (n < PORTFWD_BUFFER_LEN-1) dports[n++] = *portfwd_strptr++;
 	    }
 	    dports[n] = 0;
 	    portfwd_strptr++;

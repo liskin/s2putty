@@ -10,7 +10,7 @@
  * [No copyright messages in the original, assumed to be copyrighted by
  *  Gabor Keresztfavli and available through the PuTTY license]
  *
- * Portions copyright 2002-2004 Petteri Kangaslampi
+ * Portions copyright 2002-2004,2009 Petteri Kangaslampi
  *
  * See license.txt for full copyright and license information.
 */
@@ -495,6 +495,10 @@ Socket sk_register(void *sock, Plug plug)
 	return (Socket) ret;
     }
 
+    if ( netStatics->iWatcher ) {
+        netStatics->iWatcher->SocketOpened();
+    }
+
     ret->s->estat=KRequestPending;
     ret->s->r=NULL;
     ret->s->s=NULL;
@@ -828,10 +832,22 @@ static void sk_tcp_close(Socket sock)
     }
     del234(netStatics->iSocketTree, s);
     do_select(s->s, 0);
-    if (s->accepted!=NULL) delete s->accepted;
-    if (s->s->r!=NULL) delete s->s->r;
-    if (s->s->s!=NULL) delete s->s->s;
-    if (s->s->a!=NULL) delete s->s->a;
+    if (s->accepted!=NULL) {
+        delete s->accepted;
+        s->accepted = NULL;
+    }
+    if (s->s->r!=NULL) {
+        delete s->s->r;
+        s->s->r = NULL;
+    }
+    if (s->s->s!=NULL) {
+        delete s->s->s;
+        s->s->s = NULL;
+    }
+    if (s->s->a!=NULL) {
+        delete s->s->a;
+        s->s->a = NULL;
+    }
     s->s->Close();
     delete s->s;
     sfree(s);
@@ -1311,5 +1327,8 @@ void CAcceptor::DoCancel()
 	Actual_Socket s=(Actual_Socket)parent;
 
 	s->s->CancelAll();
-	if (s->accepted!=NULL) delete s->accepted;
+	if (s->accepted!=NULL) {
+            delete s->accepted;
+            s->accepted = NULL;
+        }
 }
