@@ -542,7 +542,6 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
     TRequestStatus cstat;
     char *errstr;
     Actual_Socket ret;
-    short localport;
 
 #ifdef DEBUGLOG
     TBuf<40> buf;
@@ -627,45 +626,6 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
             LOGF(("sk_new: SetOpt for KSoTcpKeepAlive failed: %d, %s", err, ret->error));
 	    return (Socket) ret;
         }
-    }
-
-    /*
-     * Bind to local address.
-     */
-    if (privport)
-	localport = 1023;	       /* count from 1023 downwards */
-    else
-	localport = 0;		       /* just use port 0 (ie winsock picks) */
-
-    /* Loop round trying to bind */
-    while (localport >= 0) {
-
-#ifdef IPV6
-        if ( addr->family == KAfInet6 ) {
-            locaddr = TInetAddr(KInet6AddrNone, localport);
-        } else {
-            locaddr = TInetAddr(KInetAddrAny, localport);
-        }
-#else
-	locaddr = TInetAddr(KInetAddrAny, localport);
-#endif
-	err = ret->s->Bind(locaddr);
-	if (err == KErrNone) break;		       /* done */
-	else {
-	    if (err != KErrInUse) break; /* failed, for a bad reason */
-	}
-
-	if (localport == 0)
-	    break;		       /* we're only looping once */
-	localport--;
-	if (localport == 0)
-	    break;		       /* we might have got to the end */
-    }
-
-    if (err!=KErrNone) {
-	ret->error = FormatError("Socket bind", err);
-        LOGF(("sk_new: Bind failed: %d, %s", err, ret->error));
-	return (Socket) ret;
     }
 
     /*
