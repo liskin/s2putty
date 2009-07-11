@@ -517,6 +517,14 @@ RESOURCE ARRAY r_settings_display_page {
         },
         DLG_LINE {
             type = EEikCtChoiceList;
+            prompt = "Backspace key";
+            id = ESettingsBackspace;
+            control = CHOICELIST {
+                array_id = r_settings_backspace;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtChoiceList;
             prompt = "Character Set";
             id = ESettingsCharacterSet;
             control = CHOICELIST {
@@ -542,6 +550,13 @@ RESOURCE ARRAY r_settings_character_sets {
 RESOURCE ARRAY r_settings_palettes {
     items = {
         LBUF { txt = "dummy"; }
+    };
+}
+
+RESOURCE ARRAY r_settings_backspace {
+    items = {
+        LBUF { txt = "Ctrl-H"; },
+        LBUF { txt = "Delete (127)"; }
     };
 }
 

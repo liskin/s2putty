@@ -204,6 +204,10 @@ void CSettingsDialog::PreLayoutDynInitL() {
     palList->SetArrayL(arr);
     palList->SetCurrentItem(curpal);
 
+    // Backspace key
+    ((CEikChoiceList*)Control(ESettingsBackspace))->SetCurrentItem(
+        iConfig->bksp_is_delete);
+
     // Character set
     // FIXME: This is the only thing we need the engine for -- consider another solution
     iCharSets = iPutty->SupportedCharacterSetsL();
@@ -358,6 +362,10 @@ TBool CSettingsDialog::OkToExitL(TInt aButtonId) {
                           (unsigned char*) iConfig->colours);
     delete iPalettes;
     iPalettes = NULL;
+
+    // Backspace key
+    iConfig->bksp_is_delete =
+        ((CEikChoiceList*)Control(ESettingsBackspace))->CurrentItem();
 
     // Character set
     CEikChoiceList *csList = ((CEikChoiceList*)Control(ESettingsCharacterSet));
