@@ -1,7 +1,7 @@
         PuTTY for Symbian OS
         --------------------
 
-Version 1.5 Development Snapshot
+Version 1.5.1 Release Candidate 1
 
 Copyright 2002-2009 Petteri Kangaslampi
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
@@ -13,10 +13,14 @@ See license.txt for full copyright and license information.
 Introduction
 ------------
 
-This package contains a development snapshot for PuTTY for Symbian OS
-version 1.5. While most new development will go into a new 1.6
-release, v1.5 will get bug fixes and minor enhancements. These
-snapshots will eventually turn into a new stable release.
+This package is a release candidate for PuTTY SSH client for Symbian
+OS version 1.5.1. Unless new issues are discovered, the same code will
+be used to build a final 1.5.1 release.
+
+Version 1.5 is considered stable, and will receive only bug fixes and
+minor enhancements, see "Changes" below. Most new development will go
+into a new 1.6 release, which will also contain proper support for S60
+5th edition phones.
 
 PuTTY is distributed in two different packages, one for S60 third
 edition, and one for Series 80 phones. Make sure you use the correct
@@ -29,11 +33,16 @@ putty_s80v2_*   Series 80 v2.0. Nokia 9300, 9300i, 9500
 A separate UIQ v3.x port is available at
         http://coredump.fi/putty
 
+PuTTY 1.5 only officially supports S60 3rd ed and S80 v2 phones; users
+with S60 5th edition touchscreen phones such as the Nokia 5800
+XPressMusic or the Nokia N97 should try Risto Avila's Touch UI
+available at
+        http://bd.kicks-ass.net/koodaus/putty/
+
 PuTTY is free software, and available with full source code under a
 very liberal license agreement.
 
-The user's guide contains further documentation, and has been recently
-updated.
+See the user's guide for further documentation.
 
 
 Installing PuTTY on Series 80
