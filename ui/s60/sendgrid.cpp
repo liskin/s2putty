@@ -90,8 +90,8 @@ void CSendGrid::ConstructL(const TRect &aRect, TInt aResourceId) {
     // Item size and grid layout
     TSize itemSize((aRect.Width()-2)/3, (aRect.Height()-2)/4);
     iGrid->SetLayoutL(EFalse, ETrue, ETrue, 3, 4, itemSize);
-    iGrid->SetPrimaryScrollingType(CAknGridView::EScrollIncrementLineAndLoops);
-    iGrid->SetSecondaryScrollingType(CAknGridView::EScrollIncrementLineAndLoops);
+    iGrid->SetPrimaryScrollingType(CAknGridView::EScrollFollowsGrid);
+    iGrid->SetSecondaryScrollingType(CAknGridView::EScrollFollowsGrid);
     iGrid->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EOff, CEikScrollBarFrame::EOff);
 
     // Set up grid layout
