@@ -102,6 +102,7 @@ void CProfileListView::HandleCommandL(TInt aCommand) {
                 iProfileEditName = (*iProfileFileArray)[iSelectedItem];
                 iProfileOldName = iProfileEditName;
                 iPutty->ReadConfigFileL(*AbsoluteFileNameLC(iProfileEditName));
+                CleanupStack::PopAndDestroy();
                 ((CPuttyAppUi*)AppUi())->ActivateProfileEditViewL(
                     *iPutty, iProfileEditName);
             }
