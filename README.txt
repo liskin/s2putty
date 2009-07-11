@@ -99,11 +99,19 @@ Changes
 -------
 
 Main changes since 1.5.0:
+- Added profile file import/export to make it easier to manually
+  configure advanced features
+- Incorporated a port forwarding fix from Shai Ayal. This should fix
+  long-standing bug 918200 and forwarding local ports to the remote
+  server seems to work. Note that port forwarding is still not
+  available in the UI and is not officially supported.
 - Patches from Damion Yates:
     - Backspace setting (Ctrl-H vs Delete)
     - Force a 80x24 terminal on an E90 when using a 10x14 font
     - Rudimentary LockSize support (not in the UI)
   Thanks Damion!
+- Potential fix for "Bad Name" errors seen on S60 in some situations.
+  This should fix bug #1878884.
 
 See Changelog in the source distribution for more details.
 
