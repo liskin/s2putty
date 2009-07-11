@@ -77,6 +77,7 @@ struct Socket_tag {
     int oobinline;
     int pending_error;		       /* in case send() returns error */
     int killing;		/* In case we have data to send... */
+    SockAddr addr;
 };
 
 /*
@@ -487,6 +488,7 @@ Socket sk_register(void *sock, Plug plug)
     ret->pending_error = 0;
     ret->accepted=NULL;
     ret->killing=0;
+    ret->addr = NULL;
 
     ret->s = (RSocketS *)sock;
 
@@ -568,6 +570,7 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
     ret->pending_error = 0;
     ret->accepted=NULL;
     ret->killing=0;
+    ret->addr = addr;
 
     /*
      * Open socket.
@@ -696,8 +699,6 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
 
     add234(netStatics->iSocketTree, ret);
 
-    sk_addr_free(addr);
-
     LOGF(("sk_new: Done"));
     return (Socket) ret;
 }
@@ -739,6 +740,7 @@ Socket sk_newlistener(char *srcaddr, int port, Plug plug, int local_host_only, i
     ret->pending_error = 0;
     ret->accepted=NULL;
     ret->killing=0;
+    ret->addr = NULL;
 
     /*
      * Open socket.
@@ -847,6 +849,10 @@ static void sk_tcp_close(Socket sock)
     if (s->s->a!=NULL) {
         delete s->s->a;
         s->s->a = NULL;
+    }
+    if ( s->addr ) {
+        sk_addr_free(s->addr);
+        s->addr = NULL;
     }
     s->s->Close();
     delete s->s;
