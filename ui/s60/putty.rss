@@ -822,7 +822,7 @@ RESOURCE DIALOG r_putty_auth_secret_dialog {
                 layout = ECodeLayout;
                 label = "";
                 control = SECRETED {
-                    num_letters = 32;                    
+                    num_letters = 64;
                 };
             };
         }
