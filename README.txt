@@ -1,7 +1,7 @@
         PuTTY for Symbian OS
         --------------------
 
-Version 1.5.1 Release Candidate 1
+Version 1.5.1, 19 July 2009
 
 Copyright 2002-2009 Petteri Kangaslampi
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
@@ -13,14 +13,9 @@ See license.txt for full copyright and license information.
 Introduction
 ------------
 
-This package is a release candidate for PuTTY SSH client for Symbian
-OS version 1.5.1. Unless new issues are discovered, the same code will
-be used to build a final 1.5.1 release.
-
-Version 1.5 is considered stable, and will receive only bug fixes and
-minor enhancements, see "Changes" below. Most new development will go
-into a new 1.6 release, which will also contain proper support for S60
-5th edition phones.
+This package is a maintenance release for PuTTY SSH client for Symbian
+OS version 1.5. It contains a number of bug fixes over 1.5.0 and minor
+new features, see "Changes" below for details.
 
 PuTTY is distributed in two different packages, one for S60 third
 edition, and one for Series 80 phones. Make sure you use the correct
@@ -33,11 +28,13 @@ putty_s80v2_*   Series 80 v2.0. Nokia 9300, 9300i, 9500
 A separate UIQ v3.x port is available at
         http://coredump.fi/putty
 
-PuTTY 1.5 only officially supports S60 3rd ed and S80 v2 phones; users
-with S60 5th edition touchscreen phones such as the Nokia 5800
-XPressMusic or the Nokia N97 should try Risto Avila's Touch UI
-available at
+PuTTY 1.5 only officially supports S60 3rd edition and Series 80 v2
+phones; users with S60 5th edition touchscreen phones such as the
+Nokia 5800 XPressMusic or the Nokia N97 should try Risto Avila's Touch
+UI available at
         http://bd.kicks-ass.net/koodaus/putty/
+Risto's touch UI will be included in the next major PuTTY release, so
+any feedback is more than welcome!
 
 PuTTY is free software, and available with full source code under a
 very liberal license agreement.
@@ -111,7 +108,7 @@ Main changes since 1.5.0:
 - Added profile file import/export to make it easier to manually
   configure advanced features
 - Incorporated a port forwarding fix from Shai Ayal. This should fix
-  long-standing bug 918200 and forwarding local ports to the remote
+  long-standing bug #918200 and forwarding local ports to the remote
   server seems to work. Note that port forwarding is still not
   available in the UI and is not officially supported.
 - Patches from Damion Yates:
@@ -121,6 +118,7 @@ Main changes since 1.5.0:
   Thanks Damion!
 - Potential fix for "Bad Name" errors seen on S60 in some situations.
   This should fix bug #1878884.
+- Increased the maximum password length from 32 to 64 characters on S60.
 
 See Changelog in the source distribution for more details.
 

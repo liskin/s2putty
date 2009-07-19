@@ -1,7 +1,7 @@
         PuTTY for Symbian OS
         --------------------
 
-Version 1.5.1 Release Candidate 1
+Version 1.5.1, 19 July 2009
 
 Copyright 2002-2009 Petteri Kangaslampi
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
@@ -53,7 +53,7 @@ better. If you only modify the user interface, it should be enough to
 build the software once from the command line, and use the IDE
 afterwards.
 
-On S60 third edition PuTTY compiles at least with Carbide.c++ v1.2 and
+On S60 third edition PuTTY compiles at least with Carbide.c++ and
 GCCE. RVCT and CodeWarrior have not been recently tested.
 
 
