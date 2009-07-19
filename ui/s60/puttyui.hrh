@@ -72,6 +72,8 @@ enum TCommands {
     EPuttyCmdProfileListEdit,
     EPuttyCmdProfileListNew,
     EPuttyCmdProfileListDelete,
+    EPuttyCmdProfileListExport,
+    EPuttyCmdProfileListImport,
 
     EPuttyCmdProfileEditOpen,
     EPuttyCmdProfileEditClear,
@@ -177,6 +179,7 @@ enum TSettingItems {
     EPuttySettingSshKeepalive,
 
     EPuttySettingDisplayFont,
+    EPuttySettingDisplayBackSpace,
     EPuttySettingDisplayFullScreen,
     EPuttySettingDisplayPalette,
     EPuttySettingDisplayCharSet,

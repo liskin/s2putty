@@ -15,6 +15,7 @@
 #include <bautils.h>
 #include <f32file.h>
 #include <aknnotedialog.h>
+#include <akncommondialogs.h>
 #include "profilelistview.h"
 #include "puttyappui.h"
 #include "puttyengine.h"
@@ -101,6 +102,7 @@ void CProfileListView::HandleCommandL(TInt aCommand) {
                 iProfileEditName = (*iProfileFileArray)[iSelectedItem];
                 iProfileOldName = iProfileEditName;
                 iPutty->ReadConfigFileL(*AbsoluteFileNameLC(iProfileEditName));
+                CleanupStack::PopAndDestroy();
                 ((CPuttyAppUi*)AppUi())->ActivateProfileEditViewL(
                     *iPutty, iProfileEditName);
             }
@@ -153,6 +155,64 @@ void CProfileListView::HandleCommandL(TInt aCommand) {
                 }
                 iListBox->SetCurrentItemIndexAndDraw(sel);
             }
+            break;
+
+        case EPuttyCmdProfileListExport:
+            if ( iListBox && (iProfileFileArray->Count() > 0) ) {
+                // Run "Save As" dialog to get file name
+                TInt sel = iListBox->CurrentItemIndex();
+                TFileName name = (*iProfileFileArray)[sel];
+                if ( AknCommonDialogs::RunSaveDlgLD(
+                         name, R_PUTTY_MEMORY_SELECTION_DIALOG,
+                         *(CCoeEnv::Static()->AllocReadResourceLC(
+                               R_PUTTY_STR_EXPORT_DIALOG_TITLE)),
+                         *(CCoeEnv::Static()->AllocReadResourceLC(
+                               R_PUTTY_STR_EXPORT_PROMPT))) ) {
+
+                    // Copy the profile to the selected file, overwriting if
+                    // necessary
+                    CFileMan *fman = CFileMan::NewL(
+                        CEikonEnv::Static()->FsSession());
+                    CleanupStack::PushL(fman);
+                    User::LeaveIfError(
+                        fman->Copy(
+                            *AbsoluteFileNameLC((*iProfileFileArray)[sel]),
+                            name));
+                    CleanupStack::PopAndDestroy(2); // name, fman
+                }
+                CleanupStack::PopAndDestroy(2); //title, prompt
+            }
+            break;
+
+        case EPuttyCmdProfileListImport:
+            if ( iListBox ) {
+                // Show file selection dialog for file
+                TFileName name;
+                if ( AknCommonDialogs::RunSelectDlgLD(
+                         name, R_PUTTY_MEMORY_SELECTION_DIALOG) ) {
+
+                    // Use the file name as the profile name
+                    TParsePtr parse(name);
+                    iProfileEditName = parse.Name();
+                    MakeNameUniqueL(iProfileEditName);
+
+                    // Copy the profile to the new file
+                    CFileMan *fman = CFileMan::NewL(
+                        CEikonEnv::Static()->FsSession());
+                    CleanupStack::PushL(fman);
+                    User::LeaveIfError(
+                        fman->Copy(name, 
+                                   *AbsoluteFileNameLC(iProfileEditName)));
+                    CleanupStack::PopAndDestroy(2); // name, fman
+
+                    // Add to the list
+                    AppendProfileL(iProfileEditName);
+                    iListBox->HandleItemAdditionL();
+                    iSelectedItem = iProfileFileArray->Count()-1;
+                    iListBox->SetCurrentItemIndex(iSelectedItem);
+                    iListBox->DrawDeferred();
+                };
+            };
             break;
         
         default:

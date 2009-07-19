@@ -589,6 +589,8 @@ void CTerminalView::NetConnectComplete(TInt aError, RSocketServ &aSocketServ,
     note->SetTimeout(CAknInformationNote::EShortTimeout);
     note->ExecuteLD(*(StringLoader::LoadLC(R_PUTTY_STR_CONNECTING_TO_HOST,
                                            eikenv)));
+    //We Need to destroy that note msg loaded with LoadLC
+    CleanupStack::PopAndDestroy();
     
     TInt err = iPutty->Connect(aSocketServ, aConnection);
     if ( err != KErrNone ) {
@@ -604,6 +606,8 @@ void CTerminalView::NetConnectComplete(TInt aError, RSocketServ &aSocketServ,
     }
     
     iState = EStateConnected;
+    
+    HandleStatusPaneSizeChange(); //Redraw things some reason sometimes screen stays blank
 }
 
 
@@ -615,7 +619,7 @@ void CTerminalView::HandleStatusPaneSizeChange() {
         delete iSendGrid;
         iSendGrid = NULL;
     }
-    if ( iContainer ) {
+    if ( iContainer && (!iPutty->GetConfig()->resize_action) ) {
         if ( iFullScreen ) {
             iContainer->SetRect(
                 CEikonEnv::Static()->EikAppUi()->ApplicationRect());

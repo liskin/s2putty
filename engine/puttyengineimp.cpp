@@ -171,6 +171,7 @@ TInt CPuttyEngineImp::Connect(RSocketServ &aSocketServ,
 
     // Select the protocol to use
     iBackend = NULL;
+    iBackendHandle = NULL;
     for ( TInt i = 0; backends[i].backend != NULL; i++ ) {
         if ( backends[i].protocol == iConfig.protocol ) {
             iBackend = backends[i].backend;
@@ -189,7 +190,7 @@ TInt CPuttyEngineImp::Connect(RSocketServ &aSocketServ,
     sk_provide_logctx(iLogContext);
 
     // Connect
-    char *realhost;
+    char *realhost = NULL;
     delete [] iConnError;
     iConnError = NULL;
     const char *err = iBackend->init(this, &iBackendHandle, &iConfig,
@@ -197,6 +198,14 @@ TInt CPuttyEngineImp::Connect(RSocketServ &aSocketServ,
                                      iConfig.tcp_nodelay,
                                      iConfig.tcp_keepalives);
     if ( err ) {
+        if ( iBackendHandle ) {
+            iBackend->free(iBackendHandle);
+        }
+        iBackend = NULL;
+        iBackendHandle = NULL;
+        if ( realhost ) {
+            sfree(realhost);
+        }
         iConnError = new char[strlen(err)+1];
         if ( !iConnError ) {
             return KErrNoMemory;
@@ -206,6 +215,7 @@ TInt CPuttyEngineImp::Connect(RSocketServ &aSocketServ,
         sk_cleanup();
         if ( iLogContext ) {
             logflush(iLogContext);
+            log_free(iLogContext);
         }
         return KErrGeneral;
     }

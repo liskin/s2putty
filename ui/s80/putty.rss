@@ -517,6 +517,14 @@ RESOURCE ARRAY r_settings_display_page {
         },
         DLG_LINE {
             type = EEikCtChoiceList;
+            prompt = "Backspace key";
+            id = ESettingsBackspace;
+            control = CHOICELIST {
+                array_id = r_settings_backspace;
+            };
+        },
+        DLG_LINE {
+            type = EEikCtChoiceList;
             prompt = "Character Set";
             id = ESettingsCharacterSet;
             control = CHOICELIST {
@@ -542,6 +550,13 @@ RESOURCE ARRAY r_settings_character_sets {
 RESOURCE ARRAY r_settings_palettes {
     items = {
         LBUF { txt = "dummy"; }
+    };
+}
+
+RESOURCE ARRAY r_settings_backspace {
+    items = {
+        LBUF { txt = "Ctrl-H"; },
+        LBUF { txt = "Delete (127)"; }
     };
 }
 
@@ -852,7 +867,7 @@ RESOURCE TBUF r_str_show_putty_config_files { buf = "Show PuTTY\nconfig files"; 
 RESOURCE TBUF r_str_about_title { buf = "About PuTTY"; }
 
 // ABout dialog contents (FIXME: Make more dynamic)
-RESOURCE TBUF r_str_about_text { buf = "PuTTY for Symbian OS\nVersion 1.5.0\nBased on PuTTY 0.60\nBuilt " __DATE__ ", " __TIME__; }
+RESOURCE TBUF r_str_about_text { buf = "PuTTY for Symbian OS\nVersion 1.5.1\nBased on PuTTY 0.60\nBuilt " __DATE__ ", " __TIME__; }
 
 // Delete profile confirmation title
 RESOURCE TBUF r_str_delete_profile_confirm_title { buf = "Delete profile?"; }

@@ -97,6 +97,7 @@ private:
     CTerminalControlS2Font *iTerminal;
     TRect iTermRect;
     TBool iLargeFont;
+    TBool iBackSpace;
     TBool iFullScreen;
     CS2Font *iFont;
     CTerminalView *iView;

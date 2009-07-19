@@ -68,8 +68,17 @@ RESOURCE MENU_PANE r_putty_profilelist_menu_pane {
         MENU_ITEM { command = EPuttyCmdProfileListEdit; txt = "Edit"; },
         MENU_ITEM { command = EPuttyCmdProfileListNew; txt = "New"; },
         MENU_ITEM { command = EPuttyCmdProfileListDelete; txt = "Delete"; },
+        MENU_ITEM { cascade = r_putty_profilelist_advanced_menu_pane; txt = "Advanced"; },
         MENU_ITEM { command = EEikCmdExit; txt = "Exit"; }
     };
+}
+
+// Profile list advanced menu pane
+RESOURCE MENU_PANE r_putty_profilelist_advanced_menu_pane {
+    items = {
+        MENU_ITEM { command = EPuttyCmdProfileListExport; txt = "Export"; },
+        MENU_ITEM { command = EPuttyCmdProfileListImport; txt = "Import"; }
+    };    
 }
 
 
@@ -360,6 +369,12 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_display_settinglist {
             name = "Palette";
         },
         AVKON_SETTING_ITEM {
+            identifier = EPuttySettingDisplayBackSpace;
+            setting_page_resource = r_putty_profileedit_backspace_page;
+            associated_resource = r_putty_profileedit_backspace_texts;
+            name = "Backspace key";
+        },
+        AVKON_SETTING_ITEM {
             identifier = EPuttySettingDisplayCharSet;
             setting_page_resource = r_putty_profileedit_charset_page;
             associated_resource = r_putty_profileedit_charset_texts;
@@ -388,6 +403,27 @@ RESOURCE ARRAY r_putty_profileedit_font_text_array {
 }
 RESOURCE ARRAY r_putty_profileedit_font_popped_up_text_array {
     items = {
+    };
+}
+
+// Backspace edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_backspace_page {
+    type = EAknCtPopupSettingList;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_backspace_texts {
+    setting_texts_resource = r_putty_profileedit_backspace_text_array;
+    popped_up_texts_resource = r_putty_profileedit_backspace_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_backspace_text_array {
+    items = {
+        AVKON_ENUMERATED_TEXT { value = 1; text = "Delete (127)"; },
+        AVKON_ENUMERATED_TEXT { value = 0; text = "Ctrl-H"; }
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_backspace_popped_up_text_array {
+    items = {
+        LBUF { txt = "Delete (127)"; },
+        LBUF { txt = "Ctrl-H"; }
     };
 }
 
@@ -786,7 +822,7 @@ RESOURCE DIALOG r_putty_auth_secret_dialog {
                 layout = ECodeLayout;
                 label = "";
                 control = SECRETED {
-                    num_letters = 32;                    
+                    num_letters = 64;
                 };
             };
         }
@@ -1005,3 +1041,9 @@ RESOURCE TBUF r_putty_str_ctrl_keys { buf = "Ctrl+..."; }
 
 // Send text dialog prompt for Alt+keys
 RESOURCE TBUF r_putty_str_alt_keys { buf = "Alt+..."; }
+
+// Export file selection dialog title
+RESOURCE TBUF r_putty_str_export_dialog_title { buf = "Export to file"; }
+
+// Export file file name prompt
+RESOURCE TBUF r_putty_str_export_prompt { buf = "File name"; }

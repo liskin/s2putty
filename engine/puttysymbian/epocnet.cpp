@@ -10,7 +10,7 @@
  * [No copyright messages in the original, assumed to be copyrighted by
  *  Gabor Keresztfavli and available through the PuTTY license]
  *
- * Portions copyright 2002-2004 Petteri Kangaslampi
+ * Portions copyright 2002-2004,2009 Petteri Kangaslampi
  *
  * See license.txt for full copyright and license information.
 */
@@ -77,6 +77,7 @@ struct Socket_tag {
     int oobinline;
     int pending_error;		       /* in case send() returns error */
     int killing;		/* In case we have data to send... */
+    SockAddr addr;
 };
 
 /*
@@ -487,12 +488,17 @@ Socket sk_register(void *sock, Plug plug)
     ret->pending_error = 0;
     ret->accepted=NULL;
     ret->killing=0;
+    ret->addr = NULL;
 
     ret->s = (RSocketS *)sock;
 
     if (ret->s == INVALID_SOCKET) {
 	ret->error = FormatError("Socket register", KInvalSocket);
 	return (Socket) ret;
+    }
+
+    if ( netStatics->iWatcher ) {
+        netStatics->iWatcher->SocketOpened();
     }
 
     ret->s->estat=KRequestPending;
@@ -536,7 +542,6 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
     TRequestStatus cstat;
     char *errstr;
     Actual_Socket ret;
-    short localport;
 
 #ifdef DEBUGLOG
     TBuf<40> buf;
@@ -564,6 +569,7 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
     ret->pending_error = 0;
     ret->accepted=NULL;
     ret->killing=0;
+    ret->addr = addr;
 
     /*
      * Open socket.
@@ -623,45 +629,6 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
     }
 
     /*
-     * Bind to local address.
-     */
-    if (privport)
-	localport = 1023;	       /* count from 1023 downwards */
-    else
-	localport = 0;		       /* just use port 0 (ie winsock picks) */
-
-    /* Loop round trying to bind */
-    while (localport >= 0) {
-
-#ifdef IPV6
-        if ( addr->family == KAfInet6 ) {
-            locaddr = TInetAddr(KInet6AddrNone, localport);
-        } else {
-            locaddr = TInetAddr(KInetAddrAny, localport);
-        }
-#else
-	locaddr = TInetAddr(KInetAddrAny, localport);
-#endif
-	err = ret->s->Bind(locaddr);
-	if (err == KErrNone) break;		       /* done */
-	else {
-	    if (err != KErrInUse) break; /* failed, for a bad reason */
-	}
-
-	if (localport == 0)
-	    break;		       /* we're only looping once */
-	localport--;
-	if (localport == 0)
-	    break;		       /* we might have got to the end */
-    }
-
-    if (err!=KErrNone) {
-	ret->error = FormatError("Socket bind", err);
-        LOGF(("sk_new: Bind failed: %d, %s", err, ret->error));
-	return (Socket) ret;
-    }
-
-    /*
      * Connect to remote address.
      */
 
@@ -691,8 +658,6 @@ Socket sk_new(SockAddr addr, int port, int privport, int oobinline,
     TRAP(err,ret->s->s = CSender::NewL((Socket)ret));
 
     add234(netStatics->iSocketTree, ret);
-
-    sk_addr_free(addr);
 
     LOGF(("sk_new: Done"));
     return (Socket) ret;
@@ -735,6 +700,7 @@ Socket sk_newlistener(char *srcaddr, int port, Plug plug, int local_host_only, i
     ret->pending_error = 0;
     ret->accepted=NULL;
     ret->killing=0;
+    ret->addr = NULL;
 
     /*
      * Open socket.
@@ -828,10 +794,26 @@ static void sk_tcp_close(Socket sock)
     }
     del234(netStatics->iSocketTree, s);
     do_select(s->s, 0);
-    if (s->accepted!=NULL) delete s->accepted;
-    if (s->s->r!=NULL) delete s->s->r;
-    if (s->s->s!=NULL) delete s->s->s;
-    if (s->s->a!=NULL) delete s->s->a;
+    if (s->accepted!=NULL) {
+        delete s->accepted;
+        s->accepted = NULL;
+    }
+    if (s->s->r!=NULL) {
+        delete s->s->r;
+        s->s->r = NULL;
+    }
+    if (s->s->s!=NULL) {
+        delete s->s->s;
+        s->s->s = NULL;
+    }
+    if (s->s->a!=NULL) {
+        delete s->s->a;
+        s->s->a = NULL;
+    }
+    if ( s->addr ) {
+        sk_addr_free(s->addr);
+        s->addr = NULL;
+    }
     s->s->Close();
     delete s->s;
     sfree(s);
@@ -1311,5 +1293,8 @@ void CAcceptor::DoCancel()
 	Actual_Socket s=(Actual_Socket)parent;
 
 	s->s->CancelAll();
-	if (s->accepted!=NULL) delete s->accepted;
+	if (s->accepted!=NULL) {
+            delete s->accepted;
+            s->accepted = NULL;
+        }
 }

@@ -81,6 +81,11 @@ CAknSettingItem *CProfileEditDisplaySettingList::CreateSettingItemL(
                 aIdentifier, iFonts, iFontValue);
         }
             
+        case EPuttySettingDisplayBackSpace:
+            iBackSpace = iConfig->bksp_is_delete;
+            return new (ELeave) CAknBinaryPopupSettingItem(aIdentifier, 
+                                                           iBackSpace);
+
         case EPuttySettingDisplayFullScreen:
             iFullScreen = (iConfig->width == KFullScreenWidth);
             return new (ELeave) CAknBinaryPopupSettingItem(aIdentifier, 
@@ -131,6 +136,15 @@ void CProfileEditDisplaySettingList::EditItemL(TInt aIndex,
         case EPuttySettingDisplayFont: {
             DesToString(iFonts[iFontValue], iConfig->font.name,
                         sizeof(iConfig->font.name));
+            break;
+        }
+
+        case EPuttySettingDisplayBackSpace: {
+            if ( iBackSpace ) {
+                iConfig->bksp_is_delete = 1;
+            } else {
+                iConfig->bksp_is_delete = 0;
+            }
             break;
         }
 

@@ -1,10 +1,11 @@
         PuTTY for Symbian OS
         --------------------
 
-Version 1.5.0, 25 January 2009
+Version 1.5.1, 19 July 2009
 
 Copyright 2002-2009 Petteri Kangaslampi
-Portions copyright 2003-2004 Sergei Khloupnov.
+Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
+Gabor Keresztfavli.
 Based on PuTTY 0.60, Copyright 1997-2007 Simon Tatham.
 See license.txt for full copyright and license information.
 
@@ -12,34 +13,9 @@ See license.txt for full copyright and license information.
 Introduction
 ------------
 
-This package is the full final release for PuTTY SSH client for
-Symbian OS version 1.5.0. This is the first non-beta non-snapshot
-release since 1.3.2 was released in January 2005, and is a significant
-milestone in the development.
-
-The only change compared to 1.5RC1 is a small palette resource change,
-but the code itself has not been modified.
-
-Compared to earlier releases, 1.5 brings significant enhancements:
-PuTTY for Symbian OS is based on an up-to-date release of the PuTTY
-core from the Windows version, it has a new friendlier settings system
-based on profiles, more settings including character set and color
-palette selection, and fixes and enhancements on the S60 platform.
-
-This release support all S60 third edition phones and the Series 80 v2
-Communicator products. Both versions have essentially identical
-features and will be fully supported through bug fixes. However, given
-that the user base for S60 is now orders of magnitude larger, new
-features may only be availble on S60 in the future. Earlier S60
-versions are not supported, and while this version contains some
-changes to enable very basic functionality on S60 5th edition, it is
-still considered unsupported too.
-
-If you are upgrading from releases earlier than 1.5 beta 2, note that
-PuTTY can now use full 256-bit keys with the AES encryption algorithm,
-which can slow it down considerably. New profiles will use a faster
-128-bit Blowfish algorithm, but existing profiles will need to ben
-changed from the SSH settings page to take advantage of this.
+This package is a maintenance release for PuTTY SSH client for Symbian
+OS version 1.5. It contains a number of bug fixes over 1.5.0 and minor
+new features, see "Changes" below for details.
 
 PuTTY is distributed in two different packages, one for S60 third
 edition, and one for Series 80 phones. Make sure you use the correct
@@ -52,11 +28,18 @@ putty_s80v2_*   Series 80 v2.0. Nokia 9300, 9300i, 9500
 A separate UIQ v3.x port is available at
         http://coredump.fi/putty
 
+PuTTY 1.5 only officially supports S60 3rd edition and Series 80 v2
+phones; users with S60 5th edition touchscreen phones such as the
+Nokia 5800 XPressMusic or the Nokia N97 should try Risto Avila's Touch
+UI available at
+        http://bd.kicks-ass.net/koodaus/putty/
+Risto's touch UI will be included in the next major PuTTY release, so
+any feedback is more than welcome!
+
 PuTTY is free software, and available with full source code under a
 very liberal license agreement.
 
-The user's guide contains further documentation, and has been recently
-updated.
+See the user's guide for further documentation.
 
 
 Installing PuTTY on Series 80
@@ -121,35 +104,21 @@ from the e.g. the Messages Inbox or using the file manager.
 Changes
 -------
 
-Main changes since 1.5 beta 2:
-- Some fixes for S60 5th edition devices, the terminal is now visible
-  after one orientation change.
-- Added support for user-selectable color palettes
-
-Main changes since 1.5 beta 1:
-- Updated to PuTTY 0.60 core
-- Default cipher is now 128-bit Blowfish, and the cipher can be
-  changed from the SSH settings page.
-- Fixed the send grid to work properly on S60 3.1, and to handle the
-  E71 keyboard
-- S60 settings view can now clear the private key, fixing bug 1930543.
-- Copy/paste support for S60, thanks to a patch from Thomas Grenman
-- A proper icon for S60 3rd ed, from James Nash
-
-Main changes since 1.4 beta 1:
-- Support for different character encodings, most notably UTF-8
-- S80 settings improvements: Settings are stored as profiles, and the
-  application presents a profile list at startup.
-- S60 third edition bug fixes and additional fonts. PuTTY now works
-  properly on an E90
-- Refactored and largely rewritten S60 UI, with a separate profile
-  list view, proper settings views, no need to exit the application
-  after each connection etc
-- S60 settings brought up to date with S80
-- Replaced the "Send" menu with a new grid control. This avoids problems
-  with multiply nested menus that have appeared on recent S60 3.1
-  devices, and should also improve usability on non-QWERTY devices
-- Lots of bug fixes, UI improvements, and general cleanup
+Main changes since 1.5.0:
+- Added profile file import/export to make it easier to manually
+  configure advanced features
+- Incorporated a port forwarding fix from Shai Ayal. This should fix
+  long-standing bug #918200 and forwarding local ports to the remote
+  server seems to work. Note that port forwarding is still not
+  available in the UI and is not officially supported.
+- Patches from Damion Yates:
+    - Backspace setting (Ctrl-H vs Delete)
+    - Force a 80x24 terminal on an E90 when using a 10x14 font
+    - Rudimentary LockSize support (not in the UI)
+  Thanks Damion!
+- Potential fix for "Bad Name" errors seen on S60 in some situations.
+  This should fix bug #1878884.
+- Increased the maximum password length from 32 to 64 characters on S60.
 
 See Changelog in the source distribution for more details.
 
