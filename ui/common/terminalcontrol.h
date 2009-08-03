@@ -3,6 +3,7 @@
  * Terminal UI control base class
  *
  * Copyright 2002,2004-2005 Petteri Kangaslampi
+ * Portions copyright 2009 Risto Avila
  *
  * See license.txt for full copyright and license information.
 */
@@ -165,6 +166,18 @@ public:
     virtual void HandlePointerEventL(const TPointerEvent& aPointerEvent);
 #endif
 
+#ifdef PUTTY_S60TOUCH
+    void StartVKB();
+    void ClearVKBBuffer();
+    //Need this for toolbar up / down buttons since those are not real keyup & keydown events and emulating those is quite messy.
+    void SetLastKeyArrow() { iLastKeyArrow = ETrue; };
+    virtual void HandlePointerEventL(const TPointerEvent& aPointerEvent);
+    void HandleTextChange();
+    void SetPointerSelect(TBool aEnabled);
+    TBool DoWeHaveSelection() { return iHaveSelection; };
+    void SetAltModifier(TBool aAltMod); // Default state off
+    void SetCtrlModifier(TBool aCtrlMod); // Default state off
+#endif
     // MCoeFepAwareTextEditor methods
     void StartFepInlineEditL(
         const TDesC &aInitialInlineText,
@@ -286,6 +299,28 @@ protected:
     TInt iFepEditX, iFepEditY; // Current FEP edit pos, -1 if invalid
     TInt iFepEditDisplayLen;
     TRgb iDefaultFg, iDefaultBg;
+#ifdef PUTTY_S60TOUCH
+    void ConvertToCharPos(TPoint& aPoint);
+    void DetermineCursorMove(TPoint& aPointOld, TPoint& aPointNew);
+    void MoveCursorToPoint(TPoint& aPointStart, TPoint& aPointEnd);
+    TPoint iLastPoint;
+    TPoint iOrig;
+    TBool iPointerSelectEnabled;
+    
+    TBool iLastKeyArrow;
+    
+    //We need to allways check if we have anough space left in the buffer if not we need to expand the buffer.
+    void CheckDisplayBufferSizeL(const TDesC &aText);
+    void CheckDisplayBufferSizeL(); //Tests if we have space for one more character.
+    HBufC* iDisplayBuf;
+    TInt iDisplayCursorPos;
+
+    void TestForModifiers(const TKeyEvent aKeyEvent);
+    void TestForModifiers();
+    TBool iCtrlModifier;
+    TBool iAltModifier;
+    
+#endif
 };
 
 

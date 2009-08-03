@@ -3,6 +3,7 @@
  * Putty terminal view
  *
  * Copyright 2007,2009 Petteri Kangaslampi
+ * Portions copyright 2009 Risto Avila
  *
  * See license.txt for full copyright and license information.
 */
@@ -20,7 +21,10 @@
 // Forward declarations
 class CPuttyEngine;
 class CTerminalContainer;
-
+#ifdef PUTTY_S60TOUCH
+#include "touchuisettings.h"
+class TTouchSettings;
+#endif
 /**
  * PuTTY terminal view. The terminal view is tha view that handles the actual
  * SSH connection, from network connection establishment to disconnection.
@@ -59,7 +63,13 @@ public: // From CAknView
     void DoDeactivate();
     void HandleStatusPaneSizeChange();
     void DynInitMenuPaneL(TInt aResourceId, CEikMenuPane *aMenuPane);
+#ifdef PUTTY_S60TOUCH
+    //Forward generated keypresses to putty engine
+    void SendKeypress(TKeyCode aCode, TUint aModifiers);
+    void SetReleaseAltAfterKeyPress(TBool aValue); //Default state off
+    void SetReleaseCtrlAfterKeyPress(TBool aValue); //Default state off
     
+#endif
 private: // Constructors
     CTerminalView();
     void ConstructL();
@@ -112,6 +122,13 @@ private:
     void SetFullScreenL(TBool aFullScreen);
     void SetFontL();
     void SetPaletteL();
+#ifdef PUTTY_S60TOUCH
+    TInt PopUpListViewL(TInt aResourceId, TInt aSelectedItem);
+    void SetToolbarButtonL(); //Show toolbar settings
+    void SetTouchSettingsL(); //Show touch settings
+    void SetGeneralToolbarSettingsL(); //Show general toolbar settings
+    TInt CheckGestureMap (TInt aCmd, TBool aItemToCmd);
+#endif
 
 private:
     enum {
@@ -136,6 +153,10 @@ private:
     CSendGrid *iSendGrid;
     TBool iSelection;
     TBool iMark;
+#ifdef PUTTY_S60TOUCH
+    TBool iReleaseAltAfterKey;
+    TBool iReleaseCtrlAfterKey;
+#endif    
 };
 
 

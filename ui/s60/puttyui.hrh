@@ -4,6 +4,7 @@
  *
  * Copyright 2003-2004 Sergei Khloupnov
  * Copyright 2002-2004 Petteri Kangaslampi
+ * Portions copyright 2009 Risto Avila
  *
  * See license.txt for full copyright and license information.
 */
@@ -64,6 +65,21 @@ enum TCommands {
     // Put all commands that should not be repeated by pressing green dial
     // button below this line
     //
+#ifdef PUTTY_S60TOUCH
+    EPuttyCmdStartVKB,
+    EPuttyCmdOpenPopUpMenu,
+    EPuttyCmdToggleToolbar,
+    EPuttyCmdSendCtrlAN,
+    EPuttyCmdSendCtrlAP,
+    EPuttyCmdSendAltALeft,
+    EPuttyCmdSendAltARight,
+    EPuttyCmdToolbarSettings,
+    EPuttyCmdTouchSettings,
+    EPuttyCmdGeneralToolbar,
+    EPuttyCmdSendCtrlP,
+    EPuttyCmdSendAltP,
+    EPuttyCmdNone, // No command for UI settings
+#endif
     
     EPuttyCmdNotRepeated,
 
@@ -129,6 +145,67 @@ enum TCommands {
     EPuttyCmdSetFont = 0x11000
 };
 
+/*
+    ENoTool = -1,
+    ETab = 0,
+    EAltPlus,
+    ECtrlPlus,
+    ETBLock,
+    ESelect,
+    EPipe,
+    EArrowUp,
+    EArrowDown,
+    EArrowLeft,
+    EArrowRight,
+    EEsc
+ */
+#ifdef PUTTY_S60TOUCH
+//these must be in same order in putty.rss
+/*
+         AVKON_ENUMERATED_TEXT { value = EPuttyToolbarTab; text = "Tab"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarAltP; text = "Alt+..."; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarCtrlP; text = "Ctrl+..."; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarLock; text = "Toggle toolbar lock"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarSelect; text = "Toggle select"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarPipe; text = "Pipe |"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarArrowUp; text = "Arrow up"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarArrowDown; text = "Arrow down"; },    
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarArrowLeft; text = "Arrow left"; },     
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarArrowRight; text = "Arrow right"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEsc; text = "Esc"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarPageUp; text = "Page up"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarPageDown; text = "Page down"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarHome; text = "Home"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEnd; text = "End"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarDelete; text = "Delete"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarInsert; text = "Insert"; },           
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEnter; text = "Enter"; }           
+*/ 
+enum TPuttyToolbarCommands {
+    EPuttyToolbarNoTool = -1,
+    EPuttyToolbarTab = 0,
+    EPuttyToolbarAltP,
+    EPuttyToolbarCtrlP,
+    EPuttyToolbarLock,
+    EPuttyToolbarSelect,
+    EPuttyToolbarCopy,
+    EPuttyToolbarPaste,
+    EPuttyToolbarPipe,
+    EPuttyToolbarArrowUp,
+    EPuttyToolbarArrowDown,
+    EPuttyToolbarArrowLeft,
+    EPuttyToolbarArrowRight,
+    EPuttyToolbarEsc,
+    EPuttyToolbarPageUp,  
+    EPuttyToolbarPageDown,  
+    EPuttyToolbarHome,  
+    EPuttyToolbarEnd,  
+    EPuttyToolbarDelete,  
+    EPuttyToolbarInsert,
+    EPuttyToolbarEnter
+};
+#endif
+
 enum TDlgControls {
     EConnDlgHost = 200,
 
@@ -186,12 +263,41 @@ enum TSettingItems {
 
     EPuttySettingLoggingType,
     EPuttySettingLoggingFile
+    
+#ifdef PUTTY_S60TOUCH
+    ,
+    EPuttySettingsTouchToolBarButton1,
+    EPuttySettingsTouchToolBarButton2,
+    EPuttySettingsTouchToolBarButton3,
+    EPuttySettingsTouchToolBarButton4,
+    EPuttySettingsTouchToolBarButton5,
+    EPuttySettingsTouchToolBarButton6,
+    EPuttySettingsTouchToolBarButton7,
+    EPuttySettingsTouchToolBarButton8,
+    EPuttySettingsTouchShowToolbarStartup,
+    EPuttySettingsTouchClick,
+    EPuttySettingsTouchDoubleClick,
+    EPuttySettingsTouchLongClick,
+    EPuttySettingsTouchSwipeLeft,
+    EPuttySettingsTouchSwipeRight,
+    EPuttySettingsTouchSwipeUp,
+    EPuttySettingsTouchSwipeDown,
+    EPuttySettingsTocuhToolBarNumberOfButtons,
+    EPuttySettingsTocuhToolBarButtonWidth,
+    EPuttySettingsTocuhToolBarButtonHeigth
+#endif
+    
 };
 
 enum TSettingTabs {
     EPuttySettingTabGeneral = 0,
     EPuttySettingTabSsh,
     EPuttySettingTabDisplay,
+#ifdef PUTTY_S60TOUCH
+    EPuttySettingTabTouch,
+    EPuttySettingTabToolbarSettings,
+    EPuttySettingTabGeneralToolbar,
+#endif
     EPuttySettingTabLogging
 };
 

@@ -23,6 +23,11 @@
 #include "profileeditgeneralsettinglist.h"
 #include "profileeditsshsettinglist.h"
 #include "profileeditdisplaysettinglist.h"
+#ifdef PUTTY_S60TOUCH
+#include "..\ui\s60v5\profileedittouchsettinglist.h"
+#include "..\ui\s60v5\profileedittoolbarsettinglist.h"
+#include "..\ui\s60v5\profileeditgeneraltoolbarsettinglist.h"
+#endif
 #include "profileeditloggingsettinglist.h"
 #include "puttyengine.h"
 #include "puttyuids.hrh"
@@ -308,7 +313,51 @@ void CProfileEditView::SetViewL(CProfileEditView::TView aView) {
             iView = EViewDisplay;
             break;
         }
+        
+#ifdef PUTTY_S60TOUCH
+        case EViewTouch: {
+            CProfileEditTouchSettingList *list =
+                CProfileEditTouchSettingList::NewL(
+                    *iPutty, *this);
+            CleanupStack::PushL(list);
+            list->SetMopParent(this);
+            list->SetRect(ClientRect());
+            AppUi()->AddToViewStackL(*this, list);
+            CleanupStack::Pop(); // list
+            iControl = list;
+            iView = EViewTouch;
+            break;
+        }
+        
+        case EViewGeneralToolbar: {
+            CProfileEditGeneralToolbarSettingList *list =
+                CProfileEditGeneralToolbarSettingList::NewL(
+                    *iPutty, *this);
+            CleanupStack::PushL(list);
+            list->SetMopParent(this);
+            list->SetRect(ClientRect());
+            AppUi()->AddToViewStackL(*this, list);
+            CleanupStack::Pop(); // list
+            iControl = list;
+            iView = EViewGeneralToolbar;
+            break;
+        }        
 
+        case EViewToolbar: {
+            CProfileEditToolbarSettingList *list =
+                CProfileEditToolbarSettingList::NewL(
+                    *iPutty, *this);
+            CleanupStack::PushL(list);
+            list->SetMopParent(this);
+            list->SetRect(ClientRect());
+            AppUi()->AddToViewStackL(*this, list);
+            CleanupStack::Pop(); // list
+            iControl = list;
+            iView = EViewToolbar;
+            break;
+        }        
+#endif
+        
         case EViewLogging: {
             CProfileEditLoggingSettingList *list =
                 CProfileEditLoggingSettingList::NewL(*iPutty, *this);

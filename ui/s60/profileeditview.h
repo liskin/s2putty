@@ -61,6 +61,11 @@ private:
         EViewGeneral,
         EViewSsh,
         EViewDisplay,
+#ifdef PUTTY_S60TOUCH
+        EViewTouch,
+        EViewGeneralToolbar,
+        EViewToolbar,
+#endif
         EViewLogging // the order must match the listbox
     };
 

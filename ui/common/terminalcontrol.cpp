@@ -3,6 +3,7 @@
  * A terminal UI control class
  *
  * Copyright 2002-2005 Petteri Kangaslampi
+ * Portions copyright 2009 Risto Avila
  *
  * See license.txt for full copyright and license information.
 */
@@ -17,6 +18,9 @@
 #include <aknedsts.h>
 #endif
 #include "logfile.h"
+#ifdef PUTTY_S60TOUCH
+#include <baclipb.h> 
+#endif
 
 _LIT(KPanic, "TerminalControl");
 
@@ -59,6 +63,10 @@ CTerminalControl::CTerminalControl(MTerminalObserver &aObserver)
 
 CTerminalControl::~CTerminalControl() {
 
+#ifdef PUTTY_S60TOUCH
+    delete iDisplayBuf;
+    iDisplayBuf = NULL;
+#endif
     delete [] iChars;
     delete [] iAttributes;
 #ifdef PUTTY_S60
@@ -77,6 +85,15 @@ void CTerminalControl::ConstructL(const TRect &aRect,
     Clear();
 #ifdef PUTTY_S60
     iFepExt1 = CTermFepExt1::NewL(*this);
+#endif
+#ifdef PUTTY_S60TOUCH
+    iCtrlModifier = EFalse;
+    iAltModifier = EFalse;
+    iPointerSelectEnabled = EFalse;
+    iLastKeyArrow = EFalse;
+    iDisplayBuf = HBufC::NewL(64); // Allocate display buffer for vkb default 64 characters. Grows dynamically with 10 chars.
+    iDisplayCursorPos = 0;
+    iHaveSelection = EFalse; //set it false
 #endif
 }
 
@@ -192,6 +209,20 @@ void CTerminalControl::DrawText(TInt aX, TInt aY, const TDesC &aText,
     if ( (aX < 0) || (aY < 0) || (aX >= iCharWidth) || (aY >= iCharHeight) ) {
         return;
     }
+#ifdef PUTTY_S60TOUCH
+    //Get modifiable text I asume that only up and down arroes bring something editable to the screen
+    if ( iLastKeyArrow ) {
+        TPtr tmpPtr = iDisplayBuf->Des();
+        tmpPtr.SetLength(0); //Clear old buffer
+        CheckDisplayBufferSizeL(aText);  //Ensure that buffer can hold up the new text content
+        tmpPtr.Set(iDisplayBuf->Des()); //we dont know if the buffer were reallocated so ensure tmpPtr points right place
+        tmpPtr.Copy(aText); //Copy text to the buffer
+        iDisplayCursorPos = iDisplayBuf->Length();
+        HandleTextChange();
+        iLastKeyArrow = EFalse;
+    }
+        
+#endif
 
     // Write the text to our character and attribute buffers
     TInt numChars = aText.Length();
@@ -584,6 +615,79 @@ TKeyResponse CTerminalControl::OfferKeyEventL(const TKeyEvent &aKeyEvent,
         TUint code = aKeyEvent.iCode;
         iCtrlDown = EFalse;
 
+#ifdef PUTTY_S60TOUCH
+        
+    TestForModifiers(aKeyEvent);    
+    // Update virtual keyboard buffer
+    switch( aKeyEvent.iCode ) 
+          {
+          case EKeyBackspace :
+              iLastKeyArrow = EFalse;
+              if(iDisplayBuf->Length() > 0 && iDisplayCursorPos > 0)
+                  {
+                  iDisplayCursorPos--;
+                  (iDisplayBuf->Des()).Delete(iDisplayCursorPos, 1);
+                  HandleTextChange();
+                  DrawNow();
+                  }
+              break;
+          case EKeyEnter :
+              iLastKeyArrow = EFalse;
+              (iDisplayBuf->Des()).SetLength(0); // Clear field after enter
+              iDisplayCursorPos = 0;
+              HandleTextChange();
+              DrawNow();
+              break;
+          case EKeyUpArrow:
+          case EKeyDownArrow:
+              iLastKeyArrow = ETrue;
+          case EKeyLeftArrow:
+              if ( iDisplayCursorPos > 0) {
+                  iDisplayCursorPos--;
+              } else {
+                  iDisplayCursorPos = 0;
+              }
+              HandleTextChange();
+              DrawNow(); 
+              break;
+          case EKeyRightArrow:
+              if ( iDisplayCursorPos < iDisplayBuf->Length() ) {
+                  iDisplayCursorPos++;
+              } else {
+                  iDisplayCursorPos = iDisplayBuf->Length();
+              }
+              HandleTextChange();
+              DrawNow(); 
+              break;
+          case EKeyNull :
+              break;
+          default :
+              //TODO we should have better filter
+              // we should clear after ctrl + char ?
+              iLastKeyArrow = EFalse;
+              
+              //Dont show keys with ctrl or alt modifiers in vkb edit field
+              if (aKeyEvent.iCode > 0x001F && aKeyEvent.iCode < 0x00FF && (aKeyEvent.iModifiers & EModifierCtrl) == 0 
+                      && (aKeyEvent.iModifiers & EModifierAlt) == 0 && !iAltModifier && !iCtrlModifier ) {                  
+
+                  CheckDisplayBufferSizeL(); //Test space for one char
+                  
+                  if ( iDisplayCursorPos == iDisplayBuf->Length() ) {
+                      //iDisplayCursorPos = iDisplayBuf->Length();
+                      (iDisplayBuf->Des()).Append((TChar)aKeyEvent.iCode);
+                  } else {
+                       TBuf<1> tmp;
+                       tmp.Append( (TChar)aKeyEvent.iCode );
+                       
+                       (iDisplayBuf->Des()).Insert(iDisplayCursorPos, tmp);
+
+                  }
+                  iDisplayCursorPos++;
+                  HandleTextChange();
+                  DrawNow();              
+              }
+          }
+#endif        
         // Handle cursor keys in selection mode
         if ( iSelectMode ) {
             switch ( code ) {
@@ -733,6 +837,18 @@ void CTerminalControl::StartFepInlineEditL(
     iFepEditActive = ETrue;
     iFepCursorVisible = aCursorVisibility;
 
+#ifdef PUTTY_S60TOUCH    
+    CheckDisplayBufferSizeL(aInitialInlineText);
+    if (iDisplayBuf->Length() == 0 ) {
+        iDisplayBuf->Des().Copy(aInitialInlineText);
+    } else {
+        //iDisplayBuf->Des().Append(aInitialInlineText);
+        iDisplayBuf->Des().Insert(iDisplayCursorPos, aInitialInlineText );        
+    }
+    iDisplayCursorPos = iDisplayCursorPos + aInitialInlineText.Length();
+    HandleTextChange();
+    DrawNow();
+#endif    
     if ( aInitialInlineText.Length() <= iFepEditBuf.MaxLength() ) {
         iFepEditBuf = aInitialInlineText;
     } else {
@@ -778,12 +894,39 @@ void CTerminalControl::UpdateFepInlineTextL(
     buf.AppendFormat(_L("}, %d)"), aPositionOfInsertionPointInInlineText);
     LFPRINT((buf));
 #endif
+#ifdef PUTTY_S60TOUCH
+    //Asume that we only want to inline edit only one character!
+    if ( aNewInlineText.Length() > 1 ) {
+        iFepEditBuf = aNewInlineText.Mid(aNewInlineText.Length() - 1);
+    } else {
+        iFepEditBuf = aNewInlineText;
+    }
     
+    if ( iDisplayBuf->Length() > 0) {       
+        //iDisplayBuf->Des().SetLength(iDisplayBuf->Des().Length() -1);
+        if ( iDisplayCursorPos > 0) {
+            iDisplayBuf->Des().Delete(iDisplayCursorPos -1, aNewInlineText.Length() );
+        } else {
+            iDisplayBuf->Des().Delete( iDisplayCursorPos, aNewInlineText.Length() );
+        }
+    }
+    
+    CheckDisplayBufferSizeL(aNewInlineText);
+    //iDisplayBuf->Des().Append(aNewInlineText);
+    if ( iDisplayCursorPos > 0 ) {
+        iDisplayBuf->Des().Insert(iDisplayCursorPos-1, aNewInlineText);
+    } else {
+        iDisplayBuf->Des().Insert(iDisplayCursorPos, aNewInlineText);
+    }
+    
+#else
     if ( aNewInlineText.Length() <= iFepEditBuf.MaxLength() ) {
         iFepEditBuf = aNewInlineText;
     } else {
         iFepEditBuf = aNewInlineText.Left(iFepEditBuf.MaxLength());
     }
+#endif    
+        
     
     iFepCursorPos = aPositionOfInsertionPointInInlineText;
     if ( iFepCursorPos >= iFepEditBuf.Length() ) {
@@ -826,6 +969,9 @@ void CTerminalControl::CancelFepInlineEdit() {
 // MCoeFepAwareTextEditor::DocumentLengthForFep()
 TInt CTerminalControl::DocumentLengthForFep() const {
     LFPRINT((_L("DocumentLengthForFep()")));
+#ifdef PUTTY_S60TOUCH
+        return iDisplayBuf->Length();
+#else
     if ( iFepEditActive ) {
         LFPRINT((_L(" - returning %d"), iFepEditBuf.Length()));
         return iFepEditBuf.Length();
@@ -833,20 +979,48 @@ TInt CTerminalControl::DocumentLengthForFep() const {
         LFPRINT((_L(" - returning 0 (not active)"), iFepEditBuf.Length()));
         return 0;
     }
+#endif
 }
 
 
 // MCoeFepAwareTextEditor::DocumentMaximumLengthForFep()
 TInt CTerminalControl::DocumentMaximumLengthForFep() const {
     LFPRINT((_L("DocumentMaximumLengthForFep(), returning %d"), iFepEditBuf.MaxLength()));
+#ifdef PUTTY_S60TOUCH
+    return (iDisplayBuf->Des()).MaxLength();
+#else
     return iFepEditBuf.MaxLength();
+#endif
+    
 }
 
 
 // MCoeFepAwareTextEditor::SetCursorSelectionForFepL()
 void CTerminalControl::SetCursorSelectionForFepL(
-    const TCursorSelection & /*aCursorSelection*/) {
+    const TCursorSelection & aCursorSelection) {
     LFPRINT((_L("SetCursorSelectionForFepL()")));
+#ifdef PUTTY_S60TOUCH    
+    TInt count = 0;
+    TKeyEvent iKeyEvent;
+    iKeyEvent.iRepeats = 0;
+    iKeyEvent.iModifiers = 0;
+    iKeyEvent.iScanCode = 0;
+    TEventCode iKeyEventType = EEventKey;
+
+    if (aCursorSelection.iCursorPos > iDisplayCursorPos) {
+        count = aCursorSelection.iCursorPos - iDisplayCursorPos;
+        iKeyEvent.iCode=EKeyRightArrow;        
+    }
+    if (aCursorSelection.iCursorPos < iDisplayCursorPos) {
+        count = iDisplayCursorPos - aCursorSelection.iCursorPos;
+        iKeyEvent.iCode=EKeyLeftArrow;
+    }
+    
+    for ( TInt i = 0; i < count; i++) {
+        OfferKeyEventL(iKeyEvent, iKeyEventType); // move cursor on both feps
+    }    
+    //iDisplayCursorPos = aCursorSelection.iCursorPos;
+#endif    
 }
 
 
@@ -854,13 +1028,23 @@ void CTerminalControl::SetCursorSelectionForFepL(
 void CTerminalControl::GetCursorSelectionForFep(
     TCursorSelection& aCursorSelection) const {
     LFPRINT((_L("GetCursorSelectionForFepL()")));
-    if ( iFepEditActive ) {
+#ifdef PUTTY_S60TOUCH
+    if(iDisplayBuf->Length()) {
+        aCursorSelection.iAnchorPos = iDisplayCursorPos ;
+        aCursorSelection.iCursorPos = iDisplayCursorPos ;
+    } else {
+        aCursorSelection.iAnchorPos = 0;
+        aCursorSelection.iCursorPos = 0;    
+    }
+#else
+    if ( iFepEditActive ) {        
         aCursorSelection.iAnchorPos = iFepCursorPos;
         aCursorSelection.iCursorPos = iFepCursorPos;
     } else {
         aCursorSelection.iAnchorPos = 0;
         aCursorSelection.iCursorPos = 0;
     }
+#endif
 }
 
 
@@ -876,7 +1060,14 @@ void CTerminalControl::GetEditorContentForFep(
             LFPRINT((_L(" - Returning \" \"")));
             return;
         }
-
+#ifdef PUTTY_S60TOUCH        
+        if(iDisplayBuf->Length() == aDocumentPosition) {
+            aEditorContent.Copy(_L(""));
+            return;
+        }
+        aEditorContent.Copy(iDisplayBuf->Mid(aDocumentPosition,aLengthToRetrieve));   
+        return; //FUNCTION RETURNS NOW!    
+#endif
         if ( aDocumentPosition < 0 ) {
             aLengthToRetrieve += aDocumentPosition;
             aDocumentPosition = 0;
@@ -909,8 +1100,19 @@ void CTerminalControl::GetEditorContentForFep(
 #endif
     
     } else {
+#ifdef PUTTY_S60TOUCH
+        if(aDocumentPosition < 0 ) return;
+    
+        if(iDisplayBuf->Length() == aDocumentPosition) {
+            aEditorContent.Copy(_L(""));
+            return;
+        }
+        aEditorContent.Copy(iDisplayBuf->Mid(aDocumentPosition,aLengthToRetrieve));   
+        return;    
+#else
         LFPRINT((_L(" - Not active, returning empty")));
         aEditorContent.Zero();
+#endif
     }
 }
 
@@ -939,6 +1141,9 @@ void CTerminalControl::GetScreenCoordinatesForFepL(
 void CTerminalControl::DoCommitFepInlineEditL() {
 
     LFPRINT((_L("DoCommitFepInlineEditL()")));
+#ifdef PUTTY_S60TOUCH
+    TestForModifiers();
+#endif
     for ( TInt i = 0; i < iFepEditBuf.Length(); i++ ) {
         TText c = iFepEditBuf[i];
         // S60 1.2 SDK sends Enter from the FEP by sending a 0xe125 character
@@ -966,6 +1171,12 @@ void CTerminalControl::DoCommitFepInlineEditL() {
         UpdateDisplay(iFepEditX, iFepEditY, iFepEditDisplayLen);
         TRACE;
     }
+    
+#ifdef PUTTY_S60TOUCH
+    HandleTextChange();
+    DrawNow();                     
+#endif
+    
 }
 
 
@@ -976,6 +1187,214 @@ MCoeFepAwareTextEditor_Extension1 *CTerminalControl::Extension1(TBool &aSetToTru
 //    LFPRINT((_L("Extension1()")));
     aSetToTrue = ETrue;
     return iFepExt1;
+}
+
+#endif
+
+#ifdef PUTTY_S60TOUCH
+void CTerminalControl::StartVKB() {
+    CAknEdwinState* editorState = (CAknEdwinState*) iFepExt1->State(TUid::Uid(1));
+    editorState->ReportAknEdStateEventL(MAknEdStateObserver::EAknActivatePenInputRequest);
+}
+
+void CTerminalControl::ClearVKBBuffer() {
+    iDisplayCursorPos = 0;
+    TPtr tmpPtr = iDisplayBuf->Des();
+    tmpPtr.SetLength(0);    
+}
+
+void CTerminalControl::HandlePointerEventL(const TPointerEvent& aEvent) {
+    if (iPointerSelectEnabled) {
+        TPoint iSelectPoint = aEvent.iPosition;
+        ConvertToCharPos(iSelectPoint);
+        if (aEvent.iType == TPointerEvent::EButton1Down) {
+            iOrig.SetXY(iCursorX,iCursorY);        
+            SetSelectMode(ETrue);
+            MoveCursorToPoint(iOrig, iSelectPoint);
+            SetMark();
+            iLastPoint = iSelectPoint;
+        }
+
+       if (aEvent.iType == TPointerEvent::EDrag) {
+            DetermineCursorMove(iLastPoint, iSelectPoint);
+            iLastPoint = iSelectPoint;
+       }
+    
+       if (aEvent.iType == TPointerEvent::EButton1Up) { 		
+            // get selection
+            const HBufC *text = CopySelectionLC();
+            if ( text->Length() > 0 ) {
+                // put selection on clipboard
+                CClipboard* cb = CClipboard::NewForWritingLC(
+                    CCoeEnv::Static()->FsSession());
+                cb->StreamDictionary().At(KClipboardUidTypePlainText);               
+                CPlainText *plainText = CPlainText::NewL();
+                CleanupStack::PushL(plainText);              
+                plainText->InsertL(0, *text);                                    
+                plainText->CopyToStoreL(cb->Store(),
+                                    cb->StreamDictionary(),
+                                    0,
+                                    plainText->DocumentLength());                
+                CleanupStack::PopAndDestroy(); // plainText
+                cb->CommitL();
+                CleanupStack::PopAndDestroy(); // cb
+            }
+            CleanupStack::PopAndDestroy(); // text        
+        
+        }
+    }
+    //CCoeControl::HandlePointerEventL(aEvent);
+}
+
+void CTerminalControl::ConvertToCharPos(TPoint& aPoint) {
+    TInt x = aPoint.iX / iFontWidth;
+    TInt y = aPoint.iY / iFontHeight;
+    aPoint.SetXY(x,y);
+}
+
+void CTerminalControl::MoveCursorToPoint(TPoint& aPointStart, TPoint& aPointEnd) {
+    TKeyEvent iKeyEvent;
+    iKeyEvent.iRepeats = 0;
+    iKeyEvent.iModifiers = 0;
+    iKeyEvent.iScanCode = 0;
+    TEventCode iKeyEventType = EEventKey;
+    
+    TInt startX = aPointStart.iX;
+    TInt endX = aPointEnd.iX;
+   
+    //Horizontal
+    while ( startX != endX ) {
+        if ( startX > endX ) {
+            //Move to left
+            iKeyEvent.iCode=EKeyLeftArrow;
+            OfferKeyEventL(iKeyEvent, iKeyEventType);
+            startX--;
+        } else if ( startX < endX) {
+            //Move to right
+            iKeyEvent.iCode=EKeyRightArrow;
+            OfferKeyEventL(iKeyEvent, iKeyEventType);
+            startX++;
+        }        
+    }
+    
+    
+    TInt startY = aPointStart.iY;
+    TInt endY = aPointEnd.iY;
+    
+    //Vertical    
+    while ( startY != endY ) {
+        if ( startY > endY ) {
+            //Move Up
+           iKeyEvent.iCode=EKeyUpArrow;
+           OfferKeyEventL(iKeyEvent, iKeyEventType);
+           startY--;
+        } else if ( startY < endY ) {
+            //Move down
+            iKeyEvent.iCode=EKeyDownArrow;
+            OfferKeyEventL(iKeyEvent, iKeyEventType);
+            startY++;
+        }
+    }
+}
+
+void CTerminalControl::DetermineCursorMove(TPoint& aPointOld, TPoint& aPointNew) {
+	TKeyEvent iKeyEvent;
+	iKeyEvent.iRepeats = 0;
+	iKeyEvent.iModifiers = 0;
+	iKeyEvent.iScanCode = 0;
+	TEventCode iKeyEventType = EEventKey;
+
+	if (aPointNew.iX > aPointOld.iX) {
+		iKeyEvent.iCode=EKeyRightArrow;        
+	}
+	if (aPointNew.iX < aPointOld.iX) {
+		iKeyEvent.iCode=EKeyLeftArrow;
+	}
+	if (aPointNew.iY > aPointOld.iY) {
+		iKeyEvent.iCode=EKeyDownArrow;    
+	}
+	if (aPointNew.iY < aPointOld.iY) {
+		iKeyEvent.iCode=EKeyUpArrow;
+	}
+	aPointOld = aPointNew;
+	OfferKeyEventL(iKeyEvent, iKeyEventType); // move selection to Up
+}
+
+void CTerminalControl::HandleTextChange()
+    {
+    CAknEdwinState* editorState = (CAknEdwinState*) iFepExt1->State(TUid::Uid(1));
+    editorState->ReportAknEdStateEventL(MAknEdStateObserver::EAknCursorPositionChanged);
+    }
+
+void CTerminalControl::SetPointerSelect(TBool aEnabled) {
+    iPointerSelectEnabled = aEnabled;
+}
+
+void CTerminalControl::CheckDisplayBufferSizeL(const TDesC &aText) {
+    if ( aText.Length() < (( iDisplayBuf->Des()).MaxLength() - iDisplayBuf->Length()) ) {
+        return; //We have enough space left for aText;
+    } else {
+        HBufC *newBuf = HBufC::NewL(iDisplayBuf->Length() + aText.Length() + 25);
+        newBuf->Des().Copy(iDisplayBuf->Des());
+        delete iDisplayBuf;
+        iDisplayBuf = newBuf;
+        newBuf = NULL;;
+    }
+}
+
+void CTerminalControl::CheckDisplayBufferSizeL() {
+    TInt oldMaxLength = (iDisplayBuf->Des()).MaxLength();
+    
+    if ( ( oldMaxLength - iDisplayBuf->Length() ) > 1 ) {
+        return;
+    } else {
+        HBufC *newBuf = HBufC::NewL(oldMaxLength + 25);
+        newBuf->Des().Copy(iDisplayBuf->Des());
+        delete iDisplayBuf;
+        iDisplayBuf = newBuf;
+        newBuf = NULL;;
+    }
+}
+
+void CTerminalControl::SetAltModifier(TBool aAltMod) {
+    ClearVKBBuffer();
+    iAltModifier = aAltMod;
+}
+
+void CTerminalControl::SetCtrlModifier(TBool aCtrlMod) {
+    ClearVKBBuffer();
+    iCtrlModifier = aCtrlMod;
+}
+
+void CTerminalControl::TestForModifiers() {
+    TKeyEvent tmp;
+    tmp.iCode = 0;
+    tmp.iModifiers = 0;
+    tmp.iRepeats = 0;
+    tmp.iScanCode = 0;
+    TestForModifiers(tmp);
+}
+
+void CTerminalControl::TestForModifiers(const TKeyEvent aKeyEvent) {
+    // set modifier if needed (this is just for virtual ctrl & alt buttons)        
+    if ( iCtrlModifier || iAltModifier ) {
+    //If the toolbar buttons have not been pressed its waste of time to test if ctrl/alt are present
+    //since in that case modifiers are set by hw keys
+        if ( iAltModifier ) {
+            //iNextKeyModifiers & EModifierCtrl) == 0 && (iNextKeyModifiers & EModifierAlt) == 0)
+            //if alt modifier is not present set it
+            if ( (iNextKeyModifiers & EModifierAlt) == 0 ) {
+                iNextKeyModifiers = iNextKeyModifiers | EModifierAlt;
+            }
+        }
+        if ( iCtrlModifier ) {
+            //if ctrl modifier is not present set it
+            if ((iNextKeyModifiers & EModifierCtrl) == 0 ) {
+                iNextKeyModifiers = iNextKeyModifiers | EModifierCtrl;
+            }
+        }
+        //iContainer->Terminal().ClearVKBBuffer(); // We dont want to show ctrl + char in vkb display
+    }
 }
 
 #endif

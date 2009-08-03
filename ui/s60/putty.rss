@@ -3,7 +3,8 @@
  * Putty UI resource definitions
  *
  * Copyright 2003-2004 Sergei Khloupnov
- * Copyright 2002-2004,2007 Petteri Kangaslampi
+ * Copyright 2002-2004,2007,2009 Petteri Kangaslampi
+ * Portions copyright 2009 Risto Avila
  *
  * See license.txt for full copyright and license information.
 */
@@ -122,6 +123,11 @@ RESOURCE ARRAY r_putty_profileedit_pageselect_items {
         LBUF { txt = "\tGeneral\t\t"; },
         LBUF { txt = "\tSSH protocol\t\t"; },
         LBUF { txt = "\tDisplay\t\t"; },
+#ifdef PUTTY_S60TOUCH
+        LBUF { txt = "\tGeneral touch\t\t"; },
+        LBUF { txt = "\tGeneral toolbar\t\t"; },
+        LBUF { txt = "\tToolbar buttons\t\t"; },
+#endif
         LBUF { txt = "\tLogging\t\t"; }
     };
 }
@@ -493,6 +499,509 @@ RESOURCE ARRAY r_putty_profileedit_charset_popped_up_text_array {
     };
 }
 
+#ifdef PUTTY_S60TOUCH
+//General Touch UI settings list
+RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_touch_settinglist {
+    title = "General touch";
+    items = {
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchClick;
+            setting_page_resource = r_putty_profileedit_singletap_page;
+            associated_resource = r_putty_profileedit_gesture_texts;
+            name = "Single tap";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchDoubleClick;
+            setting_page_resource = r_putty_profileedit_doubletap_page;
+            associated_resource = r_putty_profileedit_gesture_texts;
+            name = "Double tap";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchLongClick;
+            setting_page_resource = r_putty_profileedit_longtap_page;
+            associated_resource = r_putty_profileedit_gesture_texts;
+            name = "Long press";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchSwipeUp;
+            setting_page_resource = r_putty_profileedit_swipeup_page;
+            associated_resource = r_putty_profileedit_gesture_texts;
+            name = "Swipe Up";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchSwipeDown;
+            setting_page_resource = r_putty_profileedit_swipedown_page;
+            associated_resource = r_putty_profileedit_gesture_texts;
+            name = "Swipe Down";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchSwipeLeft;
+            setting_page_resource = r_putty_profileedit_swipeleft_page;
+            associated_resource = r_putty_profileedit_gesture_texts;
+            name = "Swipe left";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchSwipeRight;
+            setting_page_resource = r_putty_profileedit_swiperight_page;
+            associated_resource = r_putty_profileedit_gesture_texts;
+            name = "Swipe right";
+        }
+    };
+}
+
+RESOURCE ARRAY r_putty_profileedit_touch_settinglist_text {
+    items = {
+        LBUF { txt = "Single tap"; },
+        LBUF { txt = "Double tap"; },
+        LBUF { txt = "Long press"; },
+        LBUF { txt = "Swipe Up"; },
+        LBUF { txt = "Swipe Down"; },
+        LBUF { txt = "Swipe left"; },
+        LBUF { txt = "Swipe right"; }
+    };
+}
+
+//General Touch UI settings list
+RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_general_toolbar_settinglist {
+    title = "General Toolbar";
+    items = {
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchShowToolbarStartup;
+            setting_page_resource = r_putty_profileedit_tbshowstartup_page;
+            associated_resource = r_putty_profileedit_tbshowstartup_texts;
+            name = "Show toolbar on startup";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTocuhToolBarNumberOfButtons;
+            setting_page_resource = r_putty_profileedit_tbcount_page;
+            name = "Number of buttons shown";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTocuhToolBarButtonWidth;
+            setting_page_resource = r_putty_profileedit_tbwidth_page;
+            name = "Button width";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTocuhToolBarButtonHeigth;
+            setting_page_resource = r_putty_profileedit_tbheigth_page;
+            name = "Button height";
+        }
+    };
+}
+
+RESOURCE ARRAY r_putty_profileedit_general_toolbar_settinglist_text {
+    items = {
+        LBUF { txt = "Show toolbar on startup"; },
+        LBUF { txt = "Number of buttons shown"; },
+        LBUF { txt = "Button width"; },
+        LBUF { txt = "Button heigth"; }        
+    };
+}
+
+//If changed remember to change from terminalview.cpp also
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbcount_page {
+    label = "Number of buttons shown";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_tbcount_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbcount_edwin {
+    min = 1;
+    max = 8;
+}
+
+//If changed remember to change from terminalview.cpp also
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbwidth_page {
+    label = "Button width";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_tbwidth_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbwidth_edwin {
+    min = 25;
+    max = 150;
+}
+
+//If changed remember to change from terminalview.cpp also
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbheigth_page {
+    label = "Button heigth";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_tbheigth_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbheigth_edwin {
+    min = 25;
+    max = 150;
+}
+
+//If changed remember to change from terminalview.cpp also
+RESOURCE DIALOG r_putty_tbcount_query {
+  flags = EGeneralQueryFlags;
+  buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+  items =
+    {
+    DLG_LINE
+      {
+      type = EAknCtQuery;
+      id = EGeneralQuery;
+      control = AVKON_DATA_QUERY {
+          layout = ENumberLayout;
+          control = AVKON_INTEGER_EDWIN {
+              maxlength = 1;
+              min = 1;
+              max = 8;
+          };
+      };
+      }
+   };
+}
+
+//If changed remember to change from terminalview.cpp also
+RESOURCE DIALOG r_putty_tbwidhtheigth_query {
+  flags = EGeneralQueryFlags;
+  buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+  items =
+    {
+    DLG_LINE
+      {
+          type = EAknCtMultilineQuery;
+          id = EMultilineFirstLine;
+          control = AVKON_DATA_QUERY {
+              layout = EMultiDataFirstNumEd;
+              label = "Enter button width:";
+              control = AVKON_INTEGER_EDWIN {
+                  maxlength = 3;
+                  min = 25;
+                  max = 150;
+              };
+          };
+      },     
+      DLG_LINE
+        {
+            type = EAknCtMultilineQuery;
+            id = EMultilineSecondLine;
+            control = AVKON_DATA_QUERY {
+                layout = EMultiDataSecondNumEd;
+                label = "Enter button heigth:";
+                control = AVKON_INTEGER_EDWIN {
+                    maxlength = 3;
+                    min = 25;
+                    max = 150;
+                };
+            };
+        }
+      
+   };
+}
+
+
+//Show toolbar texts
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_tbshowstartup_texts {
+    setting_texts_resource = r_putty_profileedit_tbshowstartup_text_array;
+    popped_up_texts_resource = r_putty_profileedit_tbshowstartup_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_tbshowstartup_text_array {
+    items = {            
+        AVKON_ENUMERATED_TEXT { value = 0; text = "No"; },
+        AVKON_ENUMERATED_TEXT { value = 1; text = "Yes"; }
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_tbshowstartup_popped_up_text_array {
+    items = {
+        LBUF { txt = "No"; },
+        LBUF { txt = "Yes"; }
+    };
+}
+
+// Show toolbar edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbshowstartup_page {
+    type = EAknCtPopupSettingList;
+    label = "Show toolbar on startup";
+    editor_resource_id=r_putty_profileedit_tbshowstartup_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_tbshowstartup_popup {
+    flags = 0;
+}
+
+
+//Gesture setting texts
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_gesture_texts {
+    setting_texts_resource = r_putty_profileedit_gesture_text_array;
+    popped_up_texts_resource = r_putty_profileedit_gesture_popped_up_text_array;
+}
+//If changed update also gesture map from terminalview.cpp
+RESOURCE ARRAY r_putty_profileedit_gesture_text_array {
+    items = {            
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdNone; text = "None"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdStartVKB; text = "Open virtual keyboard"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdOpenPopUpMenu; text = "Open popup menu"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdFullScreen; text = "Toggle full screen"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdToggleToolbar; text = "Toggle toolbar"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendTab; text = "Send tab key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSend; text = "Open send grid"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendLine; text = "Open send line dialog"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendCtrlAN; text = "Send ctrl+an"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendCtrlAP; text = "Send ctrl+ap"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendAltALeft; text = "Send alt+left arrow"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendAltARight; text = "Send alt+right arrow"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendPageUp; text = "Send page up key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendPageDown; text = "Send page down key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendHome; text = "Send home key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendEnd; text = "Send end key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendDelete; text = "Send delete key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendInsert; text = "Send insert key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendCR; text = "Send enter key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendCtrlP; text = "Add ctrl to next key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendAltP; text = "Add alt to next key"; }
+        
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_gesture_popped_up_text_array {
+    items = {
+        LBUF { txt = "None"; },
+        LBUF { txt = "Open virtual keyboard"; },
+        LBUF { txt = "Open popup menu"; },
+        LBUF { txt = "Toggle fullscreen"; },
+        LBUF { txt = "Toggle toolbar"; },
+        LBUF { txt = "Send tab key"; },
+        LBUF { txt = "Open send grid"; },
+        LBUF { txt = "Open send line dialog"; },
+        LBUF { txt = "Send ctrl+an"; },
+        LBUF { txt = "Send ctrl+ap"; },
+        LBUF { txt = "Send alt+left arrow"; },
+        LBUF { txt = "Send alt+right arrow"; },
+        LBUF { txt = "Send page up key"; },
+        LBUF { txt = "Send page down key"; },
+        LBUF { txt = "Send home key"; },
+        LBUF { txt = "Send end key"; },
+        LBUF { txt = "Send delete key"; },
+        LBUF { txt = "Send insert key"; },
+        LBUF { txt = "Send enter key"; },
+        LBUF { txt = "Add ctrl to next key"; },
+        LBUF { txt = "Add alt to next key"; }     
+    };
+}
+
+// Single tap edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_singletap_page {
+    type = EAknCtPopupSettingList;
+    label = "Single tap";
+    editor_resource_id=r_putty_profileedit_singletap_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_singletap_popup {
+    flags = 0;
+}
+
+// Double tap edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_doubletap_page {
+    type = EAknCtPopupSettingList;
+    label = "Double tap";
+    editor_resource_id=r_putty_profileedit_doubletap_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_doubletap_popup {
+    flags = 0;
+}
+
+// Long tap edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_longtap_page {
+    type = EAknCtPopupSettingList;
+    label = "Long press";
+    editor_resource_id=r_putty_profileedit_longtap_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_longtap_popup {
+    flags = 0;
+}
+
+// Swipe Up edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_swipeup_page {
+    type = EAknCtPopupSettingList;
+    label = "Swipe up";
+    editor_resource_id=r_putty_profileedit_swipeup_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_swipeup_popup {
+    flags = 0;
+}
+
+// Swipe Down edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_swipedown_page {
+    type = EAknCtPopupSettingList;
+    label = "Swipe down";
+    editor_resource_id=r_putty_profileedit_swipedown_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_swipedown_popup {
+    flags = 0;
+}
+
+// Swipe left edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_swipeleft_page {
+    type = EAknCtPopupSettingList;
+    label = "Swipe left";
+    editor_resource_id=r_putty_profileedit_swipeleft_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_swipeleft_popup {
+    flags = 0;
+}
+
+// Swipe right edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_swiperight_page {
+    type = EAknCtPopupSettingList;
+    label = "Swipe right";
+    editor_resource_id=r_putty_profileedit_swiperight_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_swiperight_popup {
+    flags = 0;
+}
+
+//List of toolbar buttons.
+RESOURCE ARRAY r_putty_profileedit_tbbuttons_text_array {
+    items = {
+        LBUF { txt = "Toolbar button 1"; },
+        LBUF { txt = "Toolbar button 2"; },
+        LBUF { txt = "Toolbar button 3"; },
+        LBUF { txt = "Toolbar button 4"; },
+        LBUF { txt = "Toolbar button 5"; },
+        LBUF { txt = "Toolbar button 6"; },
+        LBUF { txt = "Toolbar button 7"; },
+        LBUF { txt = "Toolbar button 8"; }        
+    };
+}
+//General Touch Toolbar settings list
+RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_toolbar_settinglist {
+    title = "General toolbar";
+    items = {
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButton1;
+            setting_page_resource = r_putty_profileedit_tbbutton_page;
+            associated_resource = r_putty_profileedit_tbbutton_texts;
+            name = "Toolbar Button 1";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButton2;
+            setting_page_resource = r_putty_profileedit_tbbutton_page;
+            associated_resource = r_putty_profileedit_tbbutton_texts;
+            name = "Toolbar Button 2";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButton3;
+            setting_page_resource = r_putty_profileedit_tbbutton_page;
+            associated_resource = r_putty_profileedit_tbbutton_texts;
+            name = "Toolbar Button 3";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButton4;
+            setting_page_resource = r_putty_profileedit_tbbutton_page;
+            associated_resource = r_putty_profileedit_tbbutton_texts;
+            name = "Toolbar Button 4";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButton5;
+            setting_page_resource = r_putty_profileedit_tbbutton_page;
+            associated_resource = r_putty_profileedit_tbbutton_texts;
+            name = "Toolbar Button 5";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButton6;
+            setting_page_resource = r_putty_profileedit_tbbutton_page;
+            associated_resource = r_putty_profileedit_tbbutton_texts;
+            name = "Toolbar Button 6";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButton7;
+            setting_page_resource = r_putty_profileedit_tbbutton_page;
+            associated_resource = r_putty_profileedit_tbbutton_texts;
+            name = "Toolbar Button 7";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButton8;
+            setting_page_resource = r_putty_profileedit_tbbutton_page;
+            associated_resource = r_putty_profileedit_tbbutton_texts;
+            name = "Toolbar Button 8";
+        }
+    };
+}
+
+// Toolbar button setting page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbbutton_page {
+    type = EAknCtPopupSettingList;
+    label = "Toolbar button";
+    editor_resource_id=r_putty_profileedit_tbbutton_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_tbbutton_popup {
+    flags = 0;
+}
+
+//Toolbar button setting texts
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_tbbutton_texts {
+    setting_texts_resource = r_putty_profileedit_tbbutton_text_array;
+    popped_up_texts_resource = r_putty_profileedit_tbbutton_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_tbbutton_text_array {
+    items = {
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarTab; text = "Tab"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarAltP; text = "Alt+..."; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarCtrlP; text = "Ctrl+..."; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarLock; text = "Toggle toolbar lock"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarSelect; text = "Select"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarCopy; text = "Copy"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarPaste; text = "Paste"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarPipe; text = "Pipe |"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarArrowUp; text = "Arrow up"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarArrowDown; text = "Arrow down"; },    
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarArrowLeft; text = "Arrow left"; },     
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarArrowRight; text = "Arrow right"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEsc; text = "Esc"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarPageUp; text = "Page up"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarPageDown; text = "Page down"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarHome; text = "Home"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEnd; text = "End"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarDelete; text = "Delete"; },      
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarInsert; text = "Insert"; },           
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEnter; text = "Enter"; }           
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_tbbutton_popped_up_text_array {
+    items = {
+        LBUF { txt = "Tab"; },
+        LBUF { txt = "Alt+..."; },
+        LBUF { txt = "Ctrl+..."; },
+        LBUF { txt = "Toggle toolbar lock"; },
+        LBUF { txt = "Select"; },
+        LBUF { txt = "Copy"; },
+        LBUF { txt = "Paste"; },
+        LBUF { txt = "Pipe |"; },
+        LBUF { txt = "Arrow up"; },
+        LBUF { txt = "Arrow down"; },
+        LBUF { txt = "Arrow left"; },
+        LBUF { txt = "Arrow right"; },
+        LBUF { txt = "Esc"; },
+        LBUF { txt = "Page up"; },
+        LBUF { txt = "Page down"; },
+        LBUF { txt = "Home"; },
+        LBUF { txt = "End"; },
+        LBUF { txt = "Delete"; },
+        LBUF { txt = "Insert"; },
+        LBUF { txt = "Enter"; } 
+    };
+}
+
+RESOURCE DIALOG r_putty_tbbutton_exists_query_dialog {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_YES_NO;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EGeneralQuery;
+            control = AVKON_CONFIRMATION_QUERY {
+                layout = EConfirmationQueryLayout;
+                label = "Action allready defined to different button.\n Do you want to swap button places?";
+            };
+        }
+    };
+}
+/* tmp
+RESOURCE TBUF r_putty_str_accept_cipher_dlg_fmt {
+    buf = "Action allready defined to different button.\n Do you want to swap button places?";
+}
+*/
+
+#endif
 
 // Logging settings list
 RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_logging_settinglist {
@@ -573,6 +1082,20 @@ RESOURCE NAVI_DECORATOR r_putty_settings_navi_decorator {
                 id = EPuttySettingTabDisplay;
                 txt = "Display";
                 },
+#ifdef PUTTY_S60TOUCH
+            TAB {
+                id = EPuttySettingTabTouch;
+                txt = "General touch"; 
+                },                
+            TAB {
+                id = EPuttySettingTabTouch;
+                txt = "General toolbar"; 
+                },                
+            TAB {
+                id = EPuttySettingTabToolbarSettings;
+                txt = "Toolbar buttons"; 
+                },                
+#endif
             TAB {
                 id = EPuttySettingTabLogging;
                 txt = "Logging";
@@ -618,6 +1141,51 @@ RESOURCE MENU_BAR r_putty_terminal_menubar {
     };
 }
 
+// Terminal Popup menu pane for 5.0 touch
+#ifdef PUTTY_S60TOUCH
+RESOURCE STYLUS_POPUP_MENU r_putty_terminal_popup_menu
+    {
+    items = 
+        {
+        STYLUS_POPUP_MENU_ITEM
+            {
+            txt="Toggle full screen";
+            command = EPuttyCmdFullScreen;
+            },
+        STYLUS_POPUP_MENU_ITEM
+            {
+            txt="General touch...";
+            command = EPuttyCmdTouchSettings;
+            },                      
+        STYLUS_POPUP_MENU_ITEM
+            {
+            txt="General Toolbar...";
+            command = EPuttyCmdGeneralToolbar;
+            },                      
+        STYLUS_POPUP_MENU_ITEM
+            {
+            txt="Toolbar buttons...";
+            command = EPuttyCmdToolbarSettings;
+            },                      
+        STYLUS_POPUP_MENU_ITEM
+            {
+            txt="Screen font...";
+            command = EPuttyCmdSetFont;
+            },        
+        STYLUS_POPUP_MENU_ITEM
+            {
+            txt="Palette...";
+            command = EPuttyCmdSetPalette;
+            },        
+        STYLUS_POPUP_MENU_ITEM
+            {
+            txt="Disconnect";
+            command = EPuttyCmdDisconnect;
+            }        
+        };
+     }
+#endif
+
 // Terminal main menu pane
 RESOURCE MENU_PANE r_putty_terminal_menu_pane {
     items = {
@@ -633,6 +1201,10 @@ RESOURCE MENU_PANE r_putty_view_menu {
     items = {
         MENU_ITEM { command = EPuttyCmdSetFont; txt = "Screen font..."; },
         MENU_ITEM { command = EPuttyCmdSetPalette; txt = "Palette..."; },
+#ifdef PUTTY_S60TOUCH
+        MENU_ITEM { command = EPuttyCmdTouchSettings; txt = "General touch..."; },
+        MENU_ITEM { command = EPuttyCmdToolbarSettings; txt = "Touch toolbar...."; },
+#endif
         MENU_ITEM { command = EPuttyCmdFullScreen; txt = "Toggle full screen"; }
     };
 }
