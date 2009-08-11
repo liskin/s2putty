@@ -283,6 +283,7 @@ TCoeInputCapabilities CTerminalContainer::InputCapabilities() const {
 
 void CTerminalContainer::SwapButtons(TInt aButton, TInt aCmd) {
     iCustomToolbarControl->SwapButtons(aButton, aCmd);
+    iCustomToolbarControl->DrawDeferred();
 }
 
 void CTerminalContainer::HandlePointerEventL( const TPointerEvent& aEvent ) {
@@ -509,7 +510,7 @@ void CTerminalContainer::HandleLongTapEventL( const TPoint& /* aPenEventLocation
     HandleTouchAction(EPuttyTouchLongTap, aPenEventScreenLocation);
 }
 
-void CTerminalContainer::UpdateAfterSettingsChange() {
+void CTerminalContainer::UpdateAfterSettingsChangeL() {
     //if buttons are down before editing the buttons set them up before actually updating the buttons
     if ( iAltModifier ) {
         HandleCustomToolbar(EPuttyToolbarAltP);
@@ -522,10 +523,11 @@ void CTerminalContainer::UpdateAfterSettingsChange() {
     }
     
     //it's easier to recreate whole toolbar
+    
+    iCustomToolbarControl->UpdateButtonsFromSettingsL();
+    iCustomToolbarControl->DrawNow();
+    
     /*
-    iCustomToolbarControl->UpdateButtonsFromSettings();
-    iCustomToolbarControl->DrawDeferred();
-    */
     iCustomToolbarControl->SetFocus(EFalse);
     delete iCustomToolbarControl;
     iCustomToolbarControl = CCustomToolBar::NewL(this,iTermRect, &iTouchSettings);
@@ -533,7 +535,7 @@ void CTerminalContainer::UpdateAfterSettingsChange() {
     iCustomToolbarControl->SetMopParent(this);
     iCustomToolbarControl->SetFocus(ETrue);
     iCustomToolbarControl->DrawNow();
-
+    */
 }
 
 void CTerminalContainer::HandleTouchAction(TInt aCommand, const TPoint& aPenEventScreenLocation) {

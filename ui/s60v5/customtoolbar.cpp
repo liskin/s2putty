@@ -20,6 +20,7 @@
 #include "customtoolbar.h"
 #include "terminalview.h"
 
+
 _LIT(KSvgFile, "\\resource\\apps\\putty.mif");
 
 CCustomToolBar::CCustomToolBar (CTerminalContainer* aParent) : iParent(aParent) {
@@ -28,108 +29,13 @@ CCustomToolBar::CCustomToolBar (CTerminalContainer* aParent) : iParent(aParent) 
 
 CCustomToolBar::~CCustomToolBar ( ) {
     UnloadButtonsL(); //Delete button icons
+
+    iButtonsArray.ResetAndDestroy();
 }
 
 void CCustomToolBar::UnloadButtonsL() {
-    delete iTab.iButtonDownBitmap;
-    delete iTab.iButtonDownBitmapMask;
-    delete iTab.iButtonUpBitmap;
-    delete iTab.iButtonUpBitmapMask;
-    
-    delete iAltPlus.iButtonDownBitmap;
-    delete iAltPlus.iButtonDownBitmapMask;
-    delete iAltPlus.iButtonUpBitmap;
-    delete iAltPlus.iButtonUpBitmapMask;
 
-    delete iCtrlPlus.iButtonDownBitmap;
-    delete iCtrlPlus.iButtonDownBitmapMask;
-    delete iCtrlPlus.iButtonUpBitmap;
-    delete iCtrlPlus.iButtonUpBitmapMask;
 
-    delete iTBLock.iButtonDownBitmap;
-    delete iTBLock.iButtonDownBitmapMask;
-    delete iTBLock.iButtonUpBitmap;
-    delete iTBLock.iButtonUpBitmapMask;
-
-    delete iSelect.iButtonDownBitmap;
-    delete iSelect.iButtonDownBitmapMask;
-    delete iSelect.iButtonUpBitmap;
-    delete iSelect.iButtonUpBitmapMask;
-
-    delete iCopy.iButtonDownBitmap;
-    delete iCopy.iButtonDownBitmapMask;
-    delete iCopy.iButtonUpBitmap;
-    delete iCopy.iButtonUpBitmapMask;
-
-    delete iPaste.iButtonDownBitmap;
-    delete iPaste.iButtonDownBitmapMask;
-    delete iPaste.iButtonUpBitmap;
-    delete iPaste.iButtonUpBitmapMask;
-
-    delete iPipe.iButtonDownBitmap;
-    delete iPipe.iButtonDownBitmapMask;
-    delete iPipe.iButtonUpBitmap;
-    delete iPipe.iButtonUpBitmapMask;
-
-    delete iUp.iButtonDownBitmap;
-    delete iUp.iButtonDownBitmapMask;
-    delete iUp.iButtonUpBitmap;
-    delete iUp.iButtonUpBitmapMask;
-
-    delete iDown.iButtonDownBitmap;
-    delete iDown.iButtonDownBitmapMask;
-    delete iDown.iButtonUpBitmap;
-    delete iDown.iButtonUpBitmapMask;
-
-    delete iLeft.iButtonDownBitmap;
-    delete iLeft.iButtonDownBitmapMask;
-    delete iLeft.iButtonUpBitmap;
-    delete iLeft.iButtonUpBitmapMask;    
-
-    delete iRight.iButtonDownBitmap;
-    delete iRight.iButtonDownBitmapMask;
-    delete iRight.iButtonUpBitmap;
-    delete iRight.iButtonUpBitmapMask;    
-
-    delete iEsc.iButtonDownBitmap;
-    delete iEsc.iButtonDownBitmapMask;
-    delete iEsc.iButtonUpBitmap;
-    delete iEsc.iButtonUpBitmapMask;    
-
-    delete iPageUp.iButtonDownBitmap;
-    delete iPageUp.iButtonDownBitmapMask;
-    delete iPageUp.iButtonUpBitmap;
-    delete iPageUp.iButtonUpBitmapMask;  
-    
-    delete iPageDown.iButtonDownBitmap;
-    delete iPageDown.iButtonDownBitmapMask;
-    delete iPageDown.iButtonUpBitmap;
-    delete iPageDown.iButtonUpBitmapMask;
-    
-    delete iHome.iButtonDownBitmap;
-    delete iHome.iButtonDownBitmapMask;
-    delete iHome.iButtonUpBitmap;
-    delete iHome.iButtonUpBitmapMask;
-    
-    delete iEnd.iButtonDownBitmap;
-    delete iEnd.iButtonDownBitmapMask;
-    delete iEnd.iButtonUpBitmap;
-    delete iEnd.iButtonUpBitmapMask;
-    
-    delete iDelete.iButtonDownBitmap;
-    delete iDelete.iButtonDownBitmapMask;
-    delete iDelete.iButtonUpBitmap;
-    delete iDelete.iButtonUpBitmapMask;
-    
-    delete iInsert.iButtonDownBitmap;
-    delete iInsert.iButtonDownBitmapMask;
-    delete iInsert.iButtonUpBitmap;
-    delete iInsert.iButtonUpBitmapMask;    
-
-    delete iEnter.iButtonDownBitmap;
-    delete iEnter.iButtonDownBitmapMask;
-    delete iEnter.iButtonUpBitmap;
-    delete iEnter.iButtonUpBitmapMask;
 }
 
 CCustomToolBar* CCustomToolBar::NewLC (CTerminalContainer* aParent, TRect aRect, TTouchSettings *aTouchSettings) {
@@ -147,8 +53,17 @@ CCustomToolBar* CCustomToolBar::NewL (CTerminalContainer* aParent, TRect aRect, 
 
 void CCustomToolBar::ConstructL (CTerminalContainer* aParent, TRect /*aRect*/, TTouchSettings *aTouchSettings) {
     iTouchSettings = aTouchSettings;
-    //UpdateButtonsSizeAndCount(iTouchSettings->GetTbButtonWidth(),iTouchSettings->GetTbButtonHeigth(),iTouchSettings->GetTbButtonCount());
+    
+    iDefaultButtonsCount = CountDefaultButtons() -1;
+        
+    for ( int i = 0 ; i < iDefaultButtonsCount ;i++ ) {      
+       TRect buttonInitialSize = TRect(TPoint(0,0),TSize(iTouchSettings->GetTbButtonWidth(), iTouchSettings->GetTbButtonHeigth()));
+       CCustomToolbarButton *tmp = CCustomToolbarButton::NewL(buttonInitialSize, KDefaultToolbarButtons[i]);
+       iButtonsArray.AppendL(tmp);
+    }
+    
     LoadButtonsL(); //Create button lists
+    
     iLocked = ETrue; // locks toolbar to it's place
     if (iTouchSettings->GetShowToolbar() == 1) {
         iHidden = EFalse; // Toolbar is shown on startup
@@ -170,21 +85,23 @@ void CCustomToolBar::Draw( const TRect& /*aRect*/ ) const {
         
     // Get the standard graphics context
     CWindowGc& gc = SystemGc();
-
-    TBool invertMask = EFalse;
-   
+ 
     // Background of the toolbar -----------------------------------
     TRect toolbarRect = TRect(TPoint(0,0),Size());
 
     // All buttons---------------------------------------------------
     TRect buttonRect = TRect(TPoint(0,0),TSize(iToolbarItemWidth,iToolbarItemHeight));
     
+
     for ( int i = 0; i < iToolbarItemCount; i++) {
-        if ( iButtons[i]->iDown ) {
-            gc.BitBltMasked(iButtons[i]->iItem.iTl, iButtons[i]->iButtonDownBitmap, buttonRect, iButtons[i]->iButtonDownBitmapMask, invertMask);
+        
+        CCustomToolbarButton *tmp = GetButton(i);
+        if ( tmp->GetButtonDown() ) {
+            gc.BitBltMasked(tmp->GetRect().iTl, tmp->GetButtonDownBitmap(), buttonRect, tmp->GetButtonDownBitmapMask(), EFalse);
         } else {
-            gc.BitBltMasked(iButtons[i]->iItem.iTl, iButtons[i]->iButtonUpBitmap, buttonRect, iButtons[i]->iButtonUpBitmapMask, invertMask);
+            gc.BitBltMasked(tmp->GetRect().iTl, tmp->GetButtonUpBitmap(), buttonRect, tmp->GetButtonUpBitmapMask(), EFalse);
         }
+      
     }
     
 }
@@ -282,11 +199,11 @@ void CCustomToolBar::HandlePointerEventL(const TPointerEvent& aPointerEvent) {
         
         //Draw button down if not selectable tool. Do we need this after code clean up?
         for ( int i = 0; i < iToolbarItemCount; i++) {
-            if ( iButtons[i]->iItem.Contains(aPointerEvent.iPosition) ) {
-                if ( iButtons[i]->iSelectable ) {
-                    iTool = iButtons[i]->iAction;
-                    iButtons[i]->iDown = ETrue; // Set button down when clicked down.
-                    iLastButtonDown = iButtons[i]->iItem;
+            if ( GetButton(i)->GetRect().Contains(aPointerEvent.iPosition) ) {
+                if ( GetButton(i)->GetButtonSelectable() ) {
+                    iTool = GetButtonData(i).iAction;
+                    GetButton(i)->SetButtonDown(ETrue);
+                    iLastButtonDown = GetButton(i)->GetRect();
                 }
                 iTouchFeedBack->InstantFeedback(ETouchFeedbackBasic); // touch feedback to all buttons down
             }
@@ -300,8 +217,8 @@ void CCustomToolBar::HandlePointerEventL(const TPointerEvent& aPointerEvent) {
                 
                 if ( iTool == EPuttyToolbarSelect ) {
                     for (int i = 0 ; i < iToolbarItemCount ; i++) {
-                        if ( iButtons[i]->iAction == EPuttyToolbarSelect) {
-                            iButtons[i]->iDown = EFalse;
+                        if ( GetButtonData(i).iAction == EPuttyToolbarSelect) {
+                            GetButton(i)->SetButtonDown(EFalse);
                             break;
                         }
                     }
@@ -328,7 +245,7 @@ void CCustomToolBar::HandlePointerEventL(const TPointerEvent& aPointerEvent) {
                 if (iTool != EPuttyToolbarSelect) {    
                     iTool = EPuttyToolbarNoTool;
                     for (int i = 0 ; i < iToolbarItemCount; i++) {
-                        iButtons[i]->iDown = EFalse; // put all buttons up
+                        GetButton(i)->SetButtonDown(EFalse); // put all buttons up
                     }
                 }
             }
@@ -337,7 +254,7 @@ void CCustomToolBar::HandlePointerEventL(const TPointerEvent& aPointerEvent) {
         if (!iDrag) {
             // Handle tool selection
             for (TInt i = 0; i < iToolbarItemCount; i++) {
-                if ( iButtons[i]->iItem.Contains(aPointerEvent.iPosition) ) {
+                if ( GetButton(i)->GetRect().Contains(aPointerEvent.iPosition) ) {
                     HandleButtonSelection(i);
                     break;
                 }
@@ -350,21 +267,22 @@ void CCustomToolBar::HandlePointerEventL(const TPointerEvent& aPointerEvent) {
 void CCustomToolBar::DeActiveTool(TPuttyToolbarCommands aTool) {
     if ( aTool == EPuttyToolbarNoTool ) {
         for ( int i = 0 ; i < iToolbarItemCount; i++) {
-            if ( iButtons[i]->iAction == iTool && iButtons[i]->iAction != EPuttyToolbarLock) {
-                iButtons[i]->iDown = EFalse;
+            if ( GetButtonData(i).iAction == iTool && GetButtonData(i).iAction != EPuttyToolbarLock ) {
+                GetButton(i)->SetButtonDown(EFalse);
             }
         }
         iTool = aTool;
         return;
     } else {
         for ( int i = 0; i < iToolbarItemCount; i++) {
-            if ( iButtons[i]->iAction == aTool && iButtons[i]->iAction != EPuttyToolbarLock ) {
-                iButtons[i]->iDown = EFalse;
+            if ( GetButtonData(i).iAction == aTool && GetButtonData(i).iAction != EPuttyToolbarLock ) {
+                GetButton(i)->SetButtonDown(EFalse);
                 if ( iTool == aTool ) {
                     iTool = EPuttyToolbarNoTool;
                 }
                 break;
             }
+
         }
     
     }
@@ -373,8 +291,8 @@ void CCustomToolBar::DeActiveTool(TPuttyToolbarCommands aTool) {
 
 void CCustomToolBar::ActivateTool(TPuttyToolbarCommands aTool) {
      for ( int i = 0; i < iToolbarItemCount; i++) {
-            if ( iButtons[i]->iAction == aTool && iButtons[i]->iAction != EPuttyToolbarLock ) {
-                iButtons[i]->iDown = ETrue;
+            if ( GetButtonData(i).iAction == aTool && GetButtonData(i).iAction != EPuttyToolbarLock ) {
+                GetButton(i)->SetButtonDown(ETrue);
                 iTool = aTool;
                 break;
             }
@@ -384,34 +302,34 @@ void CCustomToolBar::ActivateTool(TPuttyToolbarCommands aTool) {
 //Handles real button press
 void CCustomToolBar::HandleButtonSelection(TInt aButtonPos) {
     
-    switch (iButtons[aButtonPos]->iAction) {
+    switch (GetButtonData(aButtonPos).iAction) {
         case EPuttyToolbarTab:
             iParent->HandleCustomToolbar(EPuttyToolbarTab);
             iTool = EPuttyToolbarNoTool;
-            iButtons[aButtonPos]->iDown = EFalse;
+            GetButton(aButtonPos)->SetButtonDown(EFalse);
             break;
         case EPuttyToolbarAltP:
             iTool = EPuttyToolbarAltP;
-            iButtons[aButtonPos]->iDown = ETrue;
+            GetButton(aButtonPos)->SetButtonDown(ETrue);
             iParent->HandleCustomToolbar(EPuttyToolbarAltP);
             break;
         case EPuttyToolbarCtrlP:
             iTool = EPuttyToolbarCtrlP;
-            iButtons[aButtonPos]->iDown = ETrue;
+            GetButton(aButtonPos)->SetButtonDown(ETrue);
             iParent->HandleCustomToolbar(EPuttyToolbarCtrlP);
             break;
         case EPuttyToolbarLock:
             if (iLocked) {
               iLocked = EFalse;
-              iButtons[aButtonPos]->iDown = ETrue;
+              GetButton(aButtonPos)->SetButtonDown(ETrue);
             } else {
               iLocked = ETrue;
-              iButtons[aButtonPos]->iDown = EFalse;
+              GetButton(aButtonPos)->SetButtonDown(EFalse);
             }
             break;
         case EPuttyToolbarSelect:
             iTool = EPuttyToolbarSelect;
-            iButtons[aButtonPos]->iDown = ETrue;
+            GetButton(aButtonPos)->SetButtonDown(ETrue);
             iParent->HandleCustomToolbar(EPuttyToolbarSelect);
             break;
         default:
@@ -430,9 +348,9 @@ void CCustomToolBar::HandleButtonSelection(TInt aButtonPos) {
         case EPuttyToolbarInsert:
         case EPuttyToolbarEnter:
         */
-            iParent->HandleCustomToolbar(iButtons[aButtonPos]->iAction);
+            iParent->HandleCustomToolbar(GetButtonData(aButtonPos).iAction);
             iTool = EPuttyToolbarNoTool;
-            iButtons[aButtonPos]->iDown = EFalse;
+            GetButton(aButtonPos)->SetButtonDown(EFalse);
             break;
     }
 }
@@ -440,236 +358,99 @@ void CCustomToolBar::HandleButtonSelection(TInt aButtonPos) {
 void CCustomToolBar::LoadButtonsL() {
     UpdateButtonsSizeAndCount(iTouchSettings->GetTbButtonWidth(),iTouchSettings->GetTbButtonHeigth(),iTouchSettings->GetTbButtonCount());
     
-    //Tab
-    LoadIconL(KSvgFile, EMbmPuttyTab_button_down_48x48, iTab.iButtonDownBitmap,iTab.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyTab_button_up_48x48, iTab.iButtonUpBitmap,iTab.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));
-    iTab.iAction = EPuttyToolbarTab;
-    iTab.iDown = EFalse;
-    iTab.iSelectable = ETrue;
-    //Alt+
-    LoadIconL(KSvgFile, EMbmPuttyAltp_button_down_48x48, iAltPlus.iButtonDownBitmap, iAltPlus.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyAltp_button_up_48x48, iAltPlus.iButtonUpBitmap,iAltPlus.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iAltPlus.iAction = EPuttyToolbarAltP;
-    iAltPlus.iDown = EFalse;
-    iAltPlus.iSelectable = EFalse;
-    //Ctrl+
-    LoadIconL(KSvgFile, EMbmPuttyCtrlp_button_down_48x48, iCtrlPlus.iButtonDownBitmap,iCtrlPlus.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyCtrlp_button_up_48x48, iCtrlPlus.iButtonUpBitmap,iCtrlPlus.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));
-    iCtrlPlus.iAction = EPuttyToolbarCtrlP;
-    iCtrlPlus.iDown = EFalse;
-    iCtrlPlus.iSelectable = EFalse;
-    //Toolbar lock
-    LoadIconL(KSvgFile, EMbmPuttyLock_button_down_48x48, iTBLock.iButtonDownBitmap, iTBLock.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyLock_button_up_48x48, iTBLock.iButtonUpBitmap,iTBLock.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));        
-    iTBLock.iAction = EPuttyToolbarLock;
-    iTBLock.iDown = EFalse;
-    iTBLock.iSelectable = EFalse;
-    //Select
-    LoadIconL(KSvgFile, EMbmPuttySelect_button_down_48x48, iSelect.iButtonDownBitmap,iSelect.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttySelect_button_up_48x48, iSelect.iButtonUpBitmap,iSelect.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));
-    iSelect.iAction = EPuttyToolbarSelect;
-    iSelect.iDown = EFalse;
-    iSelect.iSelectable = EFalse;
-    //Copy
-    LoadIconL(KSvgFile, EMbmPuttyCopy_button_down_48x48, iCopy.iButtonDownBitmap,iCopy.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyCopy_button_up_48x48, iCopy.iButtonUpBitmap,iCopy.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));
-    iCopy.iAction = EPuttyToolbarCopy;
-    iCopy.iDown = EFalse;
-    iCopy.iSelectable = ETrue;
-    //Paste
-    LoadIconL(KSvgFile, EMbmPuttyPaste_button_down_48x48, iPaste.iButtonDownBitmap,iPaste.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyPaste_button_up_48x48, iPaste.iButtonUpBitmap,iPaste.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));
-    iPaste.iAction = EPuttyToolbarPaste;
-    iPaste.iDown = EFalse;
-    iPaste.iSelectable = ETrue;
-    //Pipe
-    LoadIconL(KSvgFile, EMbmPuttyPipe_button_down_48x48, iPipe.iButtonDownBitmap,iPipe.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyPipe_button_up_48x48, iPipe.iButtonUpBitmap,iPipe.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));
-    iPipe.iAction = EPuttyToolbarPipe;
-    iPipe.iDown = EFalse;
-    iPipe.iSelectable = ETrue;
-    //Arrow Up
-    LoadIconL(KSvgFile, EMbmPuttyUp_button_down_48x48, iUp.iButtonDownBitmap,iUp.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyUp_button_up_48x48, iUp.iButtonUpBitmap,iUp.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iUp.iAction = EPuttyToolbarArrowUp;
-    iUp.iDown = EFalse;
-    iUp.iSelectable = ETrue;
-    //Arrow Down
-    LoadIconL(KSvgFile, EMbmPuttyDown_button_down_48x48, iDown.iButtonDownBitmap, iDown.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyDown_button_up_48x48, iDown.iButtonUpBitmap,iDown.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iDown.iAction = EPuttyToolbarArrowDown;
-    iDown.iDown = EFalse;
-    iDown.iSelectable = ETrue;
-    //Arrow Left
-    LoadIconL(KSvgFile, EMbmPuttyLeft_button_down_48x48, iLeft.iButtonDownBitmap, iLeft.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyLeft_button_up_48x48, iLeft.iButtonUpBitmap,iLeft.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iLeft.iAction = EPuttyToolbarArrowLeft;
-    iLeft.iDown = EFalse;
-    iLeft.iSelectable = ETrue;
-    //Arrow Right
-    LoadIconL(KSvgFile, EMbmPuttyRight_button_down_48x48, iRight.iButtonDownBitmap, iRight.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyRight_button_up_48x48, iRight.iButtonUpBitmap,iRight.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iRight.iAction = EPuttyToolbarArrowRight;
-    iRight.iDown = EFalse;
-    iRight.iSelectable = ETrue;
-    //Esc
-    LoadIconL(KSvgFile, EMbmPuttyEsc_button_down_48x48, iEsc.iButtonDownBitmap, iEsc.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyEsc_button_up_48x48, iEsc.iButtonUpBitmap,iEsc.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iEsc.iAction = EPuttyToolbarEsc;
-    iEsc.iDown = EFalse;
-    iEsc.iSelectable = ETrue;
-    //Page up
-    LoadIconL(KSvgFile, EMbmPuttyPageup_button_down_48x48, iPageUp.iButtonDownBitmap, iPageUp.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyPageup_button_up_48x48, iPageUp.iButtonUpBitmap,iPageUp.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iPageUp.iAction = EPuttyToolbarPageUp;
-    iPageUp.iDown = EFalse;
-    iPageUp.iSelectable = ETrue;
-    //Page down
-    LoadIconL(KSvgFile, EMbmPuttyPagedown_button_down_48x48, iPageDown.iButtonDownBitmap, iPageDown.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyPagedown_button_up_48x48, iPageDown.iButtonUpBitmap,iPageDown.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iPageDown.iAction = EPuttyToolbarPageDown;
-    iPageDown.iDown = EFalse;
-    iPageDown.iSelectable = ETrue;
-    //Home
-    LoadIconL(KSvgFile, EMbmPuttyHome_button_down_48x48, iHome.iButtonDownBitmap, iHome.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyHome_button_up_48x48, iHome.iButtonUpBitmap,iHome.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iHome.iAction = EPuttyToolbarHome;
-    iHome.iDown = EFalse;
-    iHome.iSelectable = ETrue;
-    //End
-    LoadIconL(KSvgFile, EMbmPuttyEnd_button_down_48x48, iEnd.iButtonDownBitmap, iEnd.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyEnd_button_up_48x48, iEnd.iButtonUpBitmap,iEnd.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iEnd.iAction = EPuttyToolbarEnd;
-    iEnd.iDown = EFalse;
-    iEnd.iSelectable = ETrue;
-    //Delete
-    LoadIconL(KSvgFile, EMbmPuttyDelete_button_down_48x48, iDelete.iButtonDownBitmap, iDelete.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyDelete_button_up_48x48, iDelete.iButtonUpBitmap,iDelete.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iDelete.iAction = EPuttyToolbarDelete;
-    iDelete.iDown = EFalse;
-    iDelete.iSelectable = ETrue;
-    //Insert
-    LoadIconL(KSvgFile, EMbmPuttyInsert_button_down_48x48, iInsert.iButtonDownBitmap, iInsert.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyInsert_button_up_48x48, iInsert.iButtonUpBitmap,iInsert.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iInsert.iAction = EPuttyToolbarInsert;
-    iInsert.iDown = EFalse;
-    iInsert.iSelectable = ETrue;
-
-    //Enter
-    LoadIconL(KSvgFile, EMbmPuttyEnter_button_down_48x48, iEnter.iButtonDownBitmap, iEnter.iButtonDownBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    LoadIconL(KSvgFile, EMbmPuttyEnter_button_up_48x48, iEnter.iButtonUpBitmap,iEnter.iButtonUpBitmapMask, TSize(iToolbarItemWidth,iToolbarItemHeight));    
-    iEnter.iAction = EPuttyToolbarEnter;
-    iEnter.iDown = EFalse;
-    iEnter.iSelectable = ETrue;
     
-    //Create list of available buttons
-    iButtonList[EPuttyToolbarTab] = &iTab;
-    iButtonList[EPuttyToolbarAltP] = &iAltPlus;
-    iButtonList[EPuttyToolbarCtrlP] = &iCtrlPlus;
-    iButtonList[EPuttyToolbarLock] = &iTBLock;
-    iButtonList[EPuttyToolbarSelect] = &iSelect;
-    iButtonList[EPuttyToolbarCopy] = &iCopy;
-    iButtonList[EPuttyToolbarPaste] = &iPaste;
-    iButtonList[EPuttyToolbarPipe] = &iPipe;
-    iButtonList[EPuttyToolbarArrowUp] = &iUp;
-    iButtonList[EPuttyToolbarArrowDown] = &iDown;
-    iButtonList[EPuttyToolbarArrowLeft] = &iLeft;
-    iButtonList[EPuttyToolbarArrowRight] = &iRight;
-    iButtonList[EPuttyToolbarEsc] = &iEsc;
-    iButtonList[EPuttyToolbarPageUp] = &iPageUp;
-    iButtonList[EPuttyToolbarPageDown] = &iPageDown;
-    iButtonList[EPuttyToolbarHome] = &iHome;
-    iButtonList[EPuttyToolbarEnd] = &iEnd;
-    iButtonList[EPuttyToolbarDelete] = &iDelete;
-    iButtonList[EPuttyToolbarInsert] = &iInsert;
-    iButtonList[EPuttyToolbarEnter] = &iEnter;
+    for ( TInt i = 0 ; i < iButtonsArray.Count() ; i++ ) {
     
+       switch ( iButtonsArray.operator [](i)->GetButtonData().iAction ) {
+           case EPuttyToolbarAltP:
+           case EPuttyToolbarCtrlP:
+           case EPuttyToolbarLock:
+           case EPuttyToolbarSelect:
+               iButtonsArray.operator [](i)->SetButtonSelectable(EFalse);
+               iButtonsArray.operator [](i)->GenerateIconL();
+               break;
+           default:
+               iButtonsArray.operator [](i)->SetButtonSelectable(ETrue);
+               iButtonsArray.operator [](i)->GenerateIconL();
+       }
+    }    
 
-    //Set Default buttons to toolbar
-    /*
-    iButtons[0] = iButtonList[0];
-    iButtons[1] = iButtonList[1];
-    iButtons[2] = iButtonList[2];
-    iButtons[3] = iButtonList[3];
-    iButtons[4] = iButtonList[4];
-    iButtons[5] = iButtonList[5];
-    iButtons[6] = iButtonList[6];
-    iButtons[7] = iButtonList[7];
-    */
     SetDefaultButtonsFromSettings(); // Set initial values
 }
 
 void CCustomToolBar::SetDefaultButtonsFromSettings() {
-    iButtons[0] = iButtonList[iTouchSettings->GetTbButton1()];
-    iButtons[1] = iButtonList[iTouchSettings->GetTbButton2()];
-    iButtons[2] = iButtonList[iTouchSettings->GetTbButton3()];
-    iButtons[3] = iButtonList[iTouchSettings->GetTbButton4()];
-    iButtons[4] = iButtonList[iTouchSettings->GetTbButton5()];
-    iButtons[5] = iButtonList[iTouchSettings->GetTbButton6()];
-    iButtons[6] = iButtonList[iTouchSettings->GetTbButton7()];
-    iButtons[7] = iButtonList[iTouchSettings->GetTbButton8()];   
-    //UpdateButtonsSizeAndCount(iTouchSettings->GetTbButtonWidth(),iTouchSettings->GetTbButtonHeigth(),iTouchSettings->GetTbButtonCount());
+    
+    iToolbarButtons[0] = iTouchSettings->GetTbButton1();
+    iToolbarButtons[1] = iTouchSettings->GetTbButton2();
+    iToolbarButtons[2] = iTouchSettings->GetTbButton3();
+    iToolbarButtons[3] = iTouchSettings->GetTbButton4();
+    iToolbarButtons[4] = iTouchSettings->GetTbButton5();
+    iToolbarButtons[5] = iTouchSettings->GetTbButton6();
+    iToolbarButtons[6] = iTouchSettings->GetTbButton7();
+    iToolbarButtons[7] = iTouchSettings->GetTbButton8();
+    
 }
 
 void CCustomToolBar::SwapButtons(TInt aButton, TInt aCommand) {
-    TRect tmpItem = iButtons[aButton]->iItem;
-    tbButton *tmpButton = iButtons[aButton];
+    TRect tmpItem = GetButton(aButton)->GetRect();
+    TInt tmpButton = iToolbarButtons[aButton];
     
     for ( int i = 0 ; i < iToolbarItemCount; i++) {
-        if ( iButtons[i]->iAction == aCommand) {
+        if ( GetButtonData(i).iAction == aCommand) {
             //Change button places on screen
-            iButtons[aButton]->iItem = iButtons[i]->iItem;
-            iButtons[i]->iItem = tmpItem;
-            //Change button places on list
-            iButtons[aButton] = iButtons[i]; // Swaps button places
-            iButtons[i] = tmpButton;
+            GetButton(aButton)->SetRect(GetButton(i)->GetRect());
+            GetButton(i)->SetRect(tmpItem);
+            iToolbarButtons[aButton] = iToolbarButtons[i];       
+            iToolbarButtons[i] = tmpButton;
             return;
         }
     }
 }
 
-void CCustomToolBar::UpdateButtonsFromSettings() {
+void CCustomToolBar::UpdateButtonsFromSettingsL() {
     //Set buttons from settings
+    iTouchSettings->ReadSettingFileL();
     
-    if (iButtons[0]->iAction != iButtonList[iTouchSettings->GetTbButton1()]->iAction) {
-        iButtonList[iTouchSettings->GetTbButton1()]->iItem = iButtons[0]->iItem;
-        iButtons[0] = iButtonList[iTouchSettings->GetTbButton1()];
+    if (iToolbarButtons[0] != iTouchSettings->GetTbButton1()) {
+        (iButtonsArray.operator [](iTouchSettings->GetTbButton1()))->SetRect(GetButton(0)->GetRect());
+        iToolbarButtons[0] = iTouchSettings->GetTbButton1();
+    }
+    
+    if (iToolbarButtons[1] != iTouchSettings->GetTbButton2()) {
+        (iButtonsArray.operator [](iTouchSettings->GetTbButton2()))->SetRect(GetButton(1)->GetRect());
+        iToolbarButtons[1] = iTouchSettings->GetTbButton2();
     }
 
-    if (iButtons[1]->iAction != iButtonList[iTouchSettings->GetTbButton2()]->iAction) {
-        iButtonList[iTouchSettings->GetTbButton2()]->iItem = iButtons[1]->iItem;
-        iButtons[1] = iButtonList[iTouchSettings->GetTbButton2()];
+    if (iToolbarButtons[2] != iTouchSettings->GetTbButton3()) {
+        (iButtonsArray.operator [](iTouchSettings->GetTbButton3()))->SetRect(GetButton(2)->GetRect());
+        iToolbarButtons[2] = iTouchSettings->GetTbButton3();
+    }
+    
+    if (iToolbarButtons[3] != iTouchSettings->GetTbButton4()) {
+        (iButtonsArray.operator [](iTouchSettings->GetTbButton4()))->SetRect(GetButton(3)->GetRect());
+        iToolbarButtons[3] = iTouchSettings->GetTbButton4();
     }
 
-    if (iButtons[2]->iAction != iButtonList[iTouchSettings->GetTbButton3()]->iAction) {
-        iButtonList[iTouchSettings->GetTbButton3()]->iItem = iButtons[2]->iItem;
-        iButtons[2] = iButtonList[iTouchSettings->GetTbButton3()];
+    if (iToolbarButtons[4] != iTouchSettings->GetTbButton5()) {
+        (iButtonsArray.operator [](iTouchSettings->GetTbButton5()))->SetRect(GetButton(4)->GetRect());
+        iToolbarButtons[4] = iTouchSettings->GetTbButton5();
     }
-
-    if (iButtons[3]->iAction != iButtonList[iTouchSettings->GetTbButton4()]->iAction) {
-        iButtonList[iTouchSettings->GetTbButton4()]->iItem = iButtons[3]->iItem;
-        iButtons[3] = iButtonList[iTouchSettings->GetTbButton4()];
+    
+    if (iToolbarButtons[5] != iTouchSettings->GetTbButton6()) {
+        (iButtonsArray.operator [](iTouchSettings->GetTbButton6()))->SetRect(GetButton(5)->GetRect());
+        iToolbarButtons[5] = iTouchSettings->GetTbButton6();
     }
-
-    if (iButtons[4]->iAction != iButtonList[iTouchSettings->GetTbButton5()]->iAction) {
-        iButtonList[iTouchSettings->GetTbButton5()]->iItem = iButtons[4]->iItem;
-        iButtons[4] = iButtonList[iTouchSettings->GetTbButton5()];
+    
+    if (iToolbarButtons[6] != iTouchSettings->GetTbButton7()) {
+        (iButtonsArray.operator [](iTouchSettings->GetTbButton7()))->SetRect(GetButton(6)->GetRect());
+        iToolbarButtons[6] = iTouchSettings->GetTbButton7();
     }
-
-    if (iButtons[5]->iAction != iButtonList[iTouchSettings->GetTbButton6()]->iAction) {
-        iButtonList[iTouchSettings->GetTbButton6()]->iItem = iButtons[5]->iItem;
-        iButtons[5] = iButtonList[iTouchSettings->GetTbButton6()];
+    
+    if (iToolbarButtons[7] != iTouchSettings->GetTbButton8()) {
+        (iButtonsArray.operator [](iTouchSettings->GetTbButton8()))->SetRect(GetButton(7)->GetRect());
+        iToolbarButtons[7] = iTouchSettings->GetTbButton8();
     }
-
-    if (iButtons[6]->iAction != iButtonList[iTouchSettings->GetTbButton7()]->iAction) {
-        iButtonList[iTouchSettings->GetTbButton7()]->iItem = iButtons[6]->iItem;
-        iButtons[6] = iButtonList[iTouchSettings->GetTbButton7()];
-    }
-
-    if (iButtons[7]->iAction != iButtonList[iTouchSettings->GetTbButton8()]->iAction) {
-        iButtonList[iTouchSettings->GetTbButton8()]->iItem = iButtons[7]->iItem;
-        iButtons[7] = iButtonList[iTouchSettings->GetTbButton8()];
-    }
+    
     
     //UpdateButtonsSizeAndCount(iTouchSettings->GetTbButtonWidth(),iTouchSettings->GetTbButtonHeigth(),iTouchSettings->GetTbButtonCount());
 }
@@ -927,7 +708,7 @@ void CCustomToolBar::ToolbarPortrait1rows() {
     item.Move(0,KToolbarItemGap);
  
     for (int i = 0; i < (iToolbarItemCount); i++) {
-        iButtons[i]->iItem = item;
+        GetButton(i)->SetRect(item);
         item.Move(0,iToolbarItemHeight+KToolbarItemGap);
     }
 }
@@ -950,7 +731,7 @@ void CCustomToolBar::ToolbarPortrait2rows() {
     }
     
     for (int i = 0; i < halfCount; i++) {
-        iButtons[i]->iItem = item;
+        GetButton(i)->SetRect(item);
         item.Move(0,iToolbarItemWidth+KToolbarItemGap);
     }
                         
@@ -963,7 +744,7 @@ void CCustomToolBar::ToolbarPortrait2rows() {
     item.Move(0,KToolbarItemGap);
             
     for (int i = halfCount; i < (iToolbarItemCount); i++) {
-        iButtons[i]->iItem = item;
+        GetButton(i)->SetRect(item);
         item.Move(0,iToolbarItemWidth+KToolbarItemGap);
     }
 }
@@ -985,7 +766,7 @@ void CCustomToolBar::ToolbarLandscape2rows() {
     }
     
     for (int i = 0; i < halfCount; i++) {
-        iButtons[i]->iItem = item;
+        GetButton(i)->SetRect(item);
         item.Move(iToolbarItemWidth+KToolbarItemGap,0);
     }
     
@@ -998,7 +779,7 @@ void CCustomToolBar::ToolbarLandscape2rows() {
     item.Move(KToolbarItemGap,0);
 
     for (int i = halfCount; i < (iToolbarItemCount); i++) {
-        iButtons[i]->iItem = item;
+        GetButton(i)->SetRect(item);
         item.Move(iToolbarItemWidth+KToolbarItemGap,0);
     }
     
@@ -1016,7 +797,16 @@ void CCustomToolBar::ToolbarLandscape1rows() {
     item.Move(KToolbarItemGap,0);
 
     for (int i = 0; i < (iToolbarItemCount); i++) {
-        iButtons[i]->iItem = item;
+        GetButton(i)->SetRect(item);
         item.Move(iToolbarItemWidth+KToolbarItemGap,0);
     }
+}
+
+TInt CCustomToolBar::CountDefaultButtons() {
+    TInt count = 0;
+    
+    while (KDefaultToolbarButtons[count].iAction != EPuttyToolbarNoTool ) {
+        count++;
+    }
+    return count;
 }

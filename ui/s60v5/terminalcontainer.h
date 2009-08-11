@@ -127,7 +127,7 @@ public: // From CCoeControl
     //Implemented command handling from custom toolbar
     void HandleCustomToolbar(TInt acommand);
     TTouchSettings* GetTouchSettings() { return &iTouchSettings; };
-    void UpdateAfterSettingsChange();
+    void UpdateAfterSettingsChangeL();
     void Select(TBool aValue); //Enable / disable select
     void ReleaseAlt();
     void ReleaseCtrl();

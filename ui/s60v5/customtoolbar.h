@@ -23,6 +23,8 @@
 #include "touchuisettings.h"
 #include "puttyui.hrh"
 
+#include "toolbarbutton.h"
+
 // Forward declarations
 class CTerminalView;
 class CTerminalContainer;
@@ -66,7 +68,49 @@ struct tbButton {
         TBool                   iDown;
         TBool                   iSelectable;
         TPuttyToolbarCommands   iAction;
+        TInt                    iCustomCmdId;
 };
+
+/*
+struct toolbarButtonData {
+    TInt command;
+    TDesC Label;
+    TDesC SettingsLabel;
+    TBool isCustom;
+    TBool isCtrlModifier;
+    TBool isAltModifier;
+    TBool sendEscFirst;
+    TDesC sendkeys;
+    TDesC buttonUpIconFile;
+    TDesC buttonDownIconFile;
+    TInt  customCmdId;
+};
+
+static toolbarButtonData KDefaultToolbarButtons [ ] = {
+        { EPuttyToolbarTab, _L("Tab"), _L("Tab"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0  },
+        { EPuttyToolbarAltP, _L("Alt"), _L("Alt+..."), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },      
+        { EPuttyToolbarCtrlP, _L("Ctrl"), _L("Ctrl+..."), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L("") },
+        { EPuttyToolbarLock, _L("Lock"), _L("Toggle toolbar lock"), EFalse, EFalse, EFalse, EFalse, _L("UnLock"), _L(""), _L(""), 0 },
+        { EPuttyToolbarSelect, _L("Select"), _L("Select"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarCopy, _L("Copy"), _L("Copy"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarPaste, _L("Paste"), _L("Paste"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarPipe, _L("Pipe"), _L("Pipe |"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarArrowUp, _L("Up"), _L("Arrow up"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarArrowDown, _L("Down"), _L("Arrow down"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarArrowLeft, _L("Left"), _L("Arrow left"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarArrowRight, _L("Right"), _L("Arrow right"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarEsc, _L("Esc"), _L("Esc"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarPageUp, _L("Page Up"), _L("Page up"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarPageDown, _L("Page Down"), _L("Page down"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarHome, _L("Home"), _L("Home"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarEnd, _L("End"), _L("End"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarDelete, _L("Delete"), _L("Delete"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarInsert, _L("Insert"), _L("Insert"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
+        { EPuttyToolbarEnter, _L("Enter"), _L("Enter"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 } ,
+        { EPuttyToolbarNoTool, _L("End of button list"), _L(""), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 }
+};
+*/
+
 
 // CLASS DECLARATION
 class CCustomToolBar : public CCoeControl {
@@ -94,7 +138,7 @@ class CCustomToolBar : public CCoeControl {
         inline void SetHidden(TBool aHidden) {iHidden = aHidden;};
         inline TBool GetHidden() { return iHidden; };
         inline RDrawableWindow* ParentDrawableWindow(){return iParent->DrawableWindow();};
-        void UpdateButtonsFromSettings();
+        void UpdateButtonsFromSettingsL();
         void SwapButtons(TInt aButton, TInt aCommand);
         
     private:
@@ -105,7 +149,7 @@ class CCustomToolBar : public CCoeControl {
         void LoadButtonsL();
         void UnloadButtonsL();
         void LoadIconL(const TDesC& aIconFile, TInt aIndex, CFbsBitmap*& aBitmap, CFbsBitmap*& aMask, TSize aSize);
-        void LoadIconL(const TDesC& aIconFile, TInt aIndex, CFbsBitmap*& aBitmap, TSize aSize);        
+        void LoadIconL(const TDesC& aIconFile, TInt aIndex, CFbsBitmap*& aBitmap, TSize aSize);
         void HandleButtonSelection(TInt aButtonPos);
         void UpdateButtonsSizeAndCount(TInt aWidth, TInt aHeigth, TInt aCount);
         TBool TestForSecondRow(TOrientation aToolbarOrientation);
@@ -115,7 +159,11 @@ class CCustomToolBar : public CCoeControl {
         void ToolbarLandscape1rows();
         void ToolbarLandscape2rows();
 
+        TInt CountDefaultButtons();
 
+        CCustomToolbarButton *GetButton(TInt aPlace) const { return iButtonsArray.operator [](iToolbarButtons[aPlace]); };
+        toolbarButtonData GetButtonData(TInt aPlace) const { return (iButtonsArray.operator [](iToolbarButtons[aPlace]))->GetButtonData(); };
+        
     private:
         TPuttyToolbarCommands   iTool;
         TRect                   iLastButtonDown;
@@ -125,31 +173,6 @@ class CCustomToolBar : public CCoeControl {
         TPoint                  iMovePoint;
         TPoint                  iDragStartPoint;
 
-        tbButton                *iButtons[KToolbarMaxItemCount]; //pointters to the buttons that are shown       
-        tbButton                *iButtonList[KToolbarButtonCount]; //Amount of buttons that are available to add to toolbar
-        
-        //Buttons that are supported
-        tbButton                iTab;
-        tbButton                iAltPlus;
-        tbButton                iCtrlPlus;
-        tbButton                iTBLock;
-        tbButton                iSelect;
-        tbButton                iCopy;
-        tbButton                iPaste;
-        tbButton                iPipe;
-        tbButton                iUp;
-        tbButton                iDown;
-        tbButton                iLeft;
-        tbButton                iRight;
-        tbButton                iEsc;
-        tbButton                iPageUp;
-        tbButton                iPageDown;
-        tbButton                iHome;
-        tbButton                iEnd;
-        tbButton                iDelete;
-        tbButton                iInsert;
-        tbButton                iEnter;
-        
         TBool                   iDrag;
         TBool                   iLocked;
         
@@ -186,6 +209,10 @@ class CCustomToolBar : public CCoeControl {
         TInt iLandscapeToolbarWidth2Rows;
         
         TOrientation iToolbarOrientation;
+        
+        TInt iDefaultButtonsCount;
+        RPointerArray<CCustomToolbarButton> iButtonsArray;
+        TInt iToolbarButtons[KToolbarMaxItemCount];
 };
 
 

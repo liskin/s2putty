@@ -947,7 +947,8 @@ void CTerminalView::SetGeneralToolbarSettingsL() {
                         selectedItem = 8;
                     }
                     iTouchSettings->SetTbButtonCount(selectedItem);
-                    iContainer->UpdateAfterSettingsChange();
+                    iTouchSettings->WriteSettingFileL();
+                    iContainer->UpdateAfterSettingsChangeL();
                 } else {
                   //user canceled
                 }
@@ -974,7 +975,8 @@ void CTerminalView::SetGeneralToolbarSettingsL() {
                     }
                     iTouchSettings->SetTbButtonWidth(width);
                     iTouchSettings->SetTbButtonHeigth(heigth);
-                    iContainer->UpdateAfterSettingsChange();
+                    iTouchSettings->WriteSettingFileL();
+                    iContainer->UpdateAfterSettingsChangeL();
                 } else {
                   //user canceled
                 }
@@ -982,7 +984,7 @@ void CTerminalView::SetGeneralToolbarSettingsL() {
                 }
         }
         
-        iTouchSettings->WriteSettingFileL();      
+              
     } // end if
 }
 
@@ -1029,9 +1031,9 @@ void CTerminalView::SetToolbarButtonL() {
                     if ( iTouchSettings->SwapButtons(buttonToEdit, buttonCommand) ) {
                         iTouchSettings->WriteSettingFileL();
                         iContainer->SwapButtons(buttonToEdit, buttonCommand);
-                        iContainer->UpdateAfterSettingsChange();
-                    } 
-                }            
+                        //iContainer->UpdateAfterSettingsChangeL();
+                    }                
+                }
                 return;
             }
             
@@ -1063,7 +1065,7 @@ void CTerminalView::SetToolbarButtonL() {
             }
         }
         iTouchSettings->WriteSettingFileL();
-        iContainer->UpdateAfterSettingsChange();
+        iContainer->UpdateAfterSettingsChangeL();
     }
 }
 #endif
