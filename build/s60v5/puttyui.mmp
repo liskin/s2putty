@@ -42,6 +42,7 @@ SOURCE		s60\stringutils.cpp
 SOURCE		s60\dynamicenumtextsettingitem.cpp
 SOURCE		s60\sendgrid.cpp
 SOURCE		s60v5\terminalcontainer.cpp
+SOURCE          s60v5\toolbarbutton.cpp
 SOURCE          s60v5\customtoolbar.cpp
 SOURCE          s60v5\profileedittouchsettinglist.cpp
 SOURCE          s60v5\touchuisettings.cpp
