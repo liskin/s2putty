@@ -367,11 +367,11 @@ void CCustomToolBar::LoadButtonsL() {
            case EPuttyToolbarLock:
            case EPuttyToolbarSelect:
                iButtonsArray.operator [](i)->SetButtonSelectable(EFalse);
-               iButtonsArray.operator [](i)->GenerateIconL();
+               //iButtonsArray.operator [](i)->GenerateIconL();
                break;
            default:
                iButtonsArray.operator [](i)->SetButtonSelectable(ETrue);
-               iButtonsArray.operator [](i)->GenerateIconL();
+               //iButtonsArray.operator [](i)->GenerateIconL();
        }
     }    
 
@@ -388,6 +388,12 @@ void CCustomToolBar::SetDefaultButtonsFromSettings() {
     iToolbarButtons[5] = iTouchSettings->GetTbButton6();
     iToolbarButtons[6] = iTouchSettings->GetTbButton7();
     iToolbarButtons[7] = iTouchSettings->GetTbButton8();
+    
+    TInt fontSize = CalculateBestFontSize();
+    
+    for (int i = 0 ; i < iToolbarItemCount ; i++) {
+        GetButton(i)->GenerateIconL(fontSize);
+    }
     
 }
 
@@ -451,7 +457,12 @@ void CCustomToolBar::UpdateButtonsFromSettingsL() {
         iToolbarButtons[7] = iTouchSettings->GetTbButton8();
     }
     
+    TInt fontSize = CalculateBestFontSize();
     
+    for (int i = 0 ; i < iToolbarItemCount ; i++) {
+        GetButton(i)->GenerateIconL(fontSize);
+    }
+
     //UpdateButtonsSizeAndCount(iTouchSettings->GetTbButtonWidth(),iTouchSettings->GetTbButtonHeigth(),iTouchSettings->GetTbButtonCount());
 }
 
@@ -800,6 +811,20 @@ void CCustomToolBar::ToolbarLandscape1rows() {
         GetButton(i)->SetRect(item);
         item.Move(iToolbarItemWidth+KToolbarItemGap,0);
     }
+}
+
+TInt CCustomToolBar::CalculateBestFontSize() {
+    TInt iFontSize = 2000;
+    
+    //Find longest text
+    for (int i = 0 ; i < iToolbarItemCount; i++) {
+        CCustomToolbarButton *tmp = GetButton(i);
+        if ( tmp->GetOptimalFontSize() < iFontSize ) { 
+            iFontSize = tmp->GetOptimalFontSize();
+        }
+    }
+    
+    return iFontSize;
 }
 
 TInt CCustomToolBar::CountDefaultButtons() {

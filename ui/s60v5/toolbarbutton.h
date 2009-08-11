@@ -75,6 +75,7 @@ class CCustomToolbarButton : public CBase {
         
         
         void GenerateIconL();
+        void GenerateIconL(TInt fontSize);
         void GenerateIconUpL(TInt fontSize, TInt backgroundTransparency, TInt TextTransparency);       
         void GenerateIconDownL(TInt fontSize, TInt backgroundTransparency, TInt TextTransparency);       
         void SetButtonDown(TBool aDown) { iDown = aDown; };
@@ -85,6 +86,7 @@ class CCustomToolbarButton : public CBase {
         TRect GetRect() { return iItem; };
         toolbarButtonData GetButtonData() { return iButtonData; };
         TInt GetFontSize() {return iFontSize; };
+        TInt GetOptimalFontSize() {return iOptimalFontSize; };
         CFbsBitmap* GetButtonDownBitmap() { return iButtonDownBitmap; };
         CFbsBitmap* GetButtonDownBitmapMask() { return iButtonDownBitmapMask; };
         CFbsBitmap* GetButtonUpBitmap() { return iButtonUpBitmap; };
@@ -98,7 +100,8 @@ class CCustomToolbarButton : public CBase {
         void ConstructL(TRect aItemRect, toolbarButtonData aButtonData);
         void ClearIcons();
         CFbsBitmap* CreateBitmapL( TDes& aText , TSize aTargetSize, TInt *aFontSize, TBool aMask, TInt Transparency, TInt TextTransparency );
-
+        void GenerateOptimalFontSizeL();
+        
         CFbsBitmap*             iButtonDownBitmap;
         CFbsBitmap*             iButtonDownBitmapMask;
         CFbsBitmap*             iButtonUpBitmap;
@@ -108,6 +111,7 @@ class CCustomToolbarButton : public CBase {
         TBool                   iSelectable;
         TInt                    iCustomCmdId;
         TInt                    iFontSize;
+        TInt					iOptimalFontSize;
         
         toolbarButtonData       iButtonData;
         

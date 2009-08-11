@@ -160,6 +160,7 @@ class CCustomToolBar : public CCoeControl {
         void ToolbarLandscape2rows();
 
         TInt CountDefaultButtons();
+        TInt CalculateBestFontSize();
 
         CCustomToolbarButton *GetButton(TInt aPlace) const { return iButtonsArray.operator [](iToolbarButtons[aPlace]); };
         toolbarButtonData GetButtonData(TInt aPlace) const { return (iButtonsArray.operator [](iToolbarButtons[aPlace]))->GetButtonData(); };

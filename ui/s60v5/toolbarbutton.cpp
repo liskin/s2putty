@@ -38,9 +38,11 @@ void CCustomToolbarButton::ConstructL (TRect aItemRect, TPuttyToolbarCommands aA
     iItem = aItemRect;
     iButtonData.iAction = aAction;
     iFontSize = 0;
+    iOptimalFontSize = 0;
     iButtonData.iUpLabel.Copy(aLabel.Left(iButtonData.iUpLabel.MaxLength()));
     iButtonData.iDownLabel.Copy(aLabel.Left(iButtonData.iDownLabel.MaxLength()));
     iIconsAvailable = EFalse;
+    GenerateOptimalFontSizeL();
     iDown = EFalse;
 }
 
@@ -61,6 +63,8 @@ void CCustomToolbarButton::ConstructL (TRect aItemRect, toolbarButtonData aButto
     iItem = aItemRect;
     iButtonData = aButtonData;
     iFontSize = 0;
+    iOptimalFontSize = 0;
+    GenerateOptimalFontSizeL();
     iIconsAvailable = EFalse;
     iDown = EFalse;
 }
@@ -83,10 +87,14 @@ void CCustomToolbarButton::ClearIcons() {
 }
 
 void CCustomToolbarButton::GenerateIconL() {
+    GenerateIconL(iFontSize);
+}
+
+void CCustomToolbarButton::GenerateIconL(TInt aFontSize) {
     //Up (255 * 0.70) = 179, Text = 255
     //Down (255 * 0.23) = 59, Text (255 * 0.5) = 148
-    GenerateIconUpL(iFontSize, 179, 250);
-    GenerateIconDownL(iFontSize, 59, 148);
+    GenerateIconUpL(aFontSize, 179, 250);
+    GenerateIconDownL(aFontSize, 59, 148);
 }
 
 void CCustomToolbarButton::GenerateIconUpL(TInt fontSize, TInt backgroundTransparency, TInt TextTransparency) {
@@ -113,6 +121,70 @@ void CCustomToolbarButton::GenerateIconDownL(TInt fontSize, TInt backgroundTrans
     iButtonDownBitmap = CreateBitmapL(iButtonData.iDownLabel, iItem.Size(), &requestedFontSize, EFalse, 0 ,0);
     iButtonDownBitmapMask = CreateBitmapL(iButtonData.iDownLabel, iItem.Size(), &requestedFontSize, ETrue, backgroundTransparency,TextTransparency);
     iFontSize = requestedFontSize;
+}
+
+void CCustomToolbarButton::GenerateOptimalFontSizeL() {
+    CFbsBitmap*                     iIcon;
+    CFbsBitmapDevice*               iIconDevice;
+    CFbsBitGc*                      iIconContext;
+    
+    TInt upFont;
+    TInt downFont;
+
+    //ButtonUp
+    iIcon = new (ELeave) CFbsBitmap;
+    User::LeaveIfError( iIcon->Create(iItem.Size(),EGray256)); // 16 bpp
+
+    iIconDevice = CFbsBitmapDevice::NewL(iIcon);
+    //User::LeaveIfError(iIconDevice->CreateContext(iIconContext));
+    //iIconContext->SetPenStyle( CGraphicsContext::ENullPen );
+    //iIconContext->SetBrushStyle( CGraphicsContext::ESolidBrush );
+
+    //TRect buttonRect = TRect(TPoint(2,2),TSize(aTargetSize.iHeight-4,aTargetSize.iWidth-4));
+    const CFont* origFont = AknLayoutUtils::FontFromId(EAknLogicalFontPrimarySmallFont);
+
+    //Determine correct font size for up text
+    TInt fontSize = 0;
+    TFontSpec myFontSpec = origFont->FontSpecInTwips();
+    CFont* selectedfont = NULL;
+    TInt correctFontSize = 0;
+    do {
+        fontSize++;
+        myFontSpec.iHeight = fontSize;
+        iIconDevice->GetNearestFontInTwips(selectedfont,myFontSpec);
+        correctFontSize = selectedfont->TextCount(iButtonData.iUpLabel , iItem.Width() - 6 );
+        iIconDevice->ReleaseFont(selectedfont);
+    } while ( correctFontSize == iButtonData.iUpLabel.Length() );
+    fontSize--;
+    
+    upFont = fontSize;
+    
+    //Determine correct font size for down text
+    fontSize = 0;
+    selectedfont = NULL;
+    myFontSpec = origFont->FontSpecInTwips();
+    correctFontSize = 0;
+    do {
+        fontSize++;
+        myFontSpec.iHeight = fontSize;
+        iIconDevice->GetNearestFontInTwips(selectedfont,myFontSpec);
+        correctFontSize = selectedfont->TextCount(iButtonData.iUpLabel , iItem.Width() - 6);
+        iIconDevice->ReleaseFont(selectedfont);
+    } while ( correctFontSize == iButtonData.iUpLabel.Length() );
+    fontSize--;
+    
+    downFont = fontSize;
+    
+    if ( upFont > downFont ) {
+        iOptimalFontSize = upFont;
+    } else {
+        iOptimalFontSize = downFont;
+    }
+    
+    //delete iIconContext;
+    delete iIconDevice;
+    delete iIcon;
+    
 }
 
 CFbsBitmap*  CCustomToolbarButton::CreateBitmapL( TDes &aText, TSize aTargetSize, TInt* aFontSize, TBool aMask, TInt BackGroundTransparency, TInt TextTransparency ) {
