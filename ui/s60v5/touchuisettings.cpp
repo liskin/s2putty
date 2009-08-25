@@ -23,10 +23,9 @@
 _LIT(KTouchSettingFile,"touchuisettings.dat");
 _LIT(KDataDirFormat,  "%c:\\private\\%08x\\data\\");
 
-const TInt KTouchUiSettingsVersion = 2;
+const TInt KTouchUiSettingsVersion = 3;
 
 TTouchSettings::TTouchSettings() {
-
     TFileName name;
     name = RProcess().FileName();
     TParse parsa;
@@ -159,6 +158,12 @@ void TTouchSettings::SetDefault() {
     itbButtonWidth = 60;
     itbButtonHeigth = 60;
     
+    //These are up values 
+    iButtonUpBackgroundTransparency = 179;
+    iButtonUpTextTransparency = 250;
+    iButtonDownBackgroundTransparency = 59;
+    iButtonDownTextTransparency = 148;
+    
     ReadSettingFileL();
 }
 
@@ -206,7 +211,11 @@ void TTouchSettings::ReadSettingFileL() {
     itbButtonCount = fRead.ReadInt16L();
     itbButtonWidth = fRead.ReadInt16L();
     itbButtonHeigth = fRead.ReadInt16L();
-    
+    iButtonUpBackgroundTransparency = fRead.ReadInt16L();
+    iButtonUpTextTransparency = fRead.ReadInt16L();
+    iButtonDownBackgroundTransparency = fRead.ReadInt16L();
+    iButtonDownTextTransparency = fRead.ReadInt16L();
+
     CleanupStack::PopAndDestroy(&fRead);
 
     fs.Close();
@@ -251,6 +260,11 @@ void TTouchSettings::WriteSettingFileL() {
     fWrite.WriteInt16L(itbButtonCount);
     fWrite.WriteInt16L(itbButtonWidth);
     fWrite.WriteInt16L(itbButtonHeigth);  
+
+    fWrite.WriteInt16L(iButtonUpBackgroundTransparency);
+    fWrite.WriteInt16L(iButtonUpTextTransparency);
+    fWrite.WriteInt16L(iButtonDownBackgroundTransparency);
+    fWrite.WriteInt16L(iButtonDownTextTransparency);
     
     fWrite.CommitL();
     CleanupStack::PopAndDestroy(&fWrite);

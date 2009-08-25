@@ -64,6 +64,11 @@ private:
     TInt iToolBarButtonWidth;
     TInt iToolBarButtonHeigth;
 
+    TInt iButtonUpBackgroundTransparency;
+    TInt iButtonUpTextTransparency;
+    TInt iButtonDownBackgroundTransparency;
+    TInt iButtonDownTextTransparency;
+
     TTouchSettings iTouchSettings;
     
 };

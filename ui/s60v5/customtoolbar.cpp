@@ -367,11 +367,9 @@ void CCustomToolBar::LoadButtonsL() {
            case EPuttyToolbarLock:
            case EPuttyToolbarSelect:
                iButtonsArray.operator [](i)->SetButtonSelectable(EFalse);
-               //iButtonsArray.operator [](i)->GenerateIconL();
                break;
            default:
                iButtonsArray.operator [](i)->SetButtonSelectable(ETrue);
-               //iButtonsArray.operator [](i)->GenerateIconL();
        }
     }    
 
@@ -392,7 +390,8 @@ void CCustomToolBar::SetDefaultButtonsFromSettings() {
     TInt fontSize = CalculateBestFontSize();
     
     for (int i = 0 ; i < iToolbarItemCount ; i++) {
-        GetButton(i)->GenerateIconL(fontSize);
+        GetButton(i)->GenerateIconUpL(fontSize, iTouchSettings->GetButtonUpBGTransparency(), iTouchSettings->GetButtonUpTextTransparency());
+        GetButton(i)->GenerateIconDownL(fontSize, iTouchSettings->GetButtonDownBGTransparency(), iTouchSettings->GetButtonDownTextTransparency());
     }
     
 }
@@ -460,10 +459,10 @@ void CCustomToolBar::UpdateButtonsFromSettingsL() {
     TInt fontSize = CalculateBestFontSize();
     
     for (int i = 0 ; i < iToolbarItemCount ; i++) {
-        GetButton(i)->GenerateIconL(fontSize);
+        GetButton(i)->GenerateIconUpL(fontSize, iTouchSettings->GetButtonUpBGTransparency(), iTouchSettings->GetButtonUpTextTransparency());
+        GetButton(i)->GenerateIconDownL(fontSize, iTouchSettings->GetButtonDownBGTransparency(), iTouchSettings->GetButtonDownTextTransparency());
     }
 
-    //UpdateButtonsSizeAndCount(iTouchSettings->GetTbButtonWidth(),iTouchSettings->GetTbButtonHeigth(),iTouchSettings->GetTbButtonCount());
 }
 
 void CCustomToolBar::LoadIconL(const TDesC& aIconFile, TInt aIndex, CFbsBitmap*& aBitmap, CFbsBitmap*& aMask, TSize aSize) {

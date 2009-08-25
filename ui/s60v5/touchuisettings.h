@@ -46,7 +46,12 @@ class TTouchSettings {
         
         TInt GetTbButtonCount() { return itbButtonCount; };
         TInt GetTbButtonWidth() { return itbButtonWidth; };
-        TInt GetTbButtonHeigth() { return itbButtonHeigth; };
+        TInt GetTbButtonHeigth() { return itbButtonHeigth; };        
+        TInt GetButtonUpBGTransparency() { return iButtonUpBackgroundTransparency; };
+        TInt GetButtonUpTextTransparency() { return iButtonUpTextTransparency; };
+        TInt GetButtonDownBGTransparency() { return iButtonDownBackgroundTransparency; };
+        TInt GetButtonDownTextTransparency() { return iButtonDownTextTransparency; };
+
         
         void SetShowToolbar(TInt aCmd) { iShowtoolbar = aCmd; };
         void SetSingleTap(TInt aCmd) { iSingleTap = aCmd; };
@@ -69,6 +74,10 @@ class TTouchSettings {
         void SetTbButtonCount(TInt aCmd) { itbButtonCount = aCmd; };
         void SetTbButtonWidth(TInt aCmd) { itbButtonWidth = aCmd; };
         void SetTbButtonHeigth(TInt aCmd) { itbButtonHeigth = aCmd; };
+        void SetButtonUpBGTransparency(TInt aCmd) { iButtonUpBackgroundTransparency = aCmd; };
+        void SetButtonUpTextTransparency(TInt aCmd) { iButtonUpTextTransparency = aCmd; };
+        void SetButtonDownBGTransparency(TInt aCmd) { iButtonDownBackgroundTransparency = aCmd; };
+        void SetButtonDownTextTransparency(TInt aCmd) { iButtonDownTextTransparency = aCmd; };
         
         void SetDefault(); // Set default values
         
@@ -101,6 +110,11 @@ class TTouchSettings {
         TInt itbButtonCount;
         TInt itbButtonWidth;
         TInt itbButtonHeigth;
+        
+        TInt iButtonUpBackgroundTransparency;
+        TInt iButtonUpTextTransparency;
+        TInt iButtonDownBackgroundTransparency;
+        TInt iButtonDownTextTransparency;
         
         TBuf<25> iDataDirectory; // "x:\private\12345678\data\"
         TFileName iSettingFile;

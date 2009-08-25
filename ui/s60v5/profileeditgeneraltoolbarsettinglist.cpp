@@ -71,8 +71,20 @@ CAknSettingItem *CProfileEditGeneralToolbarSettingList::CreateSettingItemL(
         case EPuttySettingsTocuhToolBarButtonHeigth:
             iToolBarButtonHeigth = iTouchSettings.GetTbButtonHeigth();
             return new (ELeave) CAknIntegerEdwinSettingItem(aIdentifier, iToolBarButtonHeigth);
+        case EPuttySettingsTocuhToolBarButtonUpBackgroundTransparency:
+            iButtonUpBackgroundTransparency = iTouchSettings.GetButtonUpBGTransparency();
+            return new (ELeave) CAknIntegerEdwinSettingItem(aIdentifier, iButtonUpBackgroundTransparency);
+        case EPuttySettingsTocuhToolBarButtonUpTextTransparency:
+            iButtonUpTextTransparency = iTouchSettings.GetButtonUpTextTransparency();
+            return new (ELeave) CAknIntegerEdwinSettingItem(aIdentifier, iButtonUpTextTransparency);
+        case EPuttySettingsTocuhToolBarButtonDownBackgroundTransparency:
+            iButtonDownBackgroundTransparency = iTouchSettings.GetButtonDownBGTransparency();
+            return new (ELeave) CAknIntegerEdwinSettingItem(aIdentifier, iButtonDownBackgroundTransparency);
+        case EPuttySettingsTocuhToolBarButtonDownTextTransparency:
+            iButtonDownTextTransparency = iTouchSettings.GetButtonDownTextTransparency();
+            return new (ELeave) CAknIntegerEdwinSettingItem(aIdentifier, iButtonDownTextTransparency);
     }
-
+    
     return NULL;
 }
 
@@ -107,7 +119,24 @@ void CProfileEditGeneralToolbarSettingList::EditItemL(TInt aIndex,
             iTouchSettings.SetTbButtonHeigth(iToolBarButtonHeigth);
             break;
         }
+        case EPuttySettingsTocuhToolBarButtonUpBackgroundTransparency: {
+            iTouchSettings.SetButtonUpBGTransparency(iButtonUpBackgroundTransparency);
+            break;
+        }
+        case EPuttySettingsTocuhToolBarButtonUpTextTransparency: {
+            iTouchSettings.SetButtonUpTextTransparency(iButtonUpTextTransparency);
+            break;
+        }
+        case EPuttySettingsTocuhToolBarButtonDownBackgroundTransparency: {
+            iTouchSettings.SetButtonDownBGTransparency(iButtonDownBackgroundTransparency);
+            break;
+        }
+        case EPuttySettingsTocuhToolBarButtonDownTextTransparency: {
+            iTouchSettings.SetButtonDownTextTransparency(iButtonDownTextTransparency);
+            break;
+        }
         
+       
         default:
             ;
     }

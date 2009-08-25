@@ -584,7 +584,27 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_general_toolbar_settinglist
         AVKON_SETTING_ITEM {
             identifier = EPuttySettingsTocuhToolBarButtonHeigth;
             setting_page_resource = r_putty_profileedit_tbheigth_page;
-            name = "Button height";
+            name = "Button heigth";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTocuhToolBarButtonUpBackgroundTransparency;
+            setting_page_resource = r_putty_profileedit_tbupbgtransp_page;
+            name = "Button up bg transparency";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTocuhToolBarButtonUpTextTransparency;
+            setting_page_resource = r_putty_profileedit_tbuptxttransp_page;
+            name = "Button up txt transparency";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTocuhToolBarButtonDownBackgroundTransparency;
+            setting_page_resource = r_putty_profileedit_tbdnbgtransp_page;
+            name = "Button down bg transparency";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTocuhToolBarButtonDownTextTransparency;
+            setting_page_resource = r_putty_profileedit_tbdntxttransp_page;
+            name = "Button down txt transparency";
         }
     };
 }
@@ -594,8 +614,51 @@ RESOURCE ARRAY r_putty_profileedit_general_toolbar_settinglist_text {
         LBUF { txt = "Show toolbar on startup"; },
         LBUF { txt = "Number of buttons shown"; },
         LBUF { txt = "Button width"; },
-        LBUF { txt = "Button heigth"; }        
+        LBUF { txt = "Button heigth"; },
+        LBUF { txt = "Button up transparency"; },
+        LBUF { txt = "Button down transpparency"; }
     };
+}
+
+//If changed remember to change from terminalview.cpp also
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbupbgtransp_page {
+    label = "Button up background transparency";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_tbupbgtransp_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbupbgtransp_edwin {
+    min = 0;
+    max = 255;
+}
+
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbuptxttransp_page {
+    label = "Button up text transparency";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_tbuptxttransp_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbuptxttransp_edwin {
+    min = 0;
+    max = 255;
+}
+
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbdnbgtransp_page {
+    label = "Button down background transparency";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_tbdnbgtransp_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbdnbgtransp_edwin {
+    min = 0;
+    max = 255;
+}
+
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbdntxttransp_page {
+    label = "Button down text transparency";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_tbdntxttransp_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbdntxttransp_edwin {
+    min = 0;
+    max = 255;
 }
 
 //If changed remember to change from terminalview.cpp also
@@ -650,6 +713,44 @@ RESOURCE DIALOG r_putty_tbcount_query {
           };
       };
       }
+   };
+}
+
+//If changed remember to change from terminalview.cpp also
+RESOURCE DIALOG r_putty_tbuptransparency_query {
+  flags = EGeneralQueryFlags;
+  buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+  items =
+    {
+    DLG_LINE
+      {
+          type = EAknCtMultilineQuery;
+          id = EMultilineFirstLine;
+          control = AVKON_DATA_QUERY {
+              layout = EMultiDataFirstNumEd;
+              label = "Background transparency:";
+              control = AVKON_INTEGER_EDWIN {
+                  maxlength = 3;
+                  min = 0;
+                  max = 255;
+              };
+          };
+      },     
+      DLG_LINE
+        {
+            type = EAknCtMultilineQuery;
+            id = EMultilineSecondLine;
+            control = AVKON_DATA_QUERY {
+                layout = EMultiDataSecondNumEd;
+                label = "Text transparency:";
+                control = AVKON_INTEGER_EDWIN {
+                    maxlength = 3;
+                    min = 0;
+                    max = 255;
+                };
+            };
+        }
+      
    };
 }
 

@@ -126,7 +126,7 @@ void CCustomToolbarButton::GenerateIconDownL(TInt fontSize, TInt backgroundTrans
 void CCustomToolbarButton::GenerateOptimalFontSizeL() {
     CFbsBitmap*                     iIcon;
     CFbsBitmapDevice*               iIconDevice;
-    CFbsBitGc*                      iIconContext;
+    //CFbsBitGc*                      iIconContext;
     
     TInt upFont;
     TInt downFont;

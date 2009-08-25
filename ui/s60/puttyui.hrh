@@ -284,7 +284,11 @@ enum TSettingItems {
     EPuttySettingsTouchSwipeDown,
     EPuttySettingsTocuhToolBarNumberOfButtons,
     EPuttySettingsTocuhToolBarButtonWidth,
-    EPuttySettingsTocuhToolBarButtonHeigth
+    EPuttySettingsTocuhToolBarButtonHeigth,
+    EPuttySettingsTocuhToolBarButtonUpBackgroundTransparency,
+    EPuttySettingsTocuhToolBarButtonUpTextTransparency,
+    EPuttySettingsTocuhToolBarButtonDownBackgroundTransparency,
+    EPuttySettingsTocuhToolBarButtonDownTextTransparency
 #endif
     
 };

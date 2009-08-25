@@ -982,6 +982,41 @@ void CTerminalView::SetGeneralToolbarSettingsL() {
                 }
                 break;
                 }
+            case 4: //Set button up transparency                
+                {
+                TInt bg = iTouchSettings->GetButtonUpBGTransparency();
+                TInt text = iTouchSettings->GetButtonUpTextTransparency();
+                CAknMultiLineDataQueryDialog* dlg =
+                    CAknMultiLineDataQueryDialog::NewL( bg,  text );
+                if ( dlg->ExecuteLD( R_PUTTY_TBUPTRANSPARENCY_QUERY ) ) {
+                    //If changed remember to change from putty.rss also
+                    iTouchSettings->SetButtonUpBGTransparency(bg);
+                    iTouchSettings->SetButtonUpTextTransparency(text);
+                    iTouchSettings->WriteSettingFileL();
+                    iContainer->UpdateAfterSettingsChangeL();
+                } else {
+                  //user canceled
+                }
+                break;
+                }
+            case 5: //Set button down transparency                
+                {
+                TInt bg = iTouchSettings->GetButtonDownBGTransparency();
+                TInt text = iTouchSettings->GetButtonDownTextTransparency();
+                CAknMultiLineDataQueryDialog* dlg =
+                    CAknMultiLineDataQueryDialog::NewL( bg,  text );
+                if ( dlg->ExecuteLD( R_PUTTY_TBUPTRANSPARENCY_QUERY ) ) {
+                    //If changed remember to change from putty.rss also
+                    iTouchSettings->SetButtonDownBGTransparency(bg);
+                    iTouchSettings->SetButtonDownTextTransparency(text);
+                    iTouchSettings->WriteSettingFileL();
+                    iContainer->UpdateAfterSettingsChangeL();
+                } else {
+                  //user canceled
+                }
+                break;
+                }
+
         }
         
               
