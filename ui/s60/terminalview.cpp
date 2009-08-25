@@ -807,10 +807,11 @@ TInt CTerminalView::CheckGestureMap (TInt aCmd, TBool aItemToCmd) {
         { EPuttyCmdSendInsert },
         { EPuttyCmdSendCR },
         { EPuttyCmdSendCtrlP },
-        { EPuttyCmdSendAltP }
+        { EPuttyCmdSendAltP },
+        { EPuttyCmdSendEsc }
     };    
 //Update also gesture action count!!!
-     const TInt iGestureCount = 21; 
+     const TInt iGestureCount = 22; 
      if ( aItemToCmd ) {
          if ( aCmd < iGestureCount && aCmd > -1 ) {
              return KItemMap[aCmd].iCommand;
@@ -854,7 +855,9 @@ void CTerminalView::SetTouchSettingsL() {
         AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendInsert; text = "Send insert key"; },
         AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendCR; text = "Send insert key"; },
         AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendCtrlP; text = "Add ctrl modifier to next key"; },
-        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendAltP; text = "Add alt modifier to next key"; }
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendAltP; text = "Add alt modifier to next key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendAltP; text = "Add alt modifier to next key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendEsc; text = "Send esc key"; }
 */    
     
     if (itemToEdit >= 0) {

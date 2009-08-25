@@ -850,8 +850,8 @@ RESOURCE ARRAY r_putty_profileedit_gesture_text_array {
         AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendInsert; text = "Send insert key"; },
         AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendCR; text = "Send enter key"; },
         AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendCtrlP; text = "Add ctrl to next key"; },
-        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendAltP; text = "Add alt to next key"; }
-        
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendAltP; text = "Add alt to next key"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyCmdSendEsc; text = "Send esc key"; }       
     };
 }
 RESOURCE ARRAY r_putty_profileedit_gesture_popped_up_text_array {
@@ -876,7 +876,8 @@ RESOURCE ARRAY r_putty_profileedit_gesture_popped_up_text_array {
         LBUF { txt = "Send insert key"; },
         LBUF { txt = "Send enter key"; },
         LBUF { txt = "Add ctrl to next key"; },
-        LBUF { txt = "Add alt to next key"; }     
+        LBUF { txt = "Add alt to next key"; },   
+        LBUF { txt = "Send esc key"; }
     };
 }
 
