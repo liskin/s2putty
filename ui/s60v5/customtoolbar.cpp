@@ -418,6 +418,7 @@ void CCustomToolBar::SwapButtons(TInt aButton, TInt aCommand) {
 void CCustomToolBar::UpdateButtonsFromSettingsL() {
     //Set buttons from settings
     iTouchSettings->ReadSettingFileL();
+    UpdateButtonsSizeAndCount(iTouchSettings->GetTbButtonWidth(),iTouchSettings->GetTbButtonHeigth(),iTouchSettings->GetTbButtonCount());
     
     if (iToolbarButtons[0] != iTouchSettings->GetTbButton1()) {
         (iButtonsArray.operator [](iTouchSettings->GetTbButton1()))->SetRect(GetButton(0)->GetRect());
@@ -459,16 +460,23 @@ void CCustomToolBar::UpdateButtonsFromSettingsL() {
         iToolbarButtons[7] = iTouchSettings->GetTbButton8();
     }
     
-    TInt fontSize = iTouchSettings->GetButtonFontSize();;
+    
+    for ( TInt i = 0 ; i< iToolbarItemCount ; i++ ) {
+        TRect tmp = GetButton(i)->GetRect();
+        tmp.SetSize(TSize(iTouchSettings->GetTbButtonWidth(),iTouchSettings->GetTbButtonHeigth()));
+        GetButton(i)->SetRect(tmp);
+    }
+    
+    TInt fontSize = iTouchSettings->GetButtonFontSize();
     if ( fontSize == 0 ) {
         fontSize = CalculateBestFontSize();
     } 
     
-    for (int i = 0 ; i < iToolbarItemCount ; i++) {
+    for (TInt i = 0 ; i < iToolbarItemCount ; i++) {
         GetButton(i)->GenerateIconUpL(fontSize, iTouchSettings->GetButtonUpBGTransparency(), iTouchSettings->GetButtonUpTextTransparency());
         GetButton(i)->GenerateIconDownL(fontSize, iTouchSettings->GetButtonDownBGTransparency(), iTouchSettings->GetButtonDownTextTransparency());
     }
-
+    SetTop();
 }
 
 void CCustomToolBar::LoadIconL(const TDesC& aIconFile, TInt aIndex, CFbsBitmap*& aBitmap, CFbsBitmap*& aMask, TSize aSize) {
@@ -819,7 +827,7 @@ void CCustomToolBar::ToolbarLandscape1rows() {
 }
 
 TInt CCustomToolBar::CalculateBestFontSize() {
-    TInt iFontSize = 2000;
+    TInt iFontSize = GetButton(0)->GetOptimalFontSize();
     
     //Find longest text
     for (int i = 0 ; i < iToolbarItemCount; i++) {

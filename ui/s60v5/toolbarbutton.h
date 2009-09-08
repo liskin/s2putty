@@ -82,7 +82,7 @@ class CCustomToolbarButton : public CBase {
         TBool GetButtonDown() {return iDown; };
         TBool GetButtonSelectable() {return iSelectable; };
         void SetButtonSelectable(TBool aSelectable) { iSelectable = aSelectable; };
-        void SetRect(TRect aButtonRect) { iItem = aButtonRect; };
+        void SetRect(TRect aButtonRect);
         TRect GetRect() { return iItem; };
         toolbarButtonData GetButtonData() { return iButtonData; };
         TInt GetFontSize() {return iFontSize; };
@@ -101,6 +101,7 @@ class CCustomToolbarButton : public CBase {
         void ClearIcons();
         CFbsBitmap* CreateBitmapL( TDes& aText , TSize aTargetSize, TInt *aFontSize, TBool aMask, TInt Transparency, TInt TextTransparency );
         void GenerateOptimalFontSizeL();
+        TInt TestFontSize(TInt aFontSize, CFbsBitmapDevice* aIconDevice, TDes &aText);
         
         CFbsBitmap*             iButtonDownBitmap;
         CFbsBitmap*             iButtonDownBitmapMask;

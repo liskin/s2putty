@@ -123,6 +123,16 @@ void CCustomToolbarButton::GenerateIconDownL(TInt fontSize, TInt backgroundTrans
     iFontSize = requestedFontSize;
 }
 
+void CCustomToolbarButton::SetRect(TRect aButtonRect) {
+    //if button size is changed we need to recalculate the optimal font
+    if ( aButtonRect.Size() != iItem.Size() ) {
+        iItem = aButtonRect;
+        GenerateOptimalFontSizeL();
+    } else {
+        iItem = aButtonRect;
+    }
+}
+
 void CCustomToolbarButton::GenerateOptimalFontSizeL() {
     CFbsBitmap*                     iIcon;
     CFbsBitmapDevice*               iIconDevice;
@@ -134,57 +144,70 @@ void CCustomToolbarButton::GenerateOptimalFontSizeL() {
     //ButtonUp
     iIcon = new (ELeave) CFbsBitmap;
     User::LeaveIfError( iIcon->Create(iItem.Size(),EGray256)); // 16 bpp
-
     iIconDevice = CFbsBitmapDevice::NewL(iIcon);
-    //User::LeaveIfError(iIconDevice->CreateContext(iIconContext));
-    //iIconContext->SetPenStyle( CGraphicsContext::ENullPen );
-    //iIconContext->SetBrushStyle( CGraphicsContext::ESolidBrush );
-
-    //TRect buttonRect = TRect(TPoint(2,2),TSize(aTargetSize.iHeight-4,aTargetSize.iWidth-4));
-    const CFont* origFont = AknLayoutUtils::FontFromId(EAknLogicalFontPrimarySmallFont);
 
     //Determine correct font size for up text
-    TInt fontSize = 0;
-    TFontSpec myFontSpec = origFont->FontSpecInTwips();
-    CFont* selectedfont = NULL;
+    TInt fontSize = iItem.Width();
     TInt correctFontSize = 0;
-    do {
-        fontSize++;
-        myFontSpec.iHeight = fontSize;
-        iIconDevice->GetNearestFontInTwips(selectedfont,myFontSpec);
-        correctFontSize = selectedfont->TextCount(iButtonData.iUpLabel , iItem.Width() - 6 );
-        iIconDevice->ReleaseFont(selectedfont);
-    } while ( correctFontSize == iButtonData.iUpLabel.Length() );
-    fontSize--;
     
+    correctFontSize = TestFontSize(fontSize,iIconDevice,iButtonData.iUpLabel);
+
+    if ( correctFontSize == iButtonData.iUpLabel.Length() ) {
+        while ( correctFontSize == iButtonData.iUpLabel.Length() ) {
+            fontSize++;
+            correctFontSize = TestFontSize(fontSize,iIconDevice,iButtonData.iUpLabel);
+        }
+        fontSize--;
+    } else {
+        while ( correctFontSize < iButtonData.iUpLabel.Length() ) {
+            fontSize--;
+            correctFontSize = TestFontSize(fontSize,iIconDevice,iButtonData.iUpLabel);
+        }
+    }    
+        
     upFont = fontSize;
     
     //Determine correct font size for down text
-    fontSize = 0;
-    selectedfont = NULL;
-    myFontSpec = origFont->FontSpecInTwips();
-    correctFontSize = 0;
-    do {
-        fontSize++;
-        myFontSpec.iHeight = fontSize;
-        iIconDevice->GetNearestFontInTwips(selectedfont,myFontSpec);
-        correctFontSize = selectedfont->TextCount(iButtonData.iUpLabel , iItem.Width() - 6);
-        iIconDevice->ReleaseFont(selectedfont);
-    } while ( correctFontSize == iButtonData.iUpLabel.Length() );
-    fontSize--;
+    fontSize = upFont;
+    correctFontSize = TestFontSize(fontSize,iIconDevice,iButtonData.iDownLabel);
+    if ( correctFontSize == iButtonData.iDownLabel.Length() ) {
+        while ( correctFontSize == iButtonData.iDownLabel.Length() ) {
+            fontSize++;
+            correctFontSize = TestFontSize(fontSize,iIconDevice,iButtonData.iDownLabel);
+        }
+        fontSize--;
+    } else {
+        while ( correctFontSize < iButtonData.iDownLabel.Length() ) {
+            fontSize--;
+            correctFontSize = TestFontSize(fontSize,iIconDevice,iButtonData.iDownLabel);
+        }
+    }    
     
     downFont = fontSize;
     
     if ( upFont > downFont ) {
-        iOptimalFontSize = upFont;
-    } else {
         iOptimalFontSize = downFont;
+    } else {
+        iOptimalFontSize = upFont;
     }
     
     //delete iIconContext;
     delete iIconDevice;
     delete iIcon;
     
+}
+
+TInt CCustomToolbarButton::TestFontSize(TInt aFontSize, CFbsBitmapDevice* aIconDevice, TDes &aText) {
+    const CFont* origFont = AknLayoutUtils::FontFromId(EAknLogicalFontPrimarySmallFont);
+    TFontSpec myFontSpec = origFont->FontSpecInTwips();
+    CFont* selectedfont = NULL;
+    TInt correctFontSize = 0;
+
+    myFontSpec.iHeight = aFontSize;
+    aIconDevice->GetNearestFontInTwips(selectedfont,myFontSpec);
+    correctFontSize = selectedfont->TextCount(aText , iItem.Width() - 6 );
+    aIconDevice->ReleaseFont(selectedfont);
+    return correctFontSize;
 }
 
 CFbsBitmap*  CCustomToolbarButton::CreateBitmapL( TDes &aText, TSize aTargetSize, TInt* aFontSize, TBool aMask, TInt BackGroundTransparency, TInt TextTransparency ) {
@@ -207,7 +230,7 @@ CFbsBitmap*  CCustomToolbarButton::CreateBitmapL( TDes &aText, TSize aTargetSize
     iIconContext->SetBrushStyle( CGraphicsContext::ESolidBrush );
     iIconSizeInPixels = iIcon->SizeInPixels();
 
-    TRect buttonRect = TRect(TPoint(2,2),TSize(aTargetSize.iHeight-4,aTargetSize.iWidth-4));
+    TRect buttonRect = TRect(TPoint(2,2),TSize(aTargetSize.iWidth-4, aTargetSize.iHeight-4));
     const CFont* origFont = AknLayoutUtils::FontFromId(EAknLogicalFontPrimarySmallFont);
     
     //Determine correct font size
@@ -235,7 +258,7 @@ CFbsBitmap*  CCustomToolbarButton::CreateBitmapL( TDes &aText, TSize aTargetSize
         TRect ring1 = TRect(TPoint(0,0),aTargetSize);
         iIconContext->SetBrushColor( KRgbBlack );
         iIconContext->DrawRect(ring1);
-        TRect ring2 = TRect(TPoint(1,1),TSize(aTargetSize.iHeight-2,aTargetSize.iWidth-2));
+        TRect ring2 = TRect(TPoint(1,1),TSize(aTargetSize.iWidth-2,aTargetSize.iHeight-2));
         iIconContext->SetBrushColor( KRgbWhite );
         iIconContext->DrawRect(ring2);
     
@@ -279,4 +302,5 @@ CFbsBitmap*  CCustomToolbarButton::CreateBitmapL( TDes &aText, TSize aTargetSize
     
     return iIcon;
 }
+
 
