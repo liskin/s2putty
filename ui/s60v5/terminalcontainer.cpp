@@ -269,7 +269,7 @@ void CTerminalContainer::SizeChanged() {
     }
     
     if ( iCustomToolbarControl ) {
-        iCustomToolbarControl->SetRect(Rect()); //Set to untouched rect since we dont need round up for toolbar
+        //iCustomToolbarControl->SetRect(Rect()); //Set to untouched rect since we dont need round up for toolbar
         iCustomToolbarControl->SetTop();
     }
         

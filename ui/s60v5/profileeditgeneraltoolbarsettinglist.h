@@ -68,7 +68,7 @@ private:
     TInt iButtonUpTextTransparency;
     TInt iButtonDownBackgroundTransparency;
     TInt iButtonDownTextTransparency;
-
+    TInt iButtonFontSize;
     TTouchSettings iTouchSettings;
     
 };

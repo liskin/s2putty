@@ -605,6 +605,11 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_general_toolbar_settinglist
             identifier = EPuttySettingsTocuhToolBarButtonDownTextTransparency;
             setting_page_resource = r_putty_profileedit_tbdntxttransp_page;
             name = "Button down txt transparency";
+        },
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchToolBarButtonFontSize;
+            setting_page_resource = r_putty_profileedit_tbfontsize_page;
+            name = "Button font size";
         }
     };
 }
@@ -616,13 +621,25 @@ RESOURCE ARRAY r_putty_profileedit_general_toolbar_settinglist_text {
         LBUF { txt = "Button width"; },
         LBUF { txt = "Button heigth"; },
         LBUF { txt = "Button up transparency"; },
-        LBUF { txt = "Button down transpparency"; }
+        LBUF { txt = "Button down transpparency"; },
+        LBUF { txt = "Button font size"; }
     };
 }
 
 //If changed remember to change from terminalview.cpp also
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbfontsize_page {
+    label = "Button font size (0 = auto, 1 = min 2000 = max)";
+    type = EAknCtIntegerEdwin;
+    editor_resource_id = r_putty_profileedit_tbfontsize_edwin;
+}
+RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbfontsize_edwin {
+    min = 0;
+    max = 2000;
+}
+
+//If changed remember to change from terminalview.cpp also
 RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbupbgtransp_page {
-    label = "Button up background transparency";
+    label = "Button up background transparency\n 0 = Solid, 255 = 100% transparent";
     type = EAknCtIntegerEdwin;
     editor_resource_id = r_putty_profileedit_tbupbgtransp_edwin;
 }
@@ -792,6 +809,27 @@ RESOURCE DIALOG r_putty_tbwidhtheigth_query {
    };
 }
 
+//If changed remember to change from terminalview.cpp also
+RESOURCE DIALOG r_putty_tbfontsize_query {
+  flags = EGeneralQueryFlags;
+  buttons = R_AVKON_SOFTKEYS_OK_CANCEL;
+  items =
+    {
+    DLG_LINE
+      {
+      type = EAknCtQuery;
+      id = EGeneralQuery;
+      control = AVKON_DATA_QUERY {
+          layout = ENumberLayout;
+          control = AVKON_INTEGER_EDWIN {
+              maxlength = 4;
+              min = 0;
+              max = 2000;
+          };
+      };
+      }
+   };
+}
 
 //Show toolbar texts
 RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_tbshowstartup_texts {

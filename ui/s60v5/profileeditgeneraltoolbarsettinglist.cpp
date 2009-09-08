@@ -83,6 +83,10 @@ CAknSettingItem *CProfileEditGeneralToolbarSettingList::CreateSettingItemL(
         case EPuttySettingsTocuhToolBarButtonDownTextTransparency:
             iButtonDownTextTransparency = iTouchSettings.GetButtonDownTextTransparency();
             return new (ELeave) CAknIntegerEdwinSettingItem(aIdentifier, iButtonDownTextTransparency);
+        case EPuttySettingsTouchToolBarButtonFontSize:
+            iButtonFontSize = iTouchSettings.GetButtonFontSize();
+            return new (ELeave) CAknIntegerEdwinSettingItem(aIdentifier, iButtonFontSize);
+            
     }
     
     return NULL;
@@ -135,7 +139,9 @@ void CProfileEditGeneralToolbarSettingList::EditItemL(TInt aIndex,
             iTouchSettings.SetButtonDownTextTransparency(iButtonDownTextTransparency);
             break;
         }
-        
+        case EPuttySettingsTouchToolBarButtonFontSize: {
+            iTouchSettings.SetButtonFontSize(iButtonFontSize);
+        }
        
         default:
             ;

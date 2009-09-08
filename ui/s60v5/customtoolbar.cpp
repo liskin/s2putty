@@ -387,7 +387,10 @@ void CCustomToolBar::SetDefaultButtonsFromSettings() {
     iToolbarButtons[6] = iTouchSettings->GetTbButton7();
     iToolbarButtons[7] = iTouchSettings->GetTbButton8();
     
-    TInt fontSize = CalculateBestFontSize();
+    TInt fontSize = iTouchSettings->GetButtonFontSize();;
+    if ( fontSize == 0 ) {
+        fontSize = CalculateBestFontSize();
+    } 
     
     for (int i = 0 ; i < iToolbarItemCount ; i++) {
         GetButton(i)->GenerateIconUpL(fontSize, iTouchSettings->GetButtonUpBGTransparency(), iTouchSettings->GetButtonUpTextTransparency());
@@ -456,7 +459,10 @@ void CCustomToolBar::UpdateButtonsFromSettingsL() {
         iToolbarButtons[7] = iTouchSettings->GetTbButton8();
     }
     
-    TInt fontSize = CalculateBestFontSize();
+    TInt fontSize = iTouchSettings->GetButtonFontSize();;
+    if ( fontSize == 0 ) {
+        fontSize = CalculateBestFontSize();
+    } 
     
     for (int i = 0 ; i < iToolbarItemCount ; i++) {
         GetButton(i)->GenerateIconUpL(fontSize, iTouchSettings->GetButtonUpBGTransparency(), iTouchSettings->GetButtonUpTextTransparency());

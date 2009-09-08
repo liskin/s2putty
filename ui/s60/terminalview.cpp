@@ -992,7 +992,17 @@ void CTerminalView::SetGeneralToolbarSettingsL() {
                 CAknMultiLineDataQueryDialog* dlg =
                     CAknMultiLineDataQueryDialog::NewL( bg,  text );
                 if ( dlg->ExecuteLD( R_PUTTY_TBUPTRANSPARENCY_QUERY ) ) {
-                    //If changed remember to change from putty.rss also
+                    //If changed remember to change from putty.rss also                 
+                    if ( bg < 0 ) {
+                        bg = 0;
+                    } else if (bg > 255 ) {
+                        bg = 255;
+                    }
+                    if ( text < 0 ) {
+                        text = 0;
+                    } else if (text > 255 ) {
+                        text = 255;
+                    }
                     iTouchSettings->SetButtonUpBGTransparency(bg);
                     iTouchSettings->SetButtonUpTextTransparency(text);
                     iTouchSettings->WriteSettingFileL();
@@ -1010,8 +1020,38 @@ void CTerminalView::SetGeneralToolbarSettingsL() {
                     CAknMultiLineDataQueryDialog::NewL( bg,  text );
                 if ( dlg->ExecuteLD( R_PUTTY_TBUPTRANSPARENCY_QUERY ) ) {
                     //If changed remember to change from putty.rss also
+                    if ( bg < 0 ) {
+                        bg = 0;
+                    } else if (bg > 255 ) {
+                        bg = 255;
+                    }
+                    if ( text < 0 ) {
+                        text = 0;
+                    } else if (text > 255 ) {
+                        text = 255;
+                    }
                     iTouchSettings->SetButtonDownBGTransparency(bg);
                     iTouchSettings->SetButtonDownTextTransparency(text);
+                    iTouchSettings->WriteSettingFileL();
+                    iContainer->UpdateAfterSettingsChangeL();
+                } else {
+                  //user canceled
+                }
+                break;
+                }
+            case 6: //Set button font size
+                {
+                TInt fontSize = iTouchSettings->GetButtonFontSize();
+
+                CAknNumberQueryDialog* dlg =
+                    CAknNumberQueryDialog::NewL( fontSize );
+                dlg->SetPromptL(_L("Enter button font size:"));
+                if ( dlg->ExecuteLD( R_PUTTY_TBFONTSIZE_QUERY ) ){
+                  
+                    if ( fontSize > 2000 ) {
+                        fontSize = 2000;
+                    }
+                    iTouchSettings->SetButtonFontSize(fontSize);
                     iTouchSettings->WriteSettingFileL();
                     iContainer->UpdateAfterSettingsChangeL();
                 } else {

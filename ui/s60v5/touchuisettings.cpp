@@ -163,6 +163,7 @@ void TTouchSettings::SetDefault() {
     iButtonUpTextTransparency = 250;
     iButtonDownBackgroundTransparency = 59;
     iButtonDownTextTransparency = 148;
+    iButtonFontSize = 0;
     
     ReadSettingFileL();
 }
@@ -215,7 +216,8 @@ void TTouchSettings::ReadSettingFileL() {
     iButtonUpTextTransparency = fRead.ReadInt16L();
     iButtonDownBackgroundTransparency = fRead.ReadInt16L();
     iButtonDownTextTransparency = fRead.ReadInt16L();
-
+    iButtonFontSize = fRead.ReadInt16L(); 
+    
     CleanupStack::PopAndDestroy(&fRead);
 
     fs.Close();
@@ -265,6 +267,7 @@ void TTouchSettings::WriteSettingFileL() {
     fWrite.WriteInt16L(iButtonUpTextTransparency);
     fWrite.WriteInt16L(iButtonDownBackgroundTransparency);
     fWrite.WriteInt16L(iButtonDownTextTransparency);
+    fWrite.WriteInt16L(iButtonFontSize);
     
     fWrite.CommitL();
     CleanupStack::PopAndDestroy(&fWrite);

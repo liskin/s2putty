@@ -288,7 +288,8 @@ enum TSettingItems {
     EPuttySettingsTocuhToolBarButtonUpBackgroundTransparency,
     EPuttySettingsTocuhToolBarButtonUpTextTransparency,
     EPuttySettingsTocuhToolBarButtonDownBackgroundTransparency,
-    EPuttySettingsTocuhToolBarButtonDownTextTransparency
+    EPuttySettingsTocuhToolBarButtonDownTextTransparency,
+    EPuttySettingsTouchToolBarButtonFontSize
 #endif
     
 };
