@@ -66,6 +66,12 @@ CAknSettingItem *CProfileEditGeneralSettingList::CreateSettingItemL(
         case EPuttySettingGeneralUsername:
             StringToDes(iConfig->username, iUsername);
             return new (ELeave) CAknTextSettingItem(aIdentifier, iUsername);
+#ifdef PUTTY_S60TOUCH
+        case EPuttySettingGeneralPromptAP:
+            iPromptAP = iTouchSettings.GetPromptAP();
+            return new (ELeave) CAknEnumeratedTextPopupSettingItem(aIdentifier, iPromptAP);
+            break;
+#endif
     }
 
     return NULL;
@@ -89,7 +95,12 @@ void CProfileEditGeneralSettingList::EditItemL(TInt aIndex,
         case EPuttySettingGeneralUsername:
             DesToString(iUsername, iConfig->username, sizeof(iConfig->username));
             break;
-            
+#ifdef PUTTY_S60TOUCH
+        case EPuttySettingGeneralPromptAP:
+            iTouchSettings.SetPromptAP(iPromptAP);
+            iTouchSettings.WriteSettingFileL();
+            break;             
+#endif
         default:
             ;
     }

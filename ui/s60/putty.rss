@@ -152,6 +152,15 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_general_settinglist {
             setting_page_resource = r_putty_profileedit_username_page;
             name = "Username";
         }
+#ifdef PUTTY_S60TOUCH
+        ,
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingGeneralPromptAP;
+            setting_page_resource = r_putty_profileedit_promptap_page;
+            associated_resource = r_putty_profileedit_tbshowstartup_texts;
+            name = "Prompt for access point";
+        }
+#endif        
     };
 }
 
@@ -195,7 +204,18 @@ RESOURCE EDWIN r_putty_profileedit_username_edwin {
     avkon_flags = EAknEditorFlagNoT9;
 }
 
+#ifdef PUTTY_S60TOUCH
+// Prompt Access point Edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_promptap_page {
+    type = EAknCtPopupSettingList;
+    label = "Prompt for Access point";
+    editor_resource_id=r_putty_profileedit_promptap_popup;
+}
+RESOURCE POPUP_SETTING_LIST r_putty_profileedit_promptap_popup {
+    flags = 0;
+}
 
+#endif
 // SSH protocol settings list
 RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_ssh_settinglist {
     title = "SSH Protocol";

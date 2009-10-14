@@ -23,7 +23,7 @@
 _LIT(KTouchSettingFile,"touchuisettings.dat");
 _LIT(KDataDirFormat,  "%c:\\private\\%08x\\data\\");
 
-const TInt KTouchUiSettingsVersion = 3;
+const TInt KTouchUiSettingsVersion = 4;
 
 TTouchSettings::TTouchSettings() {
     TFileName name;
@@ -165,6 +165,9 @@ void TTouchSettings::SetDefault() {
     iButtonDownTextTransparency = 148;
     iButtonFontSize = 0;
     
+    // 1 = allways prompt 0 = no prompt
+    iPromptAP = 1; 
+    
     ReadSettingFileL();
 }
 
@@ -218,6 +221,8 @@ void TTouchSettings::ReadSettingFileL() {
     iButtonDownTextTransparency = fRead.ReadInt16L();
     iButtonFontSize = fRead.ReadInt16L(); 
     
+    iPromptAP = fRead.ReadInt16L();
+    
     CleanupStack::PopAndDestroy(&fRead);
 
     fs.Close();
@@ -269,6 +274,7 @@ void TTouchSettings::WriteSettingFileL() {
     fWrite.WriteInt16L(iButtonDownTextTransparency);
     fWrite.WriteInt16L(iButtonFontSize);
     
+    fWrite.WriteInt16L(iPromptAP);
     fWrite.CommitL();
     CleanupStack::PopAndDestroy(&fWrite);
    

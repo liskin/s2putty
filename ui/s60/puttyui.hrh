@@ -247,7 +247,8 @@ enum TSettingItems {
     EPuttySettingGeneralProfileName = 1,
     EPuttySettingGeneralHost,
     EPuttySettingGeneralUsername,
-
+    EPuttySettingGeneralPromptAP,
+    
     EPuttySettingSshPort,
     EPuttySettingSshVersion,
     EPuttySettingSshPrivateKey,

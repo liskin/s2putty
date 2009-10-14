@@ -53,6 +53,8 @@ class TTouchSettings {
         TInt GetButtonDownTextTransparency() { return iButtonDownTextTransparency; };
         TInt GetButtonFontSize() { return iButtonFontSize; };
         
+        TInt GetPromptAP() { return iPromptAP; };
+        
         void SetShowToolbar(TInt aCmd) { iShowtoolbar = aCmd; };
         void SetSingleTap(TInt aCmd) { iSingleTap = aCmd; };
         void SetDoubleTap(TInt aCmd) { iDoubleTap = aCmd; };
@@ -79,6 +81,9 @@ class TTouchSettings {
         void SetButtonDownBGTransparency(TInt aCmd) { iButtonDownBackgroundTransparency = aCmd; };
         void SetButtonDownTextTransparency(TInt aCmd) { iButtonDownTextTransparency = aCmd; };
         void SetButtonFontSize(TInt aCmd) { iButtonFontSize = aCmd; };
+        
+        void SetPromptAP(TInt aCmd) { iPromptAP = aCmd; };
+        
         void SetDefault(); // Set default values
         
         void ReadSettingFileL();
@@ -116,6 +121,7 @@ class TTouchSettings {
         TInt iButtonDownBackgroundTransparency;
         TInt iButtonDownTextTransparency;
         TInt iButtonFontSize;
+        TInt iPromptAP;
         TBuf<25> iDataDirectory; // "x:\private\12345678\data\"
         TFileName iSettingFile;
         

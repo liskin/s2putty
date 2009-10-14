@@ -576,6 +576,11 @@ void CTerminalView::DoConnectL() {
     delete iNetConnect;
     iNetConnect = NULL;
     iNetConnect = CNetConnect::NewL(*this);
+#ifdef PUTTY_S60TOUCH
+    TTouchSettings settings;
+    settings.ReadSettingFileL();
+    iNetConnect->SetPromptAP(settings.GetPromptAP());
+#endif    
     iNetConnect->Connect();
 
     // Show wait dialog

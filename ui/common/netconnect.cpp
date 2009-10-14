@@ -8,6 +8,9 @@
 */
 
 #include <es_sock.h>
+#ifdef PUTTY_S60TOUCH
+    #include <CommDbConnPref.h>
+#endif
 #include "netconnect.h"
 
 _LIT(KPanic, "netconnect");
@@ -34,6 +37,9 @@ CNetConnect::CNetConnect(MNetConnectObserver &aObserver)
 
 // Second-phase constructor
 void CNetConnect::ConstructL() {
+#ifdef PUTTY_S60TOUCH
+    iPromptAP = -1;
+#endif
 }
 
 
@@ -70,8 +76,20 @@ void CNetConnect::Connect() {
     }
     iRConnectionOpen = ETrue;
 
+#ifdef PUTTY_S60TOUCH
+    if ( iPromptAP == 1 ) {
+        TCommDbConnPref pref;
+        pref.SetDialogPreference( ECommDbDialogPrefPrompt  );
+        //pref.SetDirection( ECommDbConnectionDirectionOutgoing );
+        // Connect to the network using default settings
+        iConnection.Start(pref, iStatus);
+    } else {
+        iConnection.Start(iStatus);
+    }
+#else    
     // Connect to the network using default settings
     iConnection.Start(iStatus);
+#endif
     iState = EStateConnecting;
     SetActive();
 }

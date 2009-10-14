@@ -72,7 +72,7 @@ END
 
 LIBRARY		avkon.lib eikdlg.lib bafl.lib hal.lib touchfeedback.lib
 LIBRARY		euser.lib apparc.lib cone.lib eikcore.lib gdi.lib eikcoctl.lib
-LIBRARY		eikctl.lib efsrv.lib
+LIBRARY		eikctl.lib efsrv.lib commdb.lib
 LIBRARY		mediaclientaudio.lib commonengine.lib
 LIBRARY		ws32.lib bitgdi.lib fbscli.lib fepbase.lib
 LIBRARY		aknskins.lib aknskinsrv.lib aknswallpaperutils.lib aknicon.lib bitmaptransforms.lib
