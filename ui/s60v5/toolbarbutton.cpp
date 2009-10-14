@@ -239,15 +239,11 @@ CFbsBitmap*  CCustomToolbarButton::CreateBitmapL( TDes &aText, TSize aTargetSize
     CFont* selectedfont;
     TInt correctFontSize = 0;
     if ( *aFontSize == 0 ) {
-        do {
-            fontSize++;
-            myFontSpec.iHeight = fontSize;
-            iIconDevice->GetNearestFontInTwips(selectedfont,myFontSpec);
-            correctFontSize = selectedfont->TextCount(aText, aTargetSize.iWidth-6);
-            iIconDevice->ReleaseFont(selectedfont);
-        } while ( correctFontSize == aText.Length() );
-        fontSize--;
-        *aFontSize = fontSize;
+        if ( iOptimalFontSize == 0 ) {
+            GenerateOptimalFontSizeL();
+        }
+        *aFontSize = iOptimalFontSize;
+        fontSize = iOptimalFontSize;
     } else {
         fontSize = *aFontSize;
     }
