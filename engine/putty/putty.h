@@ -633,6 +633,8 @@ struct config_tag {
     FontSpec widefont;
     FontSpec wideboldfont;
     int shadowboldoffset;
+    /* Added for S60 accesspoint setting - Risto Avila*/
+    int accesspoint;
 };
 
 /*
