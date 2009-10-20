@@ -13,9 +13,9 @@
 #include <coecntrl.h>
 #include <aknsettingitemlist.h>
 #include "profileeditsettinglistbase.h"
-#ifdef PUTTY_S60TOUCH
-    #include "touchuisettings.h"
-#endif
+#include <CommDb.h>
+#include <CommDbConnPref.h>
+#include "dynamicenumtextsettingitem.h"
 extern "C" {
 #include "putty.h" // struct Config
 }
@@ -65,10 +65,9 @@ private:
     TDes &iProfileName;
     TBuf<511> iHost;
     TBuf<99> iUsername;
-#ifdef PUTTY_S60TOUCH
     TInt iPromptAP;
-    TTouchSettings iTouchSettings;
-#endif
+    CDesCArray *iIAPList;
+    CArrayFixFlat<TUint32> *iIAPidList;
     Config *iConfig;
 };
 

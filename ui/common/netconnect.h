@@ -58,10 +58,10 @@ public:
      */
     void Connect();
 
-#ifdef PUTTY_S60TOUCH
     //if aValue is set to 1 Prompt is valid else uses the default internet ap
     void SetPromptAP(TInt aValue ) { iPromptAP = aValue; };
-#endif
+    TUint32 ConvertPromptApToAPIdL(TInt aValue);
+    
     /** 
      * Cancels a connection request.
      */
@@ -82,9 +82,7 @@ protected:
     void DoCancel();
 
     // Data
-#ifdef PUTTY_S60TOUCH
     TInt iPromptAP;
-#endif
     
     MNetConnectObserver &iObserver;
     RSocketServ iSocketServ;

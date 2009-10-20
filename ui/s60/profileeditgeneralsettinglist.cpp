@@ -41,6 +41,39 @@ CProfileEditGeneralSettingList::CProfileEditGeneralSettingList(
 // Second-phase constructor
 void CProfileEditGeneralSettingList::ConstructL() {
     iConfig = iPutty.GetConfig();
+
+    iIAPList = new CDesC16ArrayFlat(8);
+    iIAPidList = new CArrayFixFlat<TUint32>(8);
+
+    CCommsDatabase* iCommsDB=CCommsDatabase::NewL();
+    TBuf<52> iapfromtable;
+    TInt err = KErrNone;
+    CleanupStack::PushL(iCommsDB);
+
+#ifdef PUTTY_S60V3  
+    CCommsDbTableView* iIAPView = iCommsDB->OpenIAPTableViewMatchingBearerSetLC(
+            ECommDbBearerGPRS|ECommDbBearerWLAN|ECommDbBearerVirtual,
+            ECommDbConnectionDirectionOutgoing); 
+#else  
+    CCommsDbTableView* iIAPView = iCommsDB->OpenTableLC((TPtrC(IAP)));
+#endif
+    
+    iIAPList->AppendL(_L("Allways ask"));
+    iIAPList->AppendL(_L("Default Internet"));
+    if ( iIAPView->GotoFirstRecord() == KErrNone ){
+        do
+        {
+            iIAPView->ReadTextL(TPtrC(COMMDB_NAME), iapfromtable);
+            iIAPList->AppendL(iapfromtable);
+            TUint32 iapID;
+            iIAPView->ReadUintL(TPtrC(COMMDB_ID), iapID);
+            iIAPidList->AppendL(iapID);
+        } while ( err = iIAPView->GotoNextRecord(), err == KErrNone);
+    }
+    
+    CleanupStack::PopAndDestroy(); // view
+    CleanupStack::PopAndDestroy(); // commDB
+    
     ConstructFromResourceL(R_PUTTY_PROFILEEDIT_GENERAL_SETTINGLIST);
     ActivateL();
 }
@@ -48,6 +81,14 @@ void CProfileEditGeneralSettingList::ConstructL() {
 
 // Destructor
 CProfileEditGeneralSettingList::~CProfileEditGeneralSettingList() {
+    if (iIAPList) {
+        iIAPList->Reset();
+        delete iIAPList;
+    }
+    if ( iIAPidList ) {
+        iIAPidList->Reset();
+        delete iIAPidList;
+    }
 }
 
 
@@ -66,12 +107,11 @@ CAknSettingItem *CProfileEditGeneralSettingList::CreateSettingItemL(
         case EPuttySettingGeneralUsername:
             StringToDes(iConfig->username, iUsername);
             return new (ELeave) CAknTextSettingItem(aIdentifier, iUsername);
-#ifdef PUTTY_S60TOUCH
         case EPuttySettingGeneralPromptAP:
-            iPromptAP = iTouchSettings.GetPromptAP();
-            return new (ELeave) CAknEnumeratedTextPopupSettingItem(aIdentifier, iPromptAP);
+            iPromptAP = iConfig->accesspoint;            
+            const CDesCArray &iTmp = *iIAPList;
+            return new (ELeave) CDynamicEnumTextSettingItem( aIdentifier, iTmp, iPromptAP);
             break;
-#endif
     }
 
     return NULL;
@@ -95,12 +135,9 @@ void CProfileEditGeneralSettingList::EditItemL(TInt aIndex,
         case EPuttySettingGeneralUsername:
             DesToString(iUsername, iConfig->username, sizeof(iConfig->username));
             break;
-#ifdef PUTTY_S60TOUCH
         case EPuttySettingGeneralPromptAP:
-            iTouchSettings.SetPromptAP(iPromptAP);
-            iTouchSettings.WriteSettingFileL();
+            iConfig->accesspoint = (int) iPromptAP;
             break;             
-#endif
         default:
             ;
     }
