@@ -54,7 +54,7 @@ CCustomToolBar* CCustomToolBar::NewL (CTerminalContainer* aParent, TRect aRect, 
 void CCustomToolBar::ConstructL (CTerminalContainer* aParent, TRect /*aRect*/, TTouchSettings *aTouchSettings) {
     iTouchSettings = aTouchSettings;
     
-    iDefaultButtonsCount = CountDefaultButtons() -1;
+    iDefaultButtonsCount = CountDefaultButtons();
         
     for ( int i = 0 ; i < iDefaultButtonsCount ;i++ ) {      
        TRect buttonInitialSize = TRect(TPoint(0,0),TSize(iTouchSettings->GetTbButtonWidth(), iTouchSettings->GetTbButtonHeigth()));
