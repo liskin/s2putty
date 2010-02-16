@@ -1,9 +1,9 @@
         PuTTY for Symbian OS
         --------------------
 
-Version 1.5.1, 19 July 2009
+Version 1.5 Development Snapshot, 15 February 2010
 
-Copyright 2002-2009 Petteri Kangaslampi
+Copyright 2002-2010 Petteri Kangaslampi
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
 Gabor Keresztfavli.
 Based on PuTTY 0.60, Copyright 1997-2007 Simon Tatham.
@@ -13,9 +13,11 @@ See license.txt for full copyright and license information.
 Introduction
 ------------
 
-This package is a maintenance release for PuTTY SSH client for Symbian
-OS version 1.5. It contains a number of bug fixes over 1.5.0 and minor
-new features, see "Changes" below for details.
+This package is a development snapshot for PuTTY SSH client for
+Symbian OS. It should be considered a release candidate for version
+1.5.2. This release contains just a number of bug fixes over 1.5.1,
+and will be released as 1.5.2 unless new regressions are found. See
+"Changes" below for details.
 
 PuTTY is distributed in two different packages, one for S60 third
 edition, and one for Series 80 phones. Make sure you use the correct
@@ -103,6 +105,15 @@ from the e.g. the Messages Inbox or using the file manager.
 
 Changes
 -------
+
+Main changes since 1.5.1:
+- Added Risto Avila's access point fix to the 1.5 branch. This should
+  fix access point prompt problems on S60 3rd ed FP2, including bug
+  #2853147.
+- Don't show an error when the user select "Cancel" in the access point
+  list. This fixes bug #2539620
+- Included Juha Sahakangas's Send Grid fix for Nokia E55 keyboards, 
+  fixing bug #2881316 
 
 Main changes since 1.5.0:
 - Added profile file import/export to make it easier to manually
