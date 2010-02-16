@@ -14,6 +14,7 @@
 #include <eikbtgpc.h>
 #include <avkon.rsg>
 #include <aknsutils.h>
+#include <hal.h>
 #include "sendgrid.h"
 
 _LIT(KPanic, "SENDGRID");
@@ -234,35 +235,61 @@ void CSendGrid::HandleSelectionL(TInt aIndex) {
 TKeyResponse CSendGrid::OfferKeyEventL(const TKeyEvent &aKeyEvent,
                                        TEventCode aType) {
 
+    // Selection shortcuts
+    // Note that E71 returns QWERTY keycodes while earlier S60 QWERTY
+    // devices return the numbers printed in the keys. We'll now accept
+    // both
+#define MAPKEY1(key1, index) case key1: HandleSelectionL(index); return EKeyWasConsumed;
+#define MAPKEY2(key1, key2, index) case key1: case key2: HandleSelectionL(index); return EKeyWasConsumed;
+#define MAPKEY3(key1, key2, key3, index) case key1: case key2: case key3: HandleSelectionL(index); return EKeyWasConsumed;
+
+    if ( aType == EEventKeyDown ) {
+        switch ( aKeyEvent.iScanCode ) {
+            MAPKEY1(EStdKeyLeftFunc, 9);
+            MAPKEY1(EStdKeyLeftShift, 11);
+        }
+    }
+
     if ( aType == EEventKey ) {
         switch ( aKeyEvent.iScanCode ) {
             case EStdKeyDevice3: // Center of joystick -- select current
                 HandleSelectionL(iGrid->CurrentDataIndex());
                 return EKeyWasConsumed;
 
-            // Selection shortcuts
-            // Note that E71 returns QWERTY keycodes while earlier S60 QWERTY
-            // devices return the numbers printed in the keys. We'll now accept
-            // both
-#define MAPKEY1(key1, index) case key1: HandleSelectionL(index); return EKeyWasConsumed;
-#define MAPKEY2(key1, key2, index) case key1: case key2: HandleSelectionL(index); return EKeyWasConsumed;
-            MAPKEY2('1', 'R', 0);
+            MAPKEY3('1', 'R', 'E', 0);
             MAPKEY2('2', 'T', 1);
             MAPKEY2('3', 'Y', 2);
-            MAPKEY2('4', 'F', 3);
+            MAPKEY3('4', 'F', 'D', 3);
             MAPKEY2('5', 'G', 4);
             MAPKEY2('6', 'H', 5);
-            MAPKEY2('7', 'V', 6);
+            MAPKEY3('7', 'V', 'C', 6);
             MAPKEY2('8', 'B', 7);
             MAPKEY2('9', 'N', 8);
-            MAPKEY2(EStdKeyNkpAsterisk, 'U', 9);
-            MAPKEY1('*', 9);
-            MAPKEY2('0', 'M', 10);
-            MAPKEY2(EStdKeyHash, 'J', 11);
+            MAPKEY3('*', EStdKeyNkpAsterisk, EStdKeyLeftFunc, 9);
             MAPKEY1('#', 9);
+            MAPKEY2('0', EStdKeySpace, 10);
+            MAPKEY2(EStdKeyHash, EStdKeyLeftShift, 11);
+        }
+
+        // Handle the keys that conflict on different devices by detecting the phone.
+        TInt mUid = 0;
+        HAL::Get(HALData::EMachineUid, mUid);
+
+        if(mUid == 0x20014DCF) {  // E55 half-qwerty keypad
+            switch ( aKeyEvent.iScanCode ) {
+                MAPKEY1('U', 2);
+                MAPKEY1('J', 5);
+                MAPKEY1('M', 8);
+            }
+        } else {                  // E71 and the like with full qwerty
+            switch ( aKeyEvent.iScanCode ) {
+                MAPKEY1('U', 9);
+                MAPKEY1('J', 11);
+                MAPKEY1('M', 10);
+            }
         }
     }
-    
+
     return iGrid->OfferKeyEventL(aKeyEvent, aType);
 }
 
