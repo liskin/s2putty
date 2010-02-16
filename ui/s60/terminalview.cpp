@@ -558,17 +558,19 @@ void CTerminalView::NetConnectComplete(TInt aError, RSocketServ &aSocketServ,
     if ( aError != KErrNone ) {
         // An error occurred -- display an error message and return to the
         // profile list view
-        HBufC *err = HBufC::NewLC(128);
-        TPtr errp = err->Des();            
-        eikenv->GetErrorText(errp, aError);
-        HBufC *msg = StringLoader::LoadLC(R_PUTTY_STR_NET_CONNECT_FAILED,
-                                          errp, aError, eikenv);
+        if ( aError != KErrCancel ) { // Silently exit if cancelled
+            HBufC *err = HBufC::NewLC(128);
+            TPtr errp = err->Des();            
+            eikenv->GetErrorText(errp, aError);
+            HBufC *msg = StringLoader::LoadLC(R_PUTTY_STR_NET_CONNECT_FAILED,
+                                              errp, aError, eikenv);
             
-        CAknNoteDialog *dlg = new (ELeave) CAknNoteDialog();
-        dlg->SetTextL(*msg);
-        dlg->ExecuteDlgLD(R_PUTTY_INFO_MESSAGE_DIALOG);
+            CAknNoteDialog *dlg = new (ELeave) CAknNoteDialog();
+            dlg->SetTextL(*msg);
+            dlg->ExecuteDlgLD(R_PUTTY_INFO_MESSAGE_DIALOG);
 
-        CleanupStack::PopAndDestroy(2); // err, msg
+            CleanupStack::PopAndDestroy(2); // err, msg
+        }
         
         iState = EStateNone;
         DoDisconnectL();
