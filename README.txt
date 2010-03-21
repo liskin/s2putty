@@ -1,7 +1,7 @@
         PuTTY for Symbian OS
         --------------------
 
-Version 1.5 Development Snapshot, 15 February 2010
+Version 1.5.2, 21 March 2010
 
 Copyright 2002-2010 Petteri Kangaslampi
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
@@ -13,11 +13,11 @@ See license.txt for full copyright and license information.
 Introduction
 ------------
 
-This package is a development snapshot for PuTTY SSH client for
-Symbian OS. It should be considered a release candidate for version
-1.5.2. This release contains just a number of bug fixes over 1.5.1,
-and will be released as 1.5.2 unless new regressions are found. See
-"Changes" below for details.
+This package is a maintenance release for PuTTY SSH client for Symbian
+OS version 1.5. It contains bug fixes over 1.5.1, but no new
+features. See "Changes" below for details. None of the changes are
+security-critical, so if you are unaffected by the bugs in previous
+1.5 releases there is no need to upgrade.
 
 PuTTY is distributed in two different packages, one for S60 third
 edition, and one for Series 80 phones. Make sure you use the correct
