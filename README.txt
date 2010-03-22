@@ -52,12 +52,12 @@ self-signed certificate. To be able to verify the packages, you'll
 need to install the certificate to the device. The steps needed are:
 
 1. Fetch the certificate from
-   http://www.s2.org/~pekangas/petteri_s80_2009_der.zip and unzip it.
+   http://www.s2.org/~pekangas/petteri_2008_2035_der.zip and unzip it.
 
 2. Verify the certificate. Its MD5 sum is
-   9559ec393f3fecb0c34ababfc0f9727f. A PGP signature is available at
-   http://www.s2.org/~pekangas/petteri_s80_2009_der.cer.asc, the key is
-   http://www.s2.org/~pekangas/petteri_pgp_2009.asc. The key is also
+   6299fb89f8dff544ca3861ac150ff618. A PGP signature is available at
+   http://www.s2.org/~pekangas/petteri_2008_2035_der.cer.asc, the key is
+   http://www.s2.org/~pekangas/petteri_pgp_2008.asc. The key is also
    available on OpenPGP key servers, ID E393AD7C.
 
 3. Copy the certificate to a file in the communicator.
