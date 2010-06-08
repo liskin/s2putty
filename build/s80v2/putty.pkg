@@ -6,13 +6,13 @@
 ;*
 ;* See license.txt for full copyright and license information.
 
-#{"PuTTY"},(0x101f9076),1,5,439,TYPE=SISAPP
+#{"PuTTY"},(0x101f9076),1,5,441,TYPE=SISAPP
 
 ; Compatibility: Series 80 2.0
 (0x101F8ED2), 0, 0, 0, {"Series80ProductID"}
 
 ; Signature
-*"c:\home\pekangas\keys\petteri_s80_2009.key","c:\home\pekangas\keys\petteri_s80_2009.cer"
+*"c:\home\pekangas\keys\petteri_2008_2035.key","c:\home\pekangas\keys\petteri_2008_2035.cer"
 
 ; Installation note
 "installnote.txt"-"",FT,TC

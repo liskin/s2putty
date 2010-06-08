@@ -1,9 +1,9 @@
         PuTTY for Symbian OS
         --------------------
 
-Version 1.5.1, 19 July 2009
+Version 1.5.2, 21 March 2010
 
-Copyright 2002-2009 Petteri Kangaslampi
+Copyright 2002-2010 Petteri Kangaslampi
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
 Gabor Keresztfavli.
 Based on PuTTY 0.60, Copyright 1997-2007 Simon Tatham.
@@ -14,8 +14,10 @@ Introduction
 ------------
 
 This package is a maintenance release for PuTTY SSH client for Symbian
-OS version 1.5. It contains a number of bug fixes over 1.5.0 and minor
-new features, see "Changes" below for details.
+OS version 1.5. It contains bug fixes over 1.5.1, but no new
+features. See "Changes" below for details. None of the changes are
+security-critical, so if you are unaffected by the bugs in previous
+1.5 releases there is no need to upgrade.
 
 PuTTY is distributed in two different packages, one for S60 third
 edition, and one for Series 80 phones. Make sure you use the correct
@@ -50,12 +52,12 @@ self-signed certificate. To be able to verify the packages, you'll
 need to install the certificate to the device. The steps needed are:
 
 1. Fetch the certificate from
-   http://www.s2.org/~pekangas/petteri_s80_2009_der.zip and unzip it.
+   http://www.s2.org/~pekangas/petteri_2008_2035_der.zip and unzip it.
 
 2. Verify the certificate. Its MD5 sum is
-   9559ec393f3fecb0c34ababfc0f9727f. A PGP signature is available at
-   http://www.s2.org/~pekangas/petteri_s80_2009_der.cer.asc, the key is
-   http://www.s2.org/~pekangas/petteri_pgp_2009.asc. The key is also
+   6299fb89f8dff544ca3861ac150ff618. A PGP signature is available at
+   http://www.s2.org/~pekangas/petteri_2008_2035_der.cer.asc, the key is
+   http://www.s2.org/~pekangas/petteri_pgp_2008.asc. The key is also
    available on OpenPGP key servers, ID E393AD7C.
 
 3. Copy the certificate to a file in the communicator.
@@ -103,6 +105,15 @@ from the e.g. the Messages Inbox or using the file manager.
 
 Changes
 -------
+
+Main changes since 1.5.1:
+- Added Risto Avila's access point fix to the 1.5 branch. This should
+  fix access point prompt problems on S60 3rd ed FP2, including bug
+  #2853147.
+- Don't show an error when the user select "Cancel" in the access point
+  list. This fixes bug #2539620
+- Included Juha Sahakangas's Send Grid fix for Nokia E55 keyboards, 
+  fixing bug #2881316 
 
 Main changes since 1.5.0:
 - Added profile file import/export to make it easier to manually

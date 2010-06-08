@@ -74,3 +74,4 @@ LIBRARY		commondialogs.lib
 LIBRARY		puttyengine.lib
 LIBRARY		etext.lib
 LIBRARY		estor.lib
+LIBRARY		hal.lib

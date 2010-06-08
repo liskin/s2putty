@@ -10,7 +10,6 @@
 #include <es_sock.h>
 #ifdef PUTTY_S60V3
     #include <CommDbConnPref.h>
-    #include <CommDb.h>
 #endif
 
 #include "netconnect.h"
@@ -39,7 +38,9 @@ CNetConnect::CNetConnect(MNetConnectObserver &aObserver)
 
 // Second-phase constructor
 void CNetConnect::ConstructL() {
-    iPromptAP = 0;
+#ifdef PUTTY_S60TOUCH
+    iPromptAP = -1;
+#endif
 }
 
 
@@ -76,22 +77,23 @@ void CNetConnect::Connect() {
     }
     iRConnectionOpen = ETrue;
 
-        if ( iPromptAP == 0 ) {
+#ifdef PUTTY_S60V3
+    #ifdef PUTTY_S60TOUCH  //for setting to touch phones 
+        if ( iPromptAP == 1 ) {
+    #endif
             TCommDbConnPref pref;
-            //pref.SetIapId(iIapId); // set access point to connect
-            //ECommDbDialogPrefDoNotPrompt == do not prompt for ap
             pref.SetDialogPreference( ECommDbDialogPrefPrompt  );
             iConnection.Start(pref, iStatus);
-        } else if ( iPromptAP == 1 ) {
-            // Connect to the network Default Internet AP
+    #ifdef PUTTY_S60TOUCH //for setting to touch phones       
+        } else {
+            // Connect to the network using default settings
             iConnection.Start(iStatus);
-        } else {        
-            //Connect without prompting to user set AP
-            TCommDbConnPref pref;
-            pref.SetIapId(ConvertPromptApToAPIdL(iPromptAP-2)); // set access point to connect           
-            pref.SetDialogPreference( ECommDbDialogPrefDoNotPrompt  );
-            iConnection.Start(pref, iStatus);            
         }
+    #endif
+#else
+    // Connect to the network using default settings
+    iConnection.Start(iStatus);
+#endif
     iState = EStateConnecting;
     SetActive();
 }
@@ -121,37 +123,5 @@ void CNetConnect::DoCancel() {
     iConnection.Close();
     iRConnectionOpen = EFalse;
     iState = EStateNone;
-}
-
-// Looks for the access point ID
-TUint32 CNetConnect::ConvertPromptApToAPIdL(TInt aValue) {
-    TUint32 iapID = 0;
-    CCommsDatabase* iCommsDB=CCommsDatabase::NewL();
-    TInt i = 0;
-    TInt err = KErrNone;
-    CleanupStack::PushL(iCommsDB);
-
-#ifdef PUTTY_S60V3  
-    CCommsDbTableView* iIAPView = iCommsDB->OpenIAPTableViewMatchingBearerSetLC(
-            ECommDbBearerGPRS|ECommDbBearerWLAN|ECommDbBearerVirtual,
-            ECommDbConnectionDirectionOutgoing); 
-#else  
-    CCommsDbTableView* iIAPView = iCommsDB->OpenTableLC((TPtrC(IAP)));
-#endif
-
-    if ( iIAPView->GotoFirstRecord() == KErrNone ){
-        do
-        {
-            if ( i == aValue ) {
-                iIAPView->ReadUintL(TPtrC(COMMDB_ID), iapID);            
-                break; // break from loop
-            }
-            i++;
-        } while ( err = iIAPView->GotoNextRecord(), err == KErrNone);
-    }
-
-    CleanupStack::PopAndDestroy(); // view
-    CleanupStack::PopAndDestroy(); // commDB
-    return iapID;
 }
 
