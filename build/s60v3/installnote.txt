@@ -1,4 +1,4 @@
-PuTTY for S60 3rd ed. - Version 1.5.2, 21 March 2010
+PuTTY for S60 3rd ed. - Version 1.6 Development Snapshot
 
 The PuTTY Symbian OS port is copyright 2002-2010 Petteri Kangaslampi.
 
