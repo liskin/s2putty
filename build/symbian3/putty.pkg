@@ -1,0 +1,41 @@
+;*    putty.pkg
+;*
+;* Package definition file for PuTTY for Series 60
+;*
+;* Copyright 2002,2003,2005,2007-2009 Petteri Kangaslampi
+;*
+;* See license.txt for full copyright and license information.
+
+#{"PuTTY"},(0xf01f9076),1,6,45
+
+; Supports Symbian^3
+[0x20022E6D], 0, 0, 0, {"S60ProductID"}
+
+; Localised vendor name
+%{"Petteri Kangaslampi"}
+
+; Unique vendor name
+:"Petteri Kangaslampi"
+
+; Installation note
+"installnote.txt"-"",FT,TC
+
+; PuTTY UI application
+"..\..\..\epoc32\release\armv5\urel\putty.exe"-"!:\sys\bin\putty.exe"
+"..\..\..\epoc32\data\z\resource\apps\putty.rsc"-"!:\resource\apps\putty.rsc"
+"..\..\..\epoc32\data\z\private\10003a3f\apps\putty_reg.rsc"   -"!:\private\10003a3f\import\apps\putty_reg.rsc"
+"..\..\..\epoc32\data\z\resource\apps\putty_aif.mif"-"!:\resource\apps\putty_aif.mif"
+"..\..\..\epoc32\data\z\resource\apps\putty.mif"-"!:\resource\apps\putty.mif"
+
+; Putty engine
+"..\..\..\epoc32\release\armv5\urel\puttyengine.dll"-"!:\sys\bin\puttyengine.dll"
+
+; Fonts
+"..\..\ui\s2font\fixed5x7.s2f"-"!:\resource\puttyfonts\fixed5x7.s2f"
+"..\..\ui\s2font\fixed6x10.s2f"-"!:\resource\puttyfonts\fixed6x10.s2f"
+"..\..\ui\s2font\fixed6x13.s2f"-"!:\resource\puttyfonts\fixed6x13.s2f"
+"..\..\ui\s2font\fixed8x13b.s2f"-"!:\resource\puttyfonts\fixed8x13b.s2f"
+"..\..\ui\s2font\fixed9x15b.s2f"-"!:\resource\puttyfonts\fixed9x15b.s2f"
+
+; Backup registration
+"backup_registration.xml"-"c:\private\f01f9075\backup_registration.xml"

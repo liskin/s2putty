@@ -293,8 +293,9 @@ void CTerminalContainer::HandlePointerEventL( const TPointerEvent& aEvent ) {
         //We get button down lets reset callback
         if ( aEvent.iType == TPointerEvent::EButton1Down) {
             iDragPoints.Reset();
-            if ( iCustomToolbarControl->Rect().Contains(aEvent.iPosition) ) {
-                iIgnoreTbClick = ETrue;
+            if ( !iCustomToolbarControl->GetHidden() && 
+		        iCustomToolbarControl->Rect().Contains(aEvent.iPosition) ) {
+                    iIgnoreTbClick = ETrue;
             }
             iLongTapCallbackReceived = EFalse;
             iLastEventDrag = EFalse;
@@ -337,7 +338,8 @@ void CTerminalContainer::HandlePointerEventL( const TPointerEvent& aEvent ) {
         
         //Double tap
         if ( aEvent.iType == TPointerEvent::EButton1Up && !iLongTapCallbackReceived && now.MicroSecondsFrom(iLastTapStart) < KDoubleTapMax && 
-                    now.MicroSecondsFrom(iLastTapStart) > KDoubleTapMin && !iCustomToolbarControl->Rect().Contains(aEvent.iPosition) ) {
+                    now.MicroSecondsFrom(iLastTapStart) > KDoubleTapMin && 
+	     (iCustomToolbarControl->GetHidden() || !iCustomToolbarControl->Rect().Contains(aEvent.iPosition)) ) {
                     
             iSingleTapTimerExpired = EFalse;
             iLastEventDrag = EFalse;
@@ -388,7 +390,7 @@ void CTerminalContainer::HandlePointerEventL( const TPointerEvent& aEvent ) {
 
         //Single Tap recieved from timer
         if ( aEvent.iType == TPointerEvent::EButton1Up && !iLongTapCallbackReceived && iSingleTapTimerExpired && 
-                    !iCustomToolbarControl->Rect().Contains(aEvent.iPosition)) {
+	     (iCustomToolbarControl->GetHidden() || !iCustomToolbarControl->Rect().Contains(aEvent.iPosition))) {
                     
             iSingleTapTimerExpired = EFalse;
             DrawDeferred();
@@ -399,15 +401,21 @@ void CTerminalContainer::HandlePointerEventL( const TPointerEvent& aEvent ) {
         }
 
         //Single Tap timer enable
-        if ( aEvent.iType == TPointerEvent::EButton1Up && !iLongTapCallbackReceived && !iCustomToolbarControl->Rect().Contains(aEvent.iPosition) ) {
+        if ( aEvent.iType == TPointerEvent::EButton1Up && !iLongTapCallbackReceived &&
+	     (iCustomToolbarControl->GetHidden() || !iCustomToolbarControl->Rect().Contains(aEvent.iPosition)) ) {
             iLastPointerEvent = aEvent;
             iSingleTapTimerExpired = EFalse;
             iLastEventDrag = EFalse;
-            iTimer->After(KDoubleTapMax); //Start 500ms timer
-            iLastTapStart.HomeTime(); 
+	    if (iView->MouseMode()) {
+		    // Do single taps; don't aggregate
+		    HandleTouchAction(EPuttyTouchTap, aEvent.iPosition);
+	    } else {
+		    iTimer->After(KDoubleTapMax); //Start 500ms timer
+		    iLastTapStart.HomeTime(); 
+	    }
         }
         
-        if ( !iCustomToolbarControl->Rect().Contains(aEvent.iPosition) ) {
+        if ( iCustomToolbarControl->GetHidden() || !iCustomToolbarControl->Rect().Contains(aEvent.iPosition) ) {
             iLongTapDetector->PointerEventL( aEvent );   
         }
      }
@@ -434,7 +442,7 @@ TSwipeGesture CTerminalContainer::TestHorizontalSwipe() {
     firstPoint = iDragPoints[0];
     lastPoint = iDragPoints[iDragPoints.Count()-1];
 
-    if ( iCustomToolbarControl->Rect().Contains(firstPoint) ) {
+    if ( !iCustomToolbarControl->GetHidden() && iCustomToolbarControl->Rect().Contains(firstPoint) ) {
         return ENoSwipe; //Lets ignore if swipe started from toolbar
     }
     
@@ -472,7 +480,7 @@ TSwipeGesture CTerminalContainer::TestVerticalSwipe() {
     firstPoint = iDragPoints[0];
     lastPoint = iDragPoints[iDragPoints.Count()-1];
 
-    if ( iCustomToolbarControl->Rect().Contains(firstPoint) ) {
+    if ( !iCustomToolbarControl->GetHidden() && iCustomToolbarControl->Rect().Contains(firstPoint) ) {
         return ENoSwipe; //Lets ignore if swipe started from toolbar
     }
     
@@ -540,6 +548,20 @@ void CTerminalContainer::UpdateAfterSettingsChangeL() {
 
 void CTerminalContainer::HandleTouchAction(TInt aCommand, const TPoint& aPenEventScreenLocation) {
     TInt executeCommand = 0;
+
+    if (aCommand == EPuttyTouchTap && iView->MouseMode()) {
+	    TInt row = aPenEventScreenLocation.iX / iFont->FontSize().iWidth;
+	    TInt col = aPenEventScreenLocation.iY / iFont->FontSize().iHeight;
+
+	    
+	    iTouchFeedBack->InstantFeedback(ETouchFeedbackBasic);
+
+	    // We don't get double taps in mouse-mode
+	    iView->MouseClick(0x20, row, col);
+	    iView->MouseClick(0x23, row, col);
+        return;
+    }
+
     switch ( aCommand ) {
         case EPuttyTouchTap:
             executeCommand = iTouchSettings.GetSingleTap();

@@ -57,6 +57,9 @@ CAknSettingItem *CProfileEditTouchSettingList::CreateSettingItemL(
     TInt aIdentifier) {
 
     switch ( aIdentifier ) {
+        case EPuttySettingsTouchAllowMouseGrab:
+            iTouchAllowMouseGrab = iTouchSettings.GetAllowMouseGrab();
+            return new (ELeave) CAknBinaryPopupSettingItem(aIdentifier, iTouchAllowMouseGrab);
         case EPuttySettingsTouchClick:
             iTouchClick = iTouchSettings.GetSingleTap();
             return new (ELeave) CAknEnumeratedTextPopupSettingItem(aIdentifier, iTouchClick);
@@ -96,6 +99,10 @@ void CProfileEditTouchSettingList::EditItemL(TInt aIndex,
 
     // Store the change to Touch config if needed
     switch ( id ) {
+        case EPuttySettingsTouchAllowMouseGrab: {
+            iTouchSettings.SetAllowMouseGrab(iTouchAllowMouseGrab);
+            break;
+        }
         case EPuttySettingsTouchClick: {
             iTouchSettings.SetSingleTap(iTouchClick);
             break;

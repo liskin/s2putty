@@ -23,7 +23,7 @@
 _LIT(KTouchSettingFile,"touchuisettings.dat");
 _LIT(KDataDirFormat,  "%c:\\private\\%08x\\data\\");
 
-const TInt KTouchUiSettingsVersion = 4;
+const TInt KTouchUiSettingsVersion = 5;
 
 TTouchSettings::TTouchSettings() {
     TFileName name;
@@ -137,6 +137,7 @@ TBool TTouchSettings::SwapButtons(TInt aButton, TInt aCmd) {
 
 void TTouchSettings::SetDefault() {
     iShowtoolbar = 1; //1 show, 0 no show
+    iAllowMouseGrab = 1;
     iSingleTap = EPuttyCmdStartVKB;
     iDoubleTap = EPuttyCmdSend;
     iLongTap = EPuttyCmdOpenPopUpMenu;
@@ -192,6 +193,7 @@ void TTouchSettings::ReadSettingFileL() {
         return;
     }
     iShowtoolbar = fRead.ReadInt16L();
+    iAllowMouseGrab = fRead.ReadInt16L();
     iSingleTap = fRead.ReadInt16L();
     iDoubleTap = fRead.ReadInt16L();
     iLongTap = fRead.ReadInt16L();
@@ -242,6 +244,7 @@ void TTouchSettings::WriteSettingFileL() {
     fWrite.WriteInt16L(KTouchUiSettingsVersion);
     // then start writing settings
     fWrite.WriteInt16L(iShowtoolbar);
+    fWrite.WriteInt16L(iAllowMouseGrab);
     fWrite.WriteInt16L(iSingleTap);
     fWrite.WriteInt16L(iDoubleTap);
     fWrite.WriteInt16L(iLongTap);

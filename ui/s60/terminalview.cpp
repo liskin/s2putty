@@ -20,9 +20,12 @@
 #include <baclipb.h>
 #include "terminalview.h"
 #ifdef PUTTY_S60TOUCH
-    #include "..\s60v5\terminalcontainer.h"
+    #include "../s60v5/terminalcontainer.h"
 #else
     #include "terminalcontainer.h"
+#endif
+#ifdef PUTTY_SYM3
+    #include <txtclipboard.h>
 #endif
 #include "puttyappui.h"
 #include "puttyengine.h"
@@ -1521,6 +1524,15 @@ void CTerminalView::SetReleaseAltAfterKeyPress(TBool aValue) {
 
 void CTerminalView::SetReleaseCtrlAfterKeyPress(TBool aValue) {
     iReleaseCtrlAfterKey = aValue;
+}
+
+TInt CTerminalView::MouseMode() {
+    TTouchSettings *iTouchSettings = iContainer->GetTouchSettings();
+    return iTouchSettings->GetAllowMouseGrab() && iPutty->MouseMode();
+}
+
+void CTerminalView::MouseClick(TInt modifiers, TInt row, TInt col) {
+    iPutty->MouseClick(modifiers, row, col);
 }
 
 #endif

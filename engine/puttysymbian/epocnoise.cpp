@@ -86,6 +86,10 @@ void epoc_noise_free(void) {
  * This function is called once, at PuTTY startup. It is supposed to do all
  * kinds of heavy tricks to seed the random number generator.
  */
+
+#ifdef PUTTY_SYM3
+extern "C" {
+#endif
 void noise_get_heavy(void (*func) (void *, int))
 {
     // We'll go through all the window groups in the system, get various
@@ -152,6 +156,9 @@ void noise_get_heavy(void (*func) (void *, int))
     random_save_seed();
 
 }
+#ifdef PUTTY_SYM3
+}
+#endif
 
 void random_save_seed(void)
 {
@@ -172,6 +179,9 @@ void random_save_seed(void)
  * This function is called every time the random pool needs
  * stirring
  */
+#ifdef PUTTY_SYM3
+ extern "C" {
+#endif
 void noise_get_light(void (*func) (void *, int))
 {
     struct timeval tv;
@@ -218,7 +228,9 @@ void noise_get_light(void (*func) (void *, int))
     func(&b, sizeof(TUint8));
 #endif
 }
-
+#ifdef PUTTY_SYM3
+}
+#endif
 /*
  * This function is called on a timer, and it will monitor
  * frequently changing quantities such as the state of physical and

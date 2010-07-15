@@ -4,7 +4,7 @@
 Version 1.6 Development Snapshot
 
 Copyright 2002-2010 Petteri Kangaslampi
-Copyright 2009 Risto Avila
+Copyright 2009-2010 Risto Avila
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
 Gabor Keresztfavli.
 Based on PuTTY 0.60, Copyright 1997-2007 Simon Tatham.
@@ -37,6 +37,7 @@ build/s60v1     S60 first edition (Nokia 7650, 3650, N-gage, ...)
 build/s60v2     S60 second edition (Nokia 6600, 6630, N70, ...)
 build/s60v3     S60 third edition (Nokia E61, N80, ...)
 build/s60v5     S60 fifth edition (Noki 5800, N97, ...)
+build/symbian3  symbian^3 (N8, ...)
 build/s80v1     Series 80 v1.0 (Nokia 9200 Communicator series)
 build/s80v2     Series 80 v2.0 (Nokia 9300, 9300i, 9500)
 build/s90       Series 90 (Nokia 7710)
@@ -58,6 +59,12 @@ afterwards.
 On S60 third edition PuTTY compiles at least with Carbide.c++ and
 GCCE. RVCT and CodeWarrior have not been recently tested.
 
+On symbian3 you will need Carbide.c++ 2.x it should compile winscw and armv5.
+GCCE is untested. Also if you want to compile from dos box commands have changed.
+
+        cd s2putty\build\symbian3
+        sbs -b bld.inf -c armv5
+        (makesis putty.pkg)
 
 Applications and executables
 ----------------------------
@@ -105,7 +112,7 @@ ui               User interface implementation for different platforms
  ui/s60v1        UI files specific to S60 first edition
  ui/s60v2        UI files specific to S60 second edition
  ui/s60v3        UI files specific to S60 third edition
- ui/s60v5        UI files specific to S60 fifth edition
+ ui/s60v5        UI files specific to S60 fifth edition & symbian^3
  ui/s80          UI implementation for Series 80 communicators
  ui/s80v1        UI files specific to S80 v1.0 (Nokia 9210)
  ui/s80v2        UI files specific to S80 v2.0 (Nokia 9500 etc)

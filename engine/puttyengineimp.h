@@ -63,6 +63,10 @@ public:
     virtual void Disconnect();
     virtual void SetTerminalSize(TInt aWidth, TInt aHeight);
     virtual void RePaintWindow();
+	#ifdef PUTTY_S60TOUCH
+    virtual TInt MouseMode();
+    virtual void MouseClick(TInt modifiers, TInt row, TInt col);
+	#endif
     virtual void SendKeypress(TKeyCode aCode, TUint aModifiers);
     virtual void AddRandomNoise(const TDesC8& aNoise);
     virtual void ReadConfigFileL(const TDesC &aFile);

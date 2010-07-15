@@ -22,6 +22,10 @@
 #include <baclipb.h> 
 #endif
 
+#ifdef PUTTY_SYM3
+#include <txtclipboard.h>
+#endif
+
 _LIT(KPanic, "TerminalControl");
 
 const TUint KNewline = 0x2028; // unicode forced line break

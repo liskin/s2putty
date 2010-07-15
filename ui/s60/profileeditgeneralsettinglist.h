@@ -13,8 +13,8 @@
 #include <coecntrl.h>
 #include <aknsettingitemlist.h>
 #include "profileeditsettinglistbase.h"
-#include <CommDb.h>
-#include <CommDbConnPref.h>
+#include <commdb.h>
+#include <commdbconnpref.h>
 #include "dynamicenumtextsettingitem.h"
 extern "C" {
 #include "putty.h" // struct Config

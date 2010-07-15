@@ -63,6 +63,18 @@ RESOURCE MENU_BAR r_putty_profilelist_menubar {
 }
 
 // Profile list main menu pane
+#ifdef PUTTY_SYM3
+RESOURCE MENU_PANE r_putty_profilelist_menu_pane {
+    items = {
+        MENU_ITEM { command = EPuttyCmdProfileListConnect; txt = "Connect"; flags = EEikMenuItemSpecificListQuery; },
+        MENU_ITEM { command = EPuttyCmdProfileListEdit; txt = "Edit"; flags = EEikMenuItemSpecificListQuery; },
+        MENU_ITEM { command = EPuttyCmdProfileListNew; txt = "New"; },
+        MENU_ITEM { command = EPuttyCmdProfileListDelete; txt = "Delete"; flags = EEikMenuItemSpecificListQuery; },
+        MENU_ITEM { cascade = r_putty_profilelist_advanced_menu_pane; txt = "Advanced"; },
+        MENU_ITEM { command = EEikCmdExit; txt = "Exit"; }
+    };
+}
+#else
 RESOURCE MENU_PANE r_putty_profilelist_menu_pane {
     items = {
         MENU_ITEM { command = EPuttyCmdProfileListConnect; txt = "Connect"; },
@@ -73,6 +85,7 @@ RESOURCE MENU_PANE r_putty_profilelist_menu_pane {
         MENU_ITEM { command = EEikCmdExit; txt = "Exit"; }
     };
 }
+#endif
 
 // Profile list advanced menu pane
 RESOURCE MENU_PANE r_putty_profilelist_advanced_menu_pane {
@@ -519,6 +532,14 @@ RESOURCE ARRAY r_putty_profileedit_charset_popped_up_text_array {
 RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_touch_settinglist {
     title = "General touch";
     items = {
+    #ifdef PUTTY_S60TOUCH
+        AVKON_SETTING_ITEM {
+            identifier = EPuttySettingsTouchAllowMouseGrab;
+            setting_page_resource = r_putty_profileedit_allowmousegrab_page;
+            associated_resource = r_putty_profileedit_allowmousegrab_texts;
+            name = "Allow mouse grab by applications";
+        },
+    #endif
         AVKON_SETTING_ITEM {
             identifier = EPuttySettingsTouchClick;
             setting_page_resource = r_putty_profileedit_singletap_page;
@@ -599,7 +620,7 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_putty_profileedit_general_toolbar_settinglist
         AVKON_SETTING_ITEM {
             identifier = EPuttySettingsTocuhToolBarButtonHeigth;
             setting_page_resource = r_putty_profileedit_tbheigth_page;
-            name = "Button heigth";
+            name = "Button height";
         },
         AVKON_SETTING_ITEM {
             identifier = EPuttySettingsTocuhToolBarButtonUpBackgroundTransparency;
@@ -634,9 +655,9 @@ RESOURCE ARRAY r_putty_profileedit_general_toolbar_settinglist_text {
         LBUF { txt = "Show toolbar on startup"; },
         LBUF { txt = "Number of buttons shown"; },
         LBUF { txt = "Button width"; },
-        LBUF { txt = "Button heigth"; },
+        LBUF { txt = "Button height"; },
         LBUF { txt = "Button up transparency"; },
-        LBUF { txt = "Button down transpparency"; },
+        LBUF { txt = "Button down transparency"; },
         LBUF { txt = "Button font size"; }
     };
 }
@@ -717,7 +738,7 @@ RESOURCE AVKON_INTEGER_EDWIN r_putty_profileedit_tbwidth_edwin {
 
 //If changed remember to change from terminalview.cpp also
 RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_tbheigth_page {
-    label = "Button heigth";
+    label = "Button height";
     type = EAknCtIntegerEdwin;
     editor_resource_id = r_putty_profileedit_tbheigth_edwin;
 }
@@ -812,7 +833,7 @@ RESOURCE DIALOG r_putty_tbwidhtheigth_query {
             id = EMultilineSecondLine;
             control = AVKON_DATA_QUERY {
                 layout = EMultiDataSecondNumEd;
-                label = "Enter button heigth:";
+                label = "Enter button height:";
                 control = AVKON_INTEGER_EDWIN {
                     maxlength = 3;
                     min = 25;
@@ -874,6 +895,28 @@ RESOURCE POPUP_SETTING_LIST r_putty_profileedit_tbshowstartup_popup {
     flags = 0;
 }
 
+#ifdef PUTTY_S60TOUCH
+// Allow Mouse Grab edit page
+RESOURCE AVKON_SETTING_PAGE r_putty_profileedit_allowmousegrab_page {
+    type = EAknCtPopupSettingList;
+}
+RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_allowmousegrab_texts {
+    setting_texts_resource = r_putty_profileedit_allowmousegrab_text_array;
+    popped_up_texts_resource = r_putty_profileedit_allowmousegrab_popped_up_text_array;
+}
+RESOURCE ARRAY r_putty_profileedit_allowmousegrab_text_array {
+    items = {
+        AVKON_ENUMERATED_TEXT { value = 1; text = "On"; },
+        AVKON_ENUMERATED_TEXT { value = 0; text = "Off"; }
+    };
+}
+RESOURCE ARRAY r_putty_profileedit_allowmousegrab_popped_up_text_array {
+    items = {
+        LBUF { txt = "On"; },
+        LBUF { txt = "Off"; }
+    };
+}
+#endif
 
 //Gesture setting texts
 RESOURCE AVKON_POPUP_SETTING_TEXTS r_putty_profileedit_gesture_texts {

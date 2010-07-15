@@ -33,7 +33,11 @@ _LIT(KNewHostKeysFile, "hostkeys.dat");
 // Second-phase constructor
 void CPuttyAppUi::ConstructL() {
 #ifdef PUTTY_S60V3
-    BaseConstructL(CAknAppUi::EAknEnableSkin);
+    #ifdef PUTTY_SYM3
+        BaseConstructL(CAknAppUi::EAknEnableSkin | EAknTouchCompatible | EAknSingleClickCompatible);
+    #else
+        BaseConstructL(CAknAppUi::EAknEnableSkin);
+    #endif
 #else
     BaseConstructL();
 #endif

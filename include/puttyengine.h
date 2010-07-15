@@ -96,6 +96,22 @@ public:
      */    
     virtual void RePaintWindow() = 0;
 
+#ifdef PUTTY_S60TOUCH
+    /**
+     * Returns the current state of the xterm "mouse tracking mode"
+     * in the terminal.
+     *
+     */
+    virtual TInt MouseMode() = 0;
+
+    /**
+     * Submits a the escape sequences for a mouse event to the
+     * application in the terminal.
+     *
+     */
+    virtual void MouseClick(TInt modifiers, TInt col, TInt row) = 0;
+#endif
+
     /** 
      * Sends a keypress to the backend.
      * 

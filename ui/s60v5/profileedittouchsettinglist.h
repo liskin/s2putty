@@ -59,6 +59,7 @@ private: // Constructors
     
     
 private:
+    TInt iTouchAllowMouseGrab;
     TInt iTouchClick;
     TInt iTouchDoubleClick;
     TInt iTouchLongClick;

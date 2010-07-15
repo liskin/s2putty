@@ -4,7 +4,7 @@
 Version 1.6 Development Snapshot
 
 Copyright 2002-2010 Petteri Kangaslampi
-Copyright 2009 Risto Avila
+Copyright 2009-2010 Risto Avila
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, and
 Gabor Keresztfavli.
 Based on PuTTY 0.60, Copyright 1997-2007 Simon Tatham.
@@ -115,7 +115,7 @@ The original S60 port was written by Sergei Khloupnov.
 
 S60 3rd ed icon by James Nash <http://cirrus.twiddles.com/>
 
-S60 5th edition touch UI by Risto Avila.
+S60 5th edition & symbain^3 touch UI by Risto Avila.
 
 Obviously this program wouldn't exist without the original PuTTY SSH
 client by Simon Tatham and others. Many thanks for writing such an

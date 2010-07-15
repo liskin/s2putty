@@ -68,7 +68,9 @@ public: // From CAknView
     void SendKeypress(TKeyCode aCode, TUint aModifiers);
     void SetReleaseAltAfterKeyPress(TBool aValue); //Default state off
     void SetReleaseCtrlAfterKeyPress(TBool aValue); //Default state off
-    
+    TInt MouseMode();
+    void MouseClick(TInt modifiers, TInt row, TInt col);
+
 #endif
 private: // Constructors
     CTerminalView();

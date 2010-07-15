@@ -1,0 +1,18 @@
+//*    bld.inf
+//*
+//* Component definition file for PuTTY for S60v2
+//*
+//* Copyright 2002,2003,2006 Petteri Kangaslampi
+//*
+//* See license.txt for full copyright and license information.
+
+PRJ_PLATFORMS 
+winscw gcce armv5
+
+PRJ_MMPFILES
+gnumakefile puttyicons.mk
+gnumakefile puttytoolbaricons.mk
+
+puttyengine.mmp
+puttyui.mmp
+

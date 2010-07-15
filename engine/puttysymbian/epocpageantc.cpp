@@ -16,6 +16,9 @@ int agent_exists(void)
     return FALSE;
 }
 
+#ifdef PUTTY_SYM3
+extern "C" {
+#endif
 int agent_query(void * /*in*/, int /*inlen*/, void **out, int *outlen,
                 void (* /*callback*/ )(void *, void *, int),
                 void * /*callback_ctx*/)
@@ -24,3 +27,6 @@ int agent_query(void * /*in*/, int /*inlen*/, void **out, int *outlen,
     *outlen = 0;
     return 1;
 }
+#ifdef PUTTY_SYM3
+}
+#endif

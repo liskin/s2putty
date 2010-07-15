@@ -317,7 +317,16 @@ void CTerminalControlS2Font::Update() {
                   TRect(x0*iFontWidth, y0*iFontHeight,
                         (x1+1)*iFontWidth, (y1+1)*iFontHeight));
     }
-        
+    
+#ifdef PUTTY_SYM3
+    //For some reason redraw is not made even if the bitmap is changed elsewhere. So as workaround we force change to the bitmap and get it redrawn.
+    iBitmapGc->Activate(iBitmapDevice);
+    iBitmapGc->Reset();
+    iBitmapGc->DrawRect(TRect(TPoint(-iFontWidth, -iFontHeight), TSize(iFontWidth, iFontHeight)));   
+    gc.BitBlt(Rect().iTl, iBitmap);
+#endif    
+
+    
     gc.Deactivate();
 }
 

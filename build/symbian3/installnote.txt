@@ -1,8 +1,8 @@
-PuTTY for S60 5th ed. - Version 1.6 Development Snapshot
+PuTTY for symbian^3 - Version 1.6 Development Snapshot
 
 The PuTTY Symbian OS port is copyright 2002-2010 Petteri Kangaslampi.
 
-The PuTTY S60 5th ed. Touch UI copyright 2009-2010 Risto Avila.
+The PuTTY symbian^3 Touch UI copyright 2010 Risto Avila.
 
 Portions copyright Sergei Khloupnov, James Nash, Damion Yates, David Woodhouse, and Gabor Keresztfavli.
 

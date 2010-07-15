@@ -22,6 +22,9 @@
 extern "C" {
 #include "storage.h"
 #include "ssh.h"
+#ifdef PUTTY_S60TOUCH
+#include "terminal.h"
+#endif
 }
 
 
@@ -332,6 +335,18 @@ void CPuttyEngineImp::SendKeypress(TKeyCode aCode, TUint aModifiers) {
     }
 }
 
+#ifdef PUTTY_S60TOUCH
+TInt CPuttyEngineImp::MouseMode() {
+    return iTerminal->xterm_mouse;
+}
+
+
+void CPuttyEngineImp::MouseClick(TInt modifiers, TInt row, TInt col) {
+    char abuf[7];
+    sprintf(abuf, "\033[M%c%c%c", modifiers, row + 33, col + 33);
+    ldisc_send(iLineDisc, abuf, 6, 0);
+}
+#endif
 
 // MPuttyEngine::AddRandomNoise
 void CPuttyEngineImp::AddRandomNoise(const TDesC8& aNoise) {
@@ -617,6 +632,9 @@ int CPuttyEngineImp::putty_verify_ssh_host_key(
     return 0;
 }
 
+#ifdef PUTTY_SYM3
+extern "C" {
+#endif
 int verify_ssh_host_key(void *frontend, char *host, int port,
                          char *keytype, char *keystr, char *fingerprint,
                          void (*)(void *ctx, int result), void *) {
@@ -625,7 +643,9 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
     return engine->putty_verify_ssh_host_key(host, port, keytype, keystr,
                                              fingerprint);
 }
-
+#ifdef PUTTY_SYM3
+}
+#endif
 
 
 // Prompt the user to accept a cipher below the warning threshold
@@ -646,14 +666,18 @@ int CPuttyEngineImp::putty_askcipher(const char *ciphername,
     return 0;
 }
 
-
+#ifdef PUTTY_SYM3
+extern "C" {
+#endif
 int askalg(void *frontend, const char *ciphertype, const char *ciphername,
 	   void (*)(void *ctx, int result), void *) {
     assert(frontend);
     CPuttyEngineImp *engine = (CPuttyEngineImp*) frontend;
     return engine->putty_askcipher(ciphername, ciphertype);
 }
-
+#ifdef PUTTY_SYM3
+}
+#endif
 
 void old_keyfile_warning(void)
 {
@@ -1080,11 +1104,17 @@ int char_width(Context /*ctx*/, int /*uc*/) {
     return 1;
 }
 
+#ifdef PUTTY_SYM3
+extern "C" {
+#endif
 int askappend(void * /*frontend*/, Filename /*filename*/,
               void (* /*callback*/)(void *ctx, int result), void * /*ctx*/) {
     // Always rewrite the log file
     return 2;
 }
+#ifdef PUTTY_SYM3
+}
+#endif
 
 void set_busy_status(void * /*frontend*/, int /*status*/) {
 }

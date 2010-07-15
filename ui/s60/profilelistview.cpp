@@ -446,8 +446,14 @@ void CProfileListView::MakeNameUniqueL(TDes &aName) {
 // MEikListBoxObserver::HandleListBoxEventL()
 void CProfileListView::HandleListBoxEventL(CEikListBox * /*aListBox*/,
                                            TListBoxEvent aEventType) {
+#ifdef PUTTY_SYM3    
+    if ( (aEventType == EEventEnterKeyPressed) ||
+         (aEventType == EEventItemDoubleClicked) ||
+         (aEventType == EEventItemSingleClicked) ) {    
+#else
     if ( (aEventType == EEventEnterKeyPressed) ||
          (aEventType == EEventItemDoubleClicked) ) {
+#endif    
         HandleCommandL(EPuttyCmdProfileListConnect);
     }
 }

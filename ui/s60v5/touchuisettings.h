@@ -27,6 +27,7 @@ class TTouchSettings {
         ~TTouchSettings ( ); 
     public:
         TInt GetShowToolbar() { return iShowtoolbar; };
+        TInt GetAllowMouseGrab() { return iAllowMouseGrab; };
         TInt GetSingleTap() { return iSingleTap; };
         TInt GetDoubleTap() { return iDoubleTap; };
         TInt GetLongTap() { return iLongTap; };
@@ -54,6 +55,7 @@ class TTouchSettings {
         TInt GetButtonFontSize() { return iButtonFontSize; };
         
         void SetShowToolbar(TInt aCmd) { iShowtoolbar = aCmd; };
+        void SetAllowMouseGrab(TInt aCmd) { iAllowMouseGrab = aCmd; };
         void SetSingleTap(TInt aCmd) { iSingleTap = aCmd; };
         void SetDoubleTap(TInt aCmd) { iDoubleTap = aCmd; };
         void SetLongTap(TInt aCmd) { iLongTap = aCmd; };
@@ -91,6 +93,7 @@ class TTouchSettings {
         TBool SwapButtons(TInt aButtonToSwap, TInt aCmdOfTheButtonToSwapWith);
     private:
         TInt iShowtoolbar;
+        TInt iAllowMouseGrab;
         TInt iSingleTap;
         TInt iDoubleTap;
         TInt iLongTap;

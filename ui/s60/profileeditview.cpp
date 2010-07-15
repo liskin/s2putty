@@ -24,9 +24,9 @@
 #include "profileeditsshsettinglist.h"
 #include "profileeditdisplaysettinglist.h"
 #ifdef PUTTY_S60TOUCH
-#include "..\ui\s60v5\profileedittouchsettinglist.h"
-#include "..\ui\s60v5\profileedittoolbarsettinglist.h"
-#include "..\ui\s60v5\profileeditgeneraltoolbarsettinglist.h"
+#include "../ui/s60v5/profileedittouchsettinglist.h"
+#include "../ui/s60v5/profileedittoolbarsettinglist.h"
+#include "../ui/s60v5/profileeditgeneraltoolbarsettinglist.h"
 #endif
 #include "profileeditloggingsettinglist.h"
 #include "puttyengine.h"
@@ -186,8 +186,14 @@ void CProfileEditView::HandleStatusPaneSizeChange() {
 // MEikListBoxObserver::HandleListBoxEventL()
 void CProfileEditView::HandleListBoxEventL(CEikListBox *aListBox,
                                            TListBoxEvent aEventType) {
+#ifdef PUTTY_SYM3    
     if ( (aEventType == EEventEnterKeyPressed) ||
-         (aEventType == EEventItemDoubleClicked) ) {
+         (aEventType == EEventItemDoubleClicked) ||
+         (aEventType == EEventItemSingleClicked) ) {    
+#else    
+    if ( (aEventType == EEventEnterKeyPressed) ||
+         (aEventType == EEventItemDoubleClicked) ) {    
+#endif    
         iSwitcher->SwitchView((TView)(EViewGeneral +
                                       aListBox->CurrentItemIndex()));
     }
