@@ -85,8 +85,12 @@ void CSendGrid::ConstructL(const TRect &aRect, TInt aResourceId) {
     iGrid = new (ELeave) CAknGrid;
             
     CAknGridM *gridM = new (ELeave) CAknGridM;
-    iGrid->SetModel(gridM);    
+    iGrid->SetModel(gridM);
+#ifdef PUTTY_SYM3
+    iGrid->ConstructL(this, EAknListBoxSelectionGrid | EAknListBoxStylusMarkableList);
+#else
     iGrid->ConstructL(this, EAknListBoxSelectionGrid);
+#endif
 
     // Item size and grid layout
     TSize itemSize((aRect.Width()-2)/3, (aRect.Height()-2)/4);
@@ -293,6 +297,18 @@ TKeyResponse CSendGrid::OfferKeyEventL(const TKeyEvent &aKeyEvent,
     return iGrid->OfferKeyEventL(aKeyEvent, aType);
 }
 
+#ifdef PUTTY_SYM3
+void CSendGrid::HandlePointerEventL( const TPointerEvent& aEvent ) {
+    CCoeControl::HandlePointerEventL( aEvent ); // forward messages to avkon grid
+    
+    //make selection
+    switch ( aEvent.iType ) {
+        case TPointerEvent::EButton1Up:
+            HandleSelectionL(iGrid->CurrentDataIndex());
+            break;
+    }
+}
+#endif
 
 // MEikCommandObserver::ProcessCommandL()
 void CSendGrid::ProcessCommandL(TInt aCommand) {
