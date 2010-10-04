@@ -23,7 +23,7 @@
 _LIT(KTouchSettingFile,"touchuisettings.dat");
 _LIT(KDataDirFormat,  "%c:\\private\\%08x\\data\\");
 
-const TInt KTouchUiSettingsVersion = 5;
+const TInt KTouchUiSettingsVersion = 6;
 
 TTouchSettings::TTouchSettings() {
     TFileName name;
@@ -149,8 +149,8 @@ void TTouchSettings::SetDefault() {
     iSwipeLeft = EPuttyCmdToggleToolbar;
     iSwipeRight = EPuttyCmdToggleToolbar;
     iSwipeUp = EPuttyCmdSendPageDown;
-    iSwipeDown = EPuttyCmdSendPageUp;
-    
+    iSwipeDown = EPuttyCmdSendPageUp;    
+    /* old defaults
     itbButton1 = EPuttyToolbarTab;
     itbButton2 = EPuttyToolbarAltP;
     itbButton3 = EPuttyToolbarCtrlP;
@@ -159,15 +159,29 @@ void TTouchSettings::SetDefault() {
     itbButton6 = EPuttyToolbarSelect;
     itbButton7 = EPuttyToolbarCopy;
     itbButton8 = EPuttyToolbarPaste;
+    */
+
+    itbButton1 = EPuttyToolbarTab;
+    itbButton2 = EPuttyToolbarAltP;
+    itbButton3 = EPuttyToolbarCtrlP;
+    itbButton4 = EPuttyToolbarPipe;
+    itbButton5 = EPuttyToolbarLock;
+    itbButton6 = EPuttyToolbarGrid; // send grid
+#ifdef PUTTY_SYM3_TEST50
+    itbButton7 = EPuttyToolbarListWeb;
+#else
+    itbButton7 = EPuttyToolbarEsc;
+#endif
+    itbButton8 = EPuttyToolbarEnter;
     
     itbButtonCount = 8;
     itbButtonWidth = 60;
     itbButtonHeigth = 60;
     
     //These are up values 
-    iButtonUpBackgroundTransparency = 179;
+    iButtonUpBackgroundTransparency = 90; //old default 179
     iButtonUpTextTransparency = 250;
-    iButtonDownBackgroundTransparency = 59;
+    iButtonDownBackgroundTransparency = 20; //old default 59
     iButtonDownTextTransparency = 148;
     iButtonFontSize = 0;
     

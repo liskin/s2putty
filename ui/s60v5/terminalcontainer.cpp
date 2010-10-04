@@ -740,7 +740,15 @@ void CTerminalContainer::HandleCustomToolbar(TInt aCommand) {
         case EPuttyToolbarEnter:
             iView->HandleCommandL(EPuttyCmdSendCR);
             iTerminal->ClearVKBBuffer(); //Clear wkb after enter
-            break;                       
+            break;
+        case EPuttyToolbarGrid:
+            iView->HandleCommandL(EPuttyCmdSend);            
+            break;
+#ifdef PUTTY_SYM3_TEST50
+        case EPuttyToolbarListWeb:
+            iView->HandleCommandL(EPuttyCmdGrepHttp);
+            break;
+#endif
     }
 }
 

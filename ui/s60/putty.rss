@@ -1151,7 +1151,11 @@ RESOURCE ARRAY r_putty_profileedit_tbbutton_text_array {
         AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEnd; text = "End"; },      
         AVKON_ENUMERATED_TEXT { value = EPuttyToolbarDelete; text = "Delete"; },      
         AVKON_ENUMERATED_TEXT { value = EPuttyToolbarInsert; text = "Insert"; },           
-        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEnter; text = "Enter"; }           
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarEnter; text = "Enter"; },
+        AVKON_ENUMERATED_TEXT { value = EPuttyToolbarGrid; text = "Open send grid"; }
+#ifdef PUTTY_SYM3_TEST50
+        ,AVKON_ENUMERATED_TEXT { value = EPuttyToolbarListWeb; text = "List web addresses..."; }
+#endif
     };
 }
 RESOURCE ARRAY r_putty_profileedit_tbbutton_popped_up_text_array {
@@ -1175,7 +1179,11 @@ RESOURCE ARRAY r_putty_profileedit_tbbutton_popped_up_text_array {
         LBUF { txt = "End"; },
         LBUF { txt = "Delete"; },
         LBUF { txt = "Insert"; },
-        LBUF { txt = "Enter"; } 
+        LBUF { txt = "Enter"; },
+        LBUF { txt = "Open send grid"; }
+#ifdef PUTTY_SYM3_TEST50
+        ,LBUF { txt = "List web addresses..."; }
+#endif
     };
 }
 
@@ -1353,7 +1361,7 @@ RESOURCE STYLUS_POPUP_MENU r_putty_terminal_popup_menu
 #ifdef PUTTY_SYM3_TEST50
         STYLUS_POPUP_MENU_ITEM
             {
-            txt="List Web addresses...";
+            txt="List web addresses...";
             command = EPuttyCmdGrepHttp;
             },                                    
 #endif            

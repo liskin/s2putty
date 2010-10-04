@@ -59,6 +59,10 @@ static toolbarButtonData KDefaultToolbarButtons [ ] = {
         { EPuttyToolbarDelete, _L("Delete"), _L("Delete"), _L("Delete"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
         { EPuttyToolbarInsert, _L("Insert"), _L("Insert"), _L("Insert"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 },
         { EPuttyToolbarEnter, _L("Enter"), _L("Enter"), _L("Enter"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 } ,
+        { EPuttyToolbarGrid, _L("Send"), _L("Send"), _L("Send"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 } ,
+#ifdef PUTTY_SYM3_TEST50
+        { EPuttyToolbarListWeb, _L("L.Web"), _L("L.Web"), _L("L.Web"), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 } ,
+#endif
         { EPuttyToolbarNoTool, _L("TheEnd"), _L(""), _L(""), EFalse, EFalse, EFalse, EFalse, _L(""), _L(""), _L(""), 0 }
 };
 

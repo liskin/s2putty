@@ -205,7 +205,11 @@ enum TPuttyToolbarCommands {
     EPuttyToolbarEnd,  
     EPuttyToolbarDelete,  
     EPuttyToolbarInsert,
-    EPuttyToolbarEnter
+    EPuttyToolbarEnter,
+    EPuttyToolbarGrid
+#ifdef PUTTY_SYM3_TEST50
+    ,EPuttyToolbarListWeb
+#endif
 };
 #endif
 
