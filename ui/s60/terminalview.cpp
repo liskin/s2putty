@@ -24,8 +24,13 @@
 #else
     #include "terminalcontainer.h"
 #endif
+#ifdef PUTTY_SYM3_TEST50
+    #include <APGCLI.H>
+    #include <APGTASK.H>
+#endif
 #ifdef PUTTY_SYM3
     #include <txtclipboard.h>
+    //#include <e32debug.h> //this is for rdebug
 #endif
 #include "puttyappui.h"
 #include "puttyengine.h"
@@ -262,6 +267,12 @@ void CTerminalView::HandleCommandL(TInt aCommand) {
             SetTouchSettingsL();
             break;
         }
+#ifdef PUTTY_SYM3_TEST50
+        case EPuttyCmdGrepHttp: {
+            GrepHttpL();
+            break;
+        }
+#endif
 #endif
         case EPuttyCmdFullScreen: {
             SetFullScreenL(iFullScreen ? (TBool)EFalse : (TBool)ETrue);
@@ -1534,6 +1545,93 @@ TInt CTerminalView::MouseMode() {
 void CTerminalView::MouseClick(TInt modifiers, TInt row, TInt col) {
     iPutty->MouseClick(modifiers, row, col);
 }
+#ifdef PUTTY_SYM3_TEST50
+//todo test this also with s60 5th edition.
+void CTerminalView::GrepHttpL() {
+    iContainer->Terminal().CreateHttpListL(); //First create the list
+     
+     // Create a listbox and a popup to contain it
+     CAknSinglePopupMenuStyleListBox *box =
+         new (ELeave) CAknSinglePopupMenuStyleListBox;
+     CleanupStack::PushL(box);
+     CAknPopupList *popup = CAknPopupList::NewL(box,
+                                                R_AVKON_SOFTKEYS_SELECT_CANCEL,
+                                                AknPopupLayouts::EMenuWindow);    
+     CleanupStack::PushL(popup);
+     box->ConstructL(popup, 0);
+     box->CreateScrollBarFrameL(ETrue);
+     box->ScrollBarFrame()->SetScrollBarVisibilityL(CEikScrollBarFrame::EAuto,
+                                                    CEikScrollBarFrame::EAuto);
 
+     // Add fonts to the listbox
+     const CDesCArray &iHttp = iContainer->Terminal().HttpList();
+     box->Model()->SetItemTextArray((MDesC16Array*)&iHttp);
+     box->Model()->SetOwnershipType(ELbmDoesNotOwnItemArray);
+
+     // Run selection
+     TInt ok = popup->ExecuteLD();
+     CleanupStack::Pop(); // popup
+     if ( ok ) {
+         LaunchBrowserL(iHttp[box->CurrentItemIndex()]);
+     }
+     CleanupStack::PopAndDestroy(); // box  
+}
+
+void CTerminalView::LaunchBrowserL(const TDesC& aUrl) {
+    const TInt KWebBrowserUid = 0x10008D39;
+    TUid id( TUid::Uid( KWebBrowserUid ) );
+    TApaTaskList taskList( CEikonEnv::Static()->WsSession() );
+    TApaTask task = taskList.FindApp( id );
+    
+    if ( task.Exists() )
+        {
+        HBufC8* param = HBufC8::NewLC( aUrl.Length() + 2);
+        param->Des().Append(_L("4 "));
+        param->Des().Append(aUrl);
+        TInt ret = task.SendMessage( TUid::Uid( 0 ), *param ); // Uid is not used
+        
+        if ( ret != KErrNone )  { //if send failed copy addr to clipbaord.
+            //RDebug::Print(_L("task.SendMessage FAILED! RET: %d"), ret); 
+            // print error code -46 == permission denied not enough capabilities. Needs SwEvent capability.   
+            if ( aUrl.Length() > 0 ) {
+                // put selection on clipboard
+                CClipboard* cb = CClipboard::NewForWritingLC(
+                    CCoeEnv::Static()->FsSession());
+                cb->StreamDictionary().At(KClipboardUidTypePlainText);               
+                CPlainText *plainText = CPlainText::NewL();
+                CleanupStack::PushL(plainText);              
+                plainText->InsertL(0, aUrl);                                    
+                plainText->CopyToStoreL(cb->Store(),
+                                        cb->StreamDictionary(),
+                                        0,
+                                        plainText->DocumentLength());
+                CleanupStack::PopAndDestroy(); // plainText
+                cb->CommitL();
+                CleanupStack::PopAndDestroy(); // cb
+                         
+                // Show info note that addr was copied to clipboard.               
+                if ( CAknQueryDialog::NewL()->ExecuteLD(R_PUTTY_STR_MISSING_CAPABILITY_BROWSER_OPEN) ) {
+                    task.BringToForeground();    // answered yes.
+                }
+            }            
+        } else {
+            task.BringToForeground();
+        }
+        CleanupStack::PopAndDestroy(param);
+        }
+    else
+        {
+        HBufC16* param = HBufC16::NewLC( aUrl.Length() + 2);
+        param->Des().Append(_L("4 "));
+        param->Des().Append(aUrl);
+        RApaLsSession appArcSession;
+        User::LeaveIfError(appArcSession.Connect()); 
+        TThreadId id;
+        appArcSession.StartDocument( *param, TUid::Uid( KWebBrowserUid), id );
+        appArcSession.Close(); 
+        CleanupStack::PopAndDestroy(param);
+        }
+}
+#endif
 #endif
 

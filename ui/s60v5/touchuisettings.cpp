@@ -136,6 +136,11 @@ TBool TTouchSettings::SwapButtons(TInt aButton, TInt aCmd) {
 }
 
 void TTouchSettings::SetDefault() {
+    
+    //todo change default actions to
+    // Swipe right = alt + left ?
+    // Swipe left = alt + right ?
+
     iShowtoolbar = 1; //1 show, 0 no show
     iAllowMouseGrab = 1;
     iSingleTap = EPuttyCmdStartVKB;
@@ -143,9 +148,9 @@ void TTouchSettings::SetDefault() {
     iLongTap = EPuttyCmdOpenPopUpMenu;
     iSwipeLeft = EPuttyCmdToggleToolbar;
     iSwipeRight = EPuttyCmdToggleToolbar;
-    iSwipeUp = EPuttyCmdSendPageUp;
-    iSwipeDown = EPuttyCmdSendPageDown;
-
+    iSwipeUp = EPuttyCmdSendPageDown;
+    iSwipeDown = EPuttyCmdSendPageUp;
+    
     itbButton1 = EPuttyToolbarTab;
     itbButton2 = EPuttyToolbarAltP;
     itbButton3 = EPuttyToolbarCtrlP;

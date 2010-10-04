@@ -177,6 +177,10 @@ public:
     TBool DoWeHaveSelection() { return iHaveSelection; };
     void SetAltModifier(TBool aAltMod); // Default state off
     void SetCtrlModifier(TBool aCtrlMod); // Default state off
+#ifdef PUTTY_SYM3_TEST50
+    void CreateHttpListL();
+    const CDesCArray &HttpList();
+#endif
 #endif
     // MCoeFepAwareTextEditor methods
     void StartFepInlineEditL(
@@ -319,6 +323,10 @@ protected:
     void TestForModifiers();
     TBool iCtrlModifier;
     TBool iAltModifier;
+    
+#ifdef PUTTY_SYM3_TEST50
+    CDesCArray *iHttpList;
+#endif
     
 #endif
 };

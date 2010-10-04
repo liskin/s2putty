@@ -76,6 +76,9 @@ CTerminalControl::~CTerminalControl() {
 #ifdef PUTTY_S60
     delete iFepExt1;
 #endif
+#ifdef PUTTY_SYM3_TEST50
+    delete iHttpList;
+#endif
 }
 
 
@@ -98,6 +101,9 @@ void CTerminalControl::ConstructL(const TRect &aRect,
     iDisplayBuf = HBufC::NewL(64); // Allocate display buffer for vkb default 64 characters. Grows dynamically with 10 chars.
     iDisplayCursorPos = 0;
     iHaveSelection = EFalse; //set it false
+#endif
+#ifdef PUTTY_SYM3_TEST50
+    iHttpList = new CDesC16ArrayFlat(20);
 #endif
 }
 
@@ -1379,7 +1385,7 @@ void CTerminalControl::TestForModifiers() {
     TestForModifiers(tmp);
 }
 
-void CTerminalControl::TestForModifiers(const TKeyEvent aKeyEvent) {
+void CTerminalControl::TestForModifiers(const TKeyEvent /* aKeyEvent */) {
     // set modifier if needed (this is just for virtual ctrl & alt buttons)        
     if ( iCtrlModifier || iAltModifier ) {
     //If the toolbar buttons have not been pressed its waste of time to test if ctrl/alt are present
@@ -1400,5 +1406,53 @@ void CTerminalControl::TestForModifiers(const TKeyEvent aKeyEvent) {
         //iContainer->Terminal().ClearVKBBuffer(); // We dont want to show ctrl + char in vkb display
     }
 }
+
+#ifdef PUTTY_SYM3_TEST50
+void CTerminalControl::CreateHttpListL() { 
+    TPtrC pTxt(iChars); // point to display buffer
+    TInt iAddrStart = 0;
+    TInt iAddrEnd = 0;
+    TInt iWwwStart = 0;
+    TInt iWwwEnd = 0;
+
+    iHttpList->Reset(); // clear possible old list
+    
+    while ( iAddrStart != KErrNotFound || iWwwStart != KErrNotFound ) {
+        iAddrStart = pTxt.FindF(_L("http://"));
+        iWwwStart = pTxt.FindF(_L("www."));
+        
+        if ( iAddrStart == KErrNotFound && iWwwStart == KErrNotFound) break; // no addrs found.
+        
+        if ( ( iWwwStart > iAddrStart && iAddrStart != KErrNotFound ) || iWwwStart == KErrNotFound ) { // http:// comes first so lets take that addr
+            pTxt.Set(pTxt.Mid(iAddrStart)); // skip to start of the http addr
+            iAddrEnd = pTxt.FindF(_L(" ")); // there are no line breaks present.
+            if ( iAddrEnd == KErrNotFound) {
+                iHttpList->AppendL(pTxt);
+            } else {
+                iHttpList->AppendL(pTxt.Mid(0,iAddrEnd));
+                pTxt.Set(pTxt.Mid(iAddrEnd)); // move over the logged address
+            }
+        } else { // www. comes first
+            pTxt.Set(pTxt.Mid(iWwwStart));
+            iWwwEnd = pTxt.FindF(_L(" "));
+            if ( iWwwEnd == KErrNotFound ) {
+                iHttpList->AppendL(pTxt);
+            } else {
+                iHttpList->AppendL(pTxt.Mid(0,iWwwEnd));
+                pTxt.Set(pTxt.Mid(iWwwEnd));
+            }
+        
+        }
+        //while loop
+    }
+
+    return;       
+}
+
+const CDesCArray &CTerminalControl::HttpList() {
+    return *iHttpList;
+}
+
+#endif
 
 #endif

@@ -1350,6 +1350,13 @@ RESOURCE STYLUS_POPUP_MENU r_putty_terminal_popup_menu
             txt="Toggle full screen";
             command = EPuttyCmdFullScreen;
             },
+#ifdef PUTTY_SYM3_TEST50
+        STYLUS_POPUP_MENU_ITEM
+            {
+            txt="List Web addresses...";
+            command = EPuttyCmdGrepHttp;
+            },                                    
+#endif            
         STYLUS_POPUP_MENU_ITEM
             {
             txt="General touch...";
@@ -1559,6 +1566,24 @@ RESOURCE DIALOG r_putty_cipher_query_dialog {
         }
     };
 }
+
+// Workaround for SwEvent capability. (We display a info note)
+#ifdef PUTTY_SYM3_TEST50
+RESOURCE DIALOG r_putty_str_missing_capability_browser_open {
+    flags = EGeneralQueryFlags;
+    buttons = R_AVKON_SOFTKEYS_YES_NO;
+    items = {
+        DLG_LINE {
+            type = EAknCtQuery;
+            id = EConfirmDisconnectQuery;
+            control = AVKON_CONFIRMATION_QUERY {
+                layout = EConfirmationQueryLayout;
+                label = "Address copied to clipboard.\nSwitch to browser?";
+            };
+        }
+    };
+}
+#endif
 
 // Authentication prompt for non-secret data (such as the username)
 RESOURCE DIALOG r_putty_auth_not_secret_dialog {

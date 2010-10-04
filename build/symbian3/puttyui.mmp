@@ -27,6 +27,7 @@ MACRO		PUTTY_S60
 MACRO		PUTTY_S60V3
 MACRO		PUTTY_S60TOUCH
 MACRO		PUTTY_SYM3
+MACRO		PUTTY_SYM3_TEST50
 
 // EKA2 has CSystemRandom, no need to init RNG from audio
 MACRO		PUTTY_NO_AUDIORECORDER
@@ -87,4 +88,5 @@ LIBRARY		commondialogs.lib
 LIBRARY		puttyengine.lib
 LIBRARY		etext.lib
 LIBRARY		estor.lib
+LIBRARY     apgrfx.lib
 

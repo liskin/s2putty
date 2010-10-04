@@ -79,6 +79,9 @@ enum TCommands {
     EPuttyCmdSendCtrlP,
     EPuttyCmdSendAltP,
     EPuttyCmdNone, // No command for UI settings
+#ifdef PUTTY_SYM3_TEST50    
+    EPuttyCmdGrepHttp,
+#endif
 #endif
     
     EPuttyCmdNotRepeated,

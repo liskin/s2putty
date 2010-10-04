@@ -72,6 +72,11 @@ public: // From CAknView
     void MouseClick(TInt modifiers, TInt row, TInt col);
 
 #endif
+#ifdef PUTTY_SYM3_TEST50
+    void GrepHttpL(); //Show popuplist of http addresses.
+    void LaunchBrowserL(const TDesC& aUrl); //Open up the browser with the url
+#endif
+    
 private: // Constructors
     CTerminalView();
     void ConstructL();
