@@ -21,21 +21,21 @@
 "installnote.txt"-"",FT,TC
 
 ; PuTTY UI application
-"..\..\..\epoc32\release\gcce\urel\putty.exe"-"!:\sys\bin\putty.exe"
-"..\..\..\epoc32\data\z\resource\apps\putty.rsc"-"!:\resource\apps\putty.rsc"
-"..\..\..\epoc32\data\z\private\10003a3f\apps\putty_reg.rsc"   -"!:\private\10003a3f\import\apps\putty_reg.rsc"
-"..\..\..\epoc32\data\z\resource\apps\putty_aif.mif"-"!:\resource\apps\putty_aif.mif"
-"..\..\..\epoc32\data\z\resource\apps\putty.mif"-"!:\resource\apps\putty.mif"
+"epoc32/release/gcce/urel/putty.exe"-"!:\sys\bin\putty.exe"
+"epoc32/data/z/resource/apps/putty.rsc"-"!:\resource\apps\putty.rsc"
+"epoc32/data/z/private/10003a3f/apps/putty_reg.rsc"   -"!:\private\10003a3f\import\apps\putty_reg.rsc"
+"epoc32/data/z/resource/apps/putty_aif.mif"-"!:\resource\apps\putty_aif.mif"
+;"epoc32/data/z/resource/apps/putty.mif"-"!:\resource\apps\putty.mif"
 
 ; Putty engine
-"..\..\..\epoc32\release\gcce\urel\puttyengine.dll"-"!:\sys\bin\puttyengine.dll"
+"epoc32/release/gcce/urel/puttyengine.dll"-"!:\sys\bin\puttyengine.dll"
 
 ; Fonts
-"..\..\ui\s2font\fixed5x7.s2f"-"!:\resource\puttyfonts\fixed5x7.s2f"
-"..\..\ui\s2font\fixed6x10.s2f"-"!:\resource\puttyfonts\fixed6x10.s2f"
-"..\..\ui\s2font\fixed6x13.s2f"-"!:\resource\puttyfonts\fixed6x13.s2f"
-"..\..\ui\s2font\fixed8x13b.s2f"-"!:\resource\puttyfonts\fixed8x13b.s2f"
-"..\..\ui\s2font\fixed9x15b.s2f"-"!:\resource\puttyfonts\fixed9x15b.s2f"
+"../../ui/s2font/fixed5x7.s2f"-"!:\resource\puttyfonts\fixed5x7.s2f"
+"../../ui/s2font/fixed6x10.s2f"-"!:\resource\puttyfonts\fixed6x10.s2f"
+"../../ui/s2font/fixed6x13.s2f"-"!:\resource\puttyfonts\fixed6x13.s2f"
+"../../ui/s2font/fixed8x13b.s2f"-"!:\resource\puttyfonts\fixed8x13b.s2f"
+"../../ui/s2font/fixed9x15b.s2f"-"!:\resource\puttyfonts\fixed9x15b.s2f"
 
 ; Backup registration
 "backup_registration.xml"-"c:\private\f01f9075\backup_registration.xml"
