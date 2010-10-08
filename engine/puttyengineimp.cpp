@@ -81,6 +81,7 @@ CPuttyEngineImp::CPuttyEngineImp() {
     iState = EStateNone;
     iTermWidth = 80;
     iTermHeight = 24;
+    iVibra = NULL;
 }
 
 void CPuttyEngineImp::ConstructL(MPuttyClient *aClient,
@@ -97,6 +98,7 @@ void CPuttyEngineImp::ConstructL(MPuttyClient *aClient,
     iTimer = COneShotTimer::NewL(TCallBack(TimerCallback, this));
     iDefaultPalette = new (ELeave) TRgb[KAllColors];
     iPalette = new (ELeave) TRgb[KAllColors];
+    TRAP_IGNORE( iVibra = CHWRMVibra::NewL() );
     
     // Initialize Symbian-port bits
     epoc_memory_init();
@@ -131,6 +133,7 @@ CPuttyEngineImp::~CPuttyEngineImp() {
     epoc_noise_free();
     epoc_store_free();
     epoc_memory_free();
+    delete iVibra;
     delete [] iPalette;
     delete [] iDefaultPalette;
     delete iTimer;
@@ -888,6 +891,18 @@ void timer_change_notify(long next) {
     engine->putty_timer_change_notify(next);
 }
 
+void CPuttyEngineImp::putty_do_beep(int mode) {
+    if (mode == BELL_DEFAULT && iVibra) {
+	TRAP_IGNORE( iVibra->StartVibraL( 500 ) );
+    }
+}
+
+void do_beep(void *frontend, int mode)
+{
+    CPuttyEngineImp *engine = (CPuttyEngineImp*) frontend;
+    engine->putty_do_beep(mode);
+}
+
 TInt CPuttyEngineImp::DoTimerCallback() {
     long next;
     if (run_timers(iTimerNext, &next)) {
@@ -1021,13 +1036,6 @@ void set_iconic(void * /*frontend*/, int /*iconic*/)
 }
 
 void request_resize(void * /*frontend*/, int /*w*/, int /*h*/)
-{
-}
-
-/*
- * Beep.
- */
-void do_beep(void * /*frontend*/, int /*mode*/)
 {
 }
 

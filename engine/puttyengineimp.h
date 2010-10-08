@@ -13,6 +13,7 @@
 #include <e32std.h>
 #include <stdarg.h>
 #include <gdi.h>
+#include <hwrmvibra.h>
 extern "C" {
 #include "putty.h"
 }
@@ -55,6 +56,7 @@ public:
     char *putty_get_ttymode(const char *mode);
     void putty_notify_remote_exit();
     void putty_timer_change_notify(long next);
+    void putty_do_beep(int mode);
     
     // CPuttyEngine methods
     virtual Config *GetConfig();
@@ -102,6 +104,8 @@ private:
 
     TRgb *iDefaultPalette;
     TRgb *iPalette;
+
+    CHWRMVibra *iVibra;
 
     Config iConfig;
     void *iBackendHandle;

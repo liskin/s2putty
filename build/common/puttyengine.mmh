@@ -100,6 +100,7 @@ LIBRARY		edllstub.lib
 #endif
 LIBRARY		estlib.lib euser.lib insock.lib esock.lib efsrv.lib 
 LIBRARY		ws32.lib apgrfx.lib gdi.lib bafl.lib
+LIBRARY		hwrmvibraclient.lib
 
 // Select the random number source to use
 #ifdef EKA2
